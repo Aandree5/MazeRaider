@@ -27,7 +27,7 @@ Maze::Maze(unsigned width, unsigned height) : m_width(width), m_height(height) {
     m_stack.push(std::make_pair(1, 7));
 
     // Choose and create exit point in maze.
-    m_maze[14][7] = false;
+    m_maze[m_width - 1][7] = false;
 
     //TODO: Make entrance and exit random not fixed.
 
