@@ -150,7 +150,17 @@ void Maze::printMaze() {
         std::cout << std::endl;
 
         for(int w = 0; w < m_width; w++) {
-            std::cout << m_maze[w][h] << ", ";
+            /* Print maze to console
+                0: Path > 32
+                1: Wall > 219 */
+            switch (m_maze[w][h]){
+            case 0:
+                std::cout << (char)32 << (char)32;
+                break;
+            case 1:
+                std::cout << (char)219 << (char)219;
+                break;
+            }
         }
     }
 
