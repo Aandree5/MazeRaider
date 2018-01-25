@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <stdlib.h>
+#include <stdexcept>
 #include <vector>
 #include <time.h>
 
