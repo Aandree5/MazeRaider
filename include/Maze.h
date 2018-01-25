@@ -1,15 +1,13 @@
-#include<vector>
-#include<stack>
-
 #ifndef MAZE_H
 #define MAZE_H
 
+#include<vector>
+#include<stack>
 
 class Maze {
 
     public:
         Maze(unsigned width, unsigned height);
-
         void printMaze();
 
     protected:

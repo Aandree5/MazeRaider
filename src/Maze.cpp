@@ -20,7 +20,7 @@ Maze::Maze(unsigned width, unsigned height) : m_width(width), m_height(height) {
     // Create a new 2D array of width and height and fill with 1's.
     m_maze = Utils::create2DBoolArray(m_width, m_height, true);
 
-    // Choose and create enterance point in maze.
+    // Choose and create entrance point in maze.
     m_maze[0][7] = false;
     m_maze[1][7] = false;
     m_start = std::make_pair(1, 7);
@@ -29,12 +29,18 @@ Maze::Maze(unsigned width, unsigned height) : m_width(width), m_height(height) {
     // Choose and create exit point in maze.
     m_maze[14][7] = false;
 
+    //TODO: Make entrance and exit random not fixed.
+
     // Initialise random number generator.
     srand(time(NULL));
 
+    // Begin recursive maze generation.
     generateMaze();
 }
 
+/**
+ * Generate the maze.
+ */
 void Maze::generateMaze() {
 
     // Get the current node.
@@ -44,7 +50,7 @@ void Maze::generateMaze() {
         return;
     }
 
-    // Get neibouring wall values in every direction 2 blocks ahead.
+    // Get neighbouring wall values in every direction 2 blocks ahead.
     bool left, right, up, down;
 
     if(currentNode.first - 2 < 0) {
@@ -77,6 +83,7 @@ void Maze::generateMaze() {
         return;
     }
 
+    // Create vector used to choose a random direction.
     std::vector<int> availableDirections;
 
     if(left) {
@@ -95,6 +102,7 @@ void Maze::generateMaze() {
         availableDirections.push_back(4);
     }
 
+    // Choose random index thus choosing a random direction.
     int randomDirectionIndex = rand() % availableDirections.size();
     std::pair<unsigned, unsigned> newNode;
 
@@ -133,6 +141,9 @@ void Maze::generateMaze() {
     generateMaze();
 }
 
+/**
+ * Print the maze to the console.
+ */
 void Maze::printMaze() {
 
     for(int h = 0; h < m_height; h++) {
@@ -142,4 +153,6 @@ void Maze::printMaze() {
             std::cout << m_maze[w][h] << ", ";
         }
     }
+
+    std::cout << std::endl;
 }
