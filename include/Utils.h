@@ -4,8 +4,8 @@
 class Utils
 {
     public:
-        static bool** create2DBoolArray(unsigned width, unsigned height, bool value);
-        void delete2DBoolArray(unsigned width, int** &array2D);
+        static int** create2DIntArray(unsigned width, unsigned height, int value);
+        void delete2DIntArray(unsigned width, int** &array2D);
 
     protected:
 

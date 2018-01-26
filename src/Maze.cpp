@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <vector>
 #include <time.h>
+#include <algorithm>
 
 /**
  * Constructor.
@@ -18,16 +19,16 @@ Maze::Maze(unsigned width, unsigned height) : m_width(width), m_height(height) {
     }
 
     // Create a new 2D array of width and height and fill with 1's.
-    m_maze = Utils::create2DBoolArray(m_width, m_height, true);
+    m_maze = Utils::create2DIntArray(m_width, m_height, 1);
 
     // Choose and create entrance point in maze.
-    m_maze[0][7] = false;
-    m_maze[1][7] = false;
+    m_maze[0][7] = 0;
+    m_maze[1][7] = 0;
     m_start = std::make_pair(1, 7);
     m_stack.push(std::make_pair(1, 7));
 
     // Choose and create exit point in maze.
-    m_maze[m_width - 1][7] = false;
+    m_maze[m_width - 1][7] = 0;
 
     //TODO: Make entrance and exit random not fixed.
 
@@ -46,7 +47,12 @@ void Maze::generateMaze() {
     // Get the current node.
     std::pair<int, int> currentNode = m_stack.top();
 
-    if(currentNode == m_start && !m_firstIteration) {
+    if(currentNode == m_start && !m_firstIteration) { // Algorithm complete (recursive base-case).
+
+        // Generate chests.
+        generateChests();
+
+        // Finish.
         return;
     }
 
@@ -77,10 +83,21 @@ void Maze::generateMaze() {
         down = m_maze[currentNode.first][currentNode.second + 2];
     }
 
-    if(!left && !right && !up && !down) { // If dead-end, backtrack.
+    if(!left && !right && !up && !down) { // If dead-end maybe place chest and backtrack.
+
+        // If this dead-end node is in the visited list, its not actually a dead-end.
+        if(find(m_visitedNodes.begin(), m_visitedNodes.end(), std::make_pair(currentNode.first, currentNode.second)) == m_visitedNodes.end()) {
+
+            m_deadEnds.push_back(std::make_pair(currentNode.first, currentNode.second)); // Add current node to list of dead-ends.
+        }
+
         m_stack.pop();
         generateMaze();
         return;
+    } else {
+        // At some point this node was not a dead end, so it is not a true dead end at the
+        // end of the algorithm. So we add it to the list of visited nodes.
+        m_visitedNodes.push_back(m_stack.top());
     }
 
     // Create vector used to choose a random direction.
@@ -109,29 +126,29 @@ void Maze::generateMaze() {
     switch(availableDirections.at(randomDirectionIndex)) {
         case 1: { // Left
             std::pair<unsigned, unsigned> newNode = std::make_pair(currentNode.first - 2, currentNode.second);
-            m_maze[currentNode.first - 1][currentNode.second] = false;
-            m_maze[currentNode.first - 2][currentNode.second] = false;
+            m_maze[currentNode.first - 1][currentNode.second] = 0;
+            m_maze[currentNode.first - 2][currentNode.second] = 0;
             m_stack.push(newNode);
             break;
         }
         case 2: { // Right
             std::pair<unsigned, unsigned> newNode = std::make_pair(currentNode.first + 2, currentNode.second);
-            m_maze[currentNode.first + 1][currentNode.second] = false;
-            m_maze[currentNode.first + 2][currentNode.second] = false;
+            m_maze[currentNode.first + 1][currentNode.second] = 0;
+            m_maze[currentNode.first + 2][currentNode.second] = 0;
             m_stack.push(newNode);
             break;
         }
         case 3: { // Up
             std::pair<unsigned, unsigned> newNode = std::make_pair(currentNode.first, currentNode.second - 2);
-            m_maze[currentNode.first][currentNode.second - 1] = false;
-            m_maze[currentNode.first][currentNode.second - 2] = false;
+            m_maze[currentNode.first][currentNode.second - 1] = 0;
+            m_maze[currentNode.first][currentNode.second - 2] = 0;
             m_stack.push(newNode);
             break;
         }
         case 4: { // Down
             std::pair<unsigned, unsigned> newNode = std::make_pair(currentNode.first, currentNode.second + 2);
-            m_maze[currentNode.first][currentNode.second + 1] = false;
-            m_maze[currentNode.first][currentNode.second + 2] = false;
+            m_maze[currentNode.first][currentNode.second + 1] = 0;
+            m_maze[currentNode.first][currentNode.second + 2] = 0;
             m_stack.push(newNode);
             break;
         }
@@ -139,6 +156,19 @@ void Maze::generateMaze() {
 
     m_firstIteration = false;
     generateMaze();
+}
+
+/**
+ * Spawns chests inside of the maze.
+ */
+void Maze::generateChests() {
+    for(int i = 0; i < m_deadEnds.size(); i++) {
+        std::pair<int, int> deadEndNode = m_deadEnds.at(i);
+        int chance = rand() % 100; // Work out random percentage.
+        if(chance <= m_chestChance) { // If chest chance lies within percentage.
+            m_maze[deadEndNode.first][deadEndNode.second] = 3; // Place chest.
+        }
+    }
 }
 
 /**

@@ -1,15 +1,15 @@
 #include "Utils.h"
 
-bool** Utils::create2DBoolArray(unsigned width, unsigned height, bool value) {
+int** Utils::create2DIntArray(unsigned width, unsigned height, int value) {
 
     // Initialise 2D array.
-    bool** array2D = 0;
-    array2D = new bool*[width];
+    int** array2D = 0;
+    array2D = new int*[width];
 
     for(int w = 0; w < width; w++) {
 
         // For every width element, insert another array for heights.
-        array2D[w] = new bool[height];
+        array2D[w] = new int[height];
 
         for(int h = 0; h < height; h++) {
 
@@ -21,7 +21,7 @@ bool** Utils::create2DBoolArray(unsigned width, unsigned height, bool value) {
     return array2D;
 }
 
-void delete2DBoolArray(unsigned width, int** &array2D) {
+void delete2DIntArray(unsigned width, int** &array2D) {
 
     for(int w = 0; w < width; w++) {
         delete [] array2D[w];
