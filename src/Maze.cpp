@@ -184,7 +184,7 @@ void Maze::printMaze() {
                 0: Path > 32
                 1: Wall > 219 */
             switch (m_maze[w][h]){
-            case 0:
+            default:
                 std::cout << (char)32 << (char)32;
                 break;
             case 1:
