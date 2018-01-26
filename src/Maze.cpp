@@ -7,6 +7,7 @@
 #include <vector>
 #include <time.h>
 #include <algorithm>
+#include <windows.h>
 
 /**
  * Constructor.
@@ -182,13 +183,22 @@ void Maze::printMaze() {
         for(int w = 0; w < m_width; w++) {
             /* Print maze to console
                 0: Path > 32
-                1: Wall > 219 */
+                1: Wall > 219
+                3: Chest > 219 Yellow*/
             switch (m_maze[w][h]){
-            default:
+            case 0:
                 std::cout << (char)32 << (char)32;
                 break;
             case 1:
                 std::cout << (char)219 << (char)219;
+                break;
+            case 3:
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14);
+                std::cout << (char)219 << (char)219;
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+                break;
+            default:
+                std::cout << m_maze[w][h] << m_maze[w][h];
                 break;
             }
         }
