@@ -18,22 +18,44 @@ Maze::Maze(unsigned width, unsigned height) : m_width(width), m_height(height) {
         throw std::invalid_argument("Maze must have odd width and odd height.");
     }
 
+    // Initialise random number generator.
+    srand(time(NULL));
+
     // Create a new 2D array of width and height and fill with 1's.
     m_maze = Utils::create2DIntArray(m_width, m_height, 1);
 
     // Choose and create entrance point in maze.
-    m_maze[0][7] = 0;
-    m_maze[1][7] = 0;
-    m_start = std::make_pair(1, 7);
-    m_stack.push(std::make_pair(1, 7));
+    int randomY = rand() % m_height;
+
+    if(randomY == 0) {
+        randomY += 2;
+    } else if(randomY == m_height) {
+        randomY -= 2;
+    }
+
+    if(randomY % 2 == 0) { // If number is even.
+        randomY--; // Make it odd.
+    }
+
+    m_maze[0][randomY] = 0;
+    m_maze[1][randomY] = 0;
+    m_start = std::make_pair(1, randomY);
+    m_stack.push(std::make_pair(1, randomY));
 
     // Choose and create exit point in maze.
-    m_maze[m_width - 1][7] = 0;
+    randomY = rand() % m_height;
 
-    //TODO: Make entrance and exit random not fixed.
+    if(randomY == 0) {
+        randomY += 2;
+    } else if(randomY == m_height) {
+        randomY -= 2;
+    }
 
-    // Initialise random number generator.
-    srand(time(NULL));
+    if(randomY % 2 == 0) { // If number is even.
+        randomY--; // Make it odd.
+    }
+
+    m_maze[m_width - 1][randomY] = 0;
 
     // Begin recursive maze generation.
     generateMaze();
