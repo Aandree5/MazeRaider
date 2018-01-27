@@ -7,7 +7,18 @@
 #include <vector>
 #include <time.h>
 #include <algorithm>
+
+#ifdef _WIN32
 #include <windows.h>
+#include <stdlib.h>
+#define clearScreen() system("cls")
+#endif // _WIN32
+
+#ifdef __linux__
+#define clearScreen() cout << "\033[2J\033[1;1H"
+#endif // __LINUX__
+
+
 
 /**
  * Constructor.
