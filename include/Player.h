@@ -5,19 +5,17 @@
 class Player
 {
     public:
+        Player();
         void move(int direction);
         void spawnPlayer(int x, int y);
         Maze* maze;
 
+        int xPos;
+        int yPos;
     protected:
 
     private:
-
-
-
-        int life = 9;
-        int xPos = 0;
-        int yPos = 0;
+        int life;
 
         bool upM = false;
         bool downM = false;

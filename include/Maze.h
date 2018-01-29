@@ -8,7 +8,7 @@ class Maze {
 
     public:
         Maze(unsigned width, unsigned height);
-        std::tuple<int**, unsigned, unsigned> getDataMWH();
+        std::tuple<int**, unsigned, unsigned, std::pair<int, int>> getDataMWH();
 
     protected:
 

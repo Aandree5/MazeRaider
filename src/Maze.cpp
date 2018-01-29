@@ -199,7 +199,7 @@ void Maze::generateChests() {
 /**
  * Print the maze to the console.
  */
-std::tuple<int**, unsigned, unsigned> Maze::getDataMWH() {
+std::tuple<int**, unsigned, unsigned, std::pair<int, int>> Maze::getDataMWH() {
 
-    return std::tuple<int**, unsigned, unsigned>(m_maze, m_width, m_height);
+    return std::tuple<int**, unsigned, unsigned, std::pair<int, int>>(m_maze, m_width, m_height, m_start);
 }

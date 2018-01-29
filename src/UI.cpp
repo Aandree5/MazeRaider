@@ -111,15 +111,16 @@ void UI::PrintC(std::string character, int colour = 7)
 }
 
 // Build UI
-void  UI::ShowUI(Maze* maze)
+void  UI::ShowUI(Maze* maze, Player* player)
 {
+    clearScreen();
     UI::printStateInfo();
-    printMaze(maze);
-    UI::printUOptions();
+    printMaze(maze, std::make_pair(player->xPos, player->yPos));
+    UI::printUOptions(maze, player);
 }
 
 // Print Maze
-void  UI::printMaze(Maze* maze)
+void  UI::printMaze(Maze* maze, std::pair<int,int> playerPos)
 {
 
     // getDataMWH - get height = 2
@@ -127,7 +128,13 @@ void  UI::printMaze(Maze* maze)
         std::cout << std::endl;
 
         // getDataMWH - get width = 1
-        for(int w = 0; w < std::get<1>(maze->getDataMWH()) ; w++) {
+        for(int w = 0; w < std::get<1>(maze->getDataMWH()) ; w++)
+            {
+                if (playerPos.first == w && playerPos.second == h)
+                {
+                    PrintC(mazeWall, 11);
+                    continue;
+                }
 
             // getDataMWH - get maze = 0
             switch ( std::get<0>(maze->getDataMWH())[w][h]){
@@ -157,7 +164,12 @@ void UI::printStateInfo()
 }
 
 // Print User Possible Options
-void UI::printUOptions()
+void UI::printUOptions(Maze* maze, Player* player)
 {
+    int userOption;
 
+    std::cout << std::endl << "Choose option:    8 - Up       4 - Left        6 - Right        2 - Down" << std::endl;
+    std::cin >> userOption;
+    player->move(userOption);
+    UI::ShowUI(maze, player);
 }

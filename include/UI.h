@@ -2,6 +2,7 @@
 #define UI_H
 #include <string>
 #include "Maze.h"
+#include "Player.h"
 
 class  UI
 {
@@ -14,7 +15,7 @@ class  UI
         static bool ChangeColour(int colour);
 
         // Build UI
-        static void ShowUI(Maze* maze);
+        static void ShowUI(Maze* maze, Player* player);
 
     protected:
 
@@ -22,11 +23,11 @@ class  UI
         static int** m_maze;
 
         // Print Maze
-        static void printMaze(Maze* maze);
+        static void printMaze(Maze* maze, std::pair<int,int> playerPos);
         // Print Timer, Scorn and Lives info
         static void printStateInfo();
         // Print User Possible Options
-        static void printUOptions();
+        static void printUOptions(Maze* maze, Player* player);
 };
 
 #endif // UI_H
