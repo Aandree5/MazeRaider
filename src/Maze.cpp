@@ -7,16 +7,7 @@
 #include <vector>
 #include <time.h>
 #include <algorithm>
-
-#ifdef _WIN32
-#include <windows.h>
-#include <stdlib.h>
-#define clearScreen() system("cls")
-#endif // _WIN32
-
-#ifdef __linux__
-#define clearScreen() cout << "\033[2J\033[1;1H"
-#endif // __LINUX__
+#include <tuple>
 
 
 
@@ -208,34 +199,7 @@ void Maze::generateChests() {
 /**
  * Print the maze to the console.
  */
-void Maze::printMaze() {
+std::tuple<int**, unsigned, unsigned> Maze::getDataMWH() {
 
-    for(int h = 0; h < m_height; h++) {
-        std::cout << std::endl;
-
-        for(int w = 0; w < m_width; w++) {
-            /* Print maze to console
-                0: Path > 32
-                1: Wall > 219
-                3: Chest > 219 Yellow*/
-            switch (m_maze[w][h]){
-            case 0:
-                std::cout << (char)32 << (char)32;
-                break;
-            case 1:
-                std::cout << (char)219 << (char)219;
-                break;
-            case 3:
-                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14);
-                std::cout << (char)219 << (char)219;
-                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
-                break;
-            default:
-                std::cout << m_maze[w][h] << m_maze[w][h];
-                break;
-            }
-        }
-    }
-
-    std::cout << std::endl;
+    return std::tuple<int**, unsigned, unsigned>(m_maze, m_width, m_height);
 }
