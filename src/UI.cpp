@@ -23,6 +23,7 @@
 
 #ifdef __linux__
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define clearScreen() cout << "\033[2J\033[1;1H"
 #define mazeWall "\u2588"
 #define red() cout << "\033[1;31m"
@@ -38,6 +39,8 @@
 #define darkpurple() cout << "\033[0;35m"
 #define grey() cout << "\033[1;37m"
 =======
+=======
+>>>>>>> f38a23612b4662c60594c1f09342e33305fd458f
 #include<cstdio>
 #define clearScreen() std::cout << "\033[2J\033[1;1H"
 #define red() std::cout << "\033[1;31m"
@@ -52,6 +55,9 @@
 #define darkgreen() std::cout << "\033[0;32m"
 #define darkpurple() std::cout << "\033[0;35m"
 #define grey() std::cout << "\033[1;37m"
+<<<<<<< HEAD
+>>>>>>> f38a23612b4662c60594c1f09342e33305fd458f
+=======
 >>>>>>> f38a23612b4662c60594c1f09342e33305fd458f
 #endif // __LINUX__
 
