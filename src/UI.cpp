@@ -6,7 +6,8 @@
 #include <windows.h>
 #include <stdlib.h>
 #define clearScreen() system("cls")
-#define mazeWall 219
+#define mazeWall (char)219
+#define mazePath (char)32
 #define red() SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12)
 #define blue() SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 9)
 #define green() SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 10)
@@ -22,10 +23,9 @@
 #endif // _WIN32
 
 #ifdef __linux__
-<<<<<<< HEAD
-<<<<<<< HEAD
 #define clearScreen() cout << "\033[2J\033[1;1H"
 #define mazeWall "\u2588"
+#define mazePath "\u0020"
 #define red() cout << "\033[1;31m"
 #define blue() cout << "\033[1;34m"
 #define green() cout << "\033[1;32m"
@@ -38,31 +38,9 @@
 #define darkgreen() cout << "\033[0;32m"
 #define darkpurple() cout << "\033[0;35m"
 #define grey() cout << "\033[1;37m"
-=======
-=======
->>>>>>> f38a23612b4662c60594c1f09342e33305fd458f
-#include<cstdio>
-#define clearScreen() std::cout << "\033[2J\033[1;1H"
-#define red() std::cout << "\033[1;31m"
-#define blue() std::cout << "\033[1;34m"
-#define green() std::cout << "\033[1;32m"
-#define yellow() std::cout << "\033[1;33m"
-#define cyan() std::cout << "\033[1;36m"
-#define white() std::cout << "\033[1;37m"
-#define purple() std::cout << "\033[1;35m"
-#define darkred() std::cout << "\033[0;31m"
-#define darkblue() std::cout << "\033[0;34m"
-#define darkgreen() std::cout << "\033[0;32m"
-#define darkpurple() std::cout << "\033[0;35m"
-#define grey() std::cout << "\033[1;37m"
-<<<<<<< HEAD
->>>>>>> f38a23612b4662c60594c1f09342e33305fd458f
-=======
->>>>>>> f38a23612b4662c60594c1f09342e33305fd458f
 #endif // __LINUX__
 
-// cout with colour   CHAR
-void UI::PrintC(char character, bool endLine = false, int colour = 7)
+bool UI::ChangeColour(int colour)
 {
     switch (colour)
     {
@@ -101,78 +79,36 @@ void UI::PrintC(char character, bool endLine = false, int colour = 7)
         break;
     default:
         grey();
+        return false;
         break;
     }
 
-    if (endLine)
-    {
-        std::cout << character << std::endl;
-    }
-    else
-    {
-        std::cout << character << character;
-    }
-
-    // Return colour to default
-    grey();
+    return true;
 }
 
-// cout with colour   STRING
-void UI::PrintC(std::string character, bool endLine = false, int colour = 7)
+// cout with colour   CHAR Overload
+void UI::PrintC(char character, int colour = 7)
 {
-    switch (colour)
-    {
-    case 12:
-        red();
-        break;
-    case 9:
-        blue();
-        break;
-    case 10:
-        green();
-        break;
-    case 14:
-        yellow();
-        break;
-    case 11:
-        cyan();
-        break;
-    case 15:
-        white();
-        break;
-    case 13:
-        purple();
-        break;
-    case 4:
-        darkred();
-        break;
-    case 3:
-        darkblue();
-        break;
-    case 2:
-        darkgreen();
-        break;
-    case 5:
-        darkpurple();
-        break;
-    default:
-        grey();
-        break;
-    }
+    bool needsReset = ChangeColour(colour);
 
-    if (endLine)
-    {
-        std::cout << character << std::endl;
-    }
-    else
-    {
-        std::cout << character << character;
-    }
+    std::cout << character << character;
 
     // Return colour to default
-    grey();
+    if (needsReset)
+        grey();
 }
 
+// cout with colour   STRING Overload
+void UI::PrintC(std::string character, int colour = 7)
+{
+    bool needsReset = ChangeColour(colour);
+
+    std::cout << character << character;
+
+    // Return colour to default
+    if (needsReset)
+        grey();
+}
 
 // Build UI
 void  UI::ShowUI(Maze* maze)
@@ -195,16 +131,14 @@ void  UI::printMaze(Maze* maze)
 
             // getDataMWH - get maze = 0
             switch ( std::get<0>(maze->getDataMWH())[w][h]){
-            case 0: // 0: Path > 32
-                //std::cout << (char)32 << (char)32;
-                PrintC( (char)32 );
+            case 0: // 0: Path
+                PrintC( mazePath );
                 break;
-            case 1: // 1: Wall > 219
+            case 1: // 1: Wall
                 PrintC( mazeWall );
-                //PrintC( (char)219 );
                 break;
-            case 3: // 3: Chest > 219 Yellow
-                PrintC( (char)219, false, 14);
+            case 3: // 3: Chest
+                PrintC( mazeWall, 14);
                 break;
             default:
                 PrintC( std::get<0>(maze->getDataMWH())[w][h] );
