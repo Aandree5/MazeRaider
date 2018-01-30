@@ -1,6 +1,6 @@
 #include <iostream>
-#include "UI.h"
 #include <tuple>
+#include "UI.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -26,19 +26,28 @@
 #define clearScreen() cout << "\033[2J\033[1;1H"
 #define mazeWall "\u2588"
 #define mazePath "\u0020"
-#define red() std::cout << "\033[1;31m"
-#define blue() std::cout << "\033[1;34m"
-#define green() std::cout << "\033[1;32m"
-#define yellow() std::cout << "\033[1;33m"
-#define cyan() std::cout << "\033[1;36m"
-#define white() std::cout << "\033[1;37m"
-#define purple() std::cout << "\033[1;35m"
-#define darkred() std::cout << "\033[0;31m"
-#define darkblue() std::cout << "\033[0;34m"
-#define darkgreen() std::cout << "\033[0;32m"
-#define darkpurple() std::cout << "\033[0;35m"
-#define grey() std::cout << "\033[1;37m"
+#define red() cout << "\033[1;31m"
+#define blue() cout << "\033[1;34m"
+#define green() cout << "\033[1;32m"
+#define yellow() cout << "\033[1;33m"
+#define cyan() cout << "\033[1;36m"
+#define white() cout << "\033[1;37m"
+#define purple() cout << "\033[1;35m"
+#define darkred() cout << "\033[0;31m"
+#define darkblue() cout << "\033[0;34m"
+#define darkgreen() cout << "\033[0;32m"
+#define darkpurple() cout << "\033[0;35m"
+#define grey() cout << "\033[1;37m"
 #endif // __LINUX__
+
+UI::UI(Maze* maze)
+{
+    printableMaze = get<0>(maze->getDataMWH());
+    mazeWidth = get<1>(maze->getDataMWH());
+    mazeHeight = get<2>(maze->getDataMWH());
+
+    inBattle = false;
+}
 
 bool UI::ChangeColour(int colour)
 {
@@ -91,7 +100,7 @@ void UI::PrintC(char character, int colour = 7)
 {
     bool needsReset = ChangeColour(colour);
 
-    std::cout << character << character;
+    cout << character << character;
 
     // Return colour to default
     if (needsReset)
@@ -99,11 +108,11 @@ void UI::PrintC(char character, int colour = 7)
 }
 
 // cout with colour   STRING Overload
-void UI::PrintC(std::string character, int colour = 7)
+void UI::PrintC(string character, int colour = 7)
 {
     bool needsReset = ChangeColour(colour);
 
-    std::cout << character << character;
+    cout << character << character;
 
     // Return colour to default
     if (needsReset)
@@ -111,65 +120,158 @@ void UI::PrintC(std::string character, int colour = 7)
 }
 
 // Build UI
-void  UI::ShowUI(Maze* maze, Player* player)
+void  UI::ShowUI(Player* player)
 {
     clearScreen();
+
     UI::printStateInfo();
-    printMaze(maze, std::make_pair(player->xPos, player->yPos));
-    UI::printUOptions(maze, player);
+    if (!inBattle)
+        printMaze(make_pair(player->xPos, player->yPos));
+    else
+        printBattleScene();
+
+    UI::printUOptions(player);
 }
 
 // Print Maze
-void  UI::printMaze(Maze* maze, std::pair<int,int> playerPos)
+void  UI::printMaze(pair<int,int> playerPos)
 {
+    // Get player position
+    printableMaze[playerPos.first][playerPos.second] = 2;
 
-    // getDataMWH - get height = 2
-    for(int h = 0; h < std::get<2>(maze->getDataMWH()) ; h++) {
-        std::cout << std::endl;
+    // Print maze with objects
+    for(int h = 0; h < mazeWidth ; h++) {
+        cout << endl;
 
-        // getDataMWH - get width = 1
-        for(int w = 0; w < std::get<1>(maze->getDataMWH()) ; w++)
+        for(int w = 0; w < mazeHeight ; w++)
             {
-                if (playerPos.first == w && playerPos.second == h)
-                {
-                    PrintC(mazeWall, 11);
-                    continue;
-                }
-
-            // getDataMWH - get maze = 0
-            switch ( std::get<0>(maze->getDataMWH())[w][h]){
+            switch ( printableMaze[w][h]){
             case 0: // 0: Path
                 PrintC( mazePath );
                 break;
             case 1: // 1: Wall
                 PrintC( mazeWall );
                 break;
+            case 2: // 1: Wall
+                PrintC( mazeWall, 11 );
+                break;
             case 3: // 3: Chest
                 PrintC( mazeWall, 14);
                 break;
             default:
-                PrintC( std::get<0>(maze->getDataMWH())[w][h] );
+                PrintC( printableMaze[w][h] );
                 break;
             }
         }
     }
 
-    std::cout << std::endl;
+    cout << endl;
 }
 
 // Print Timer, Scorn and Lives info
 void UI::printStateInfo()
 {
-    std::cout << "Timer: 0           Score: 0            Lives: 3/3" << std::endl << std::endl;
+    cout << "Timer: 0           Score: 0            Lives: 3/3" << endl << endl;
 }
 
 // Print User Possible Options
-void UI::printUOptions(Maze* maze, Player* player)
+void UI::printUOptions(Player* player)
 {
-    int userOption;
+    char userOption;
 
-    std::cout << std::endl << "Choose option:    8 - Up       4 - Left        6 - Right        2 - Down" << std::endl;
-    std::cin >> userOption;
-    player->move(userOption);
-    UI::ShowUI(maze, player);
+    cout << endl << endl << "Choose option:    w - Up       a - Left        d - Right        s - Down" << endl;
+    cout << endl << "Test battle mode:    b" << endl;
+    cin >> userOption;
+
+    if (userOption != (char)98)
+        player->move(userOption);
+    else
+        inBattle = !inBattle;
+
+    ShowUI(player);
+}
+
+void UI::printBattleScene()
+{
+    int sceneWidth = 100;
+    int sceneHeight = 15;
+    int playerCounter = 0;
+    int enemyCounter = 0;
+
+    vector<string> enemyMesh = {"                                   ",
+                                "                          .    .   ",
+                                "                           )  (    ",
+                                "     _ _ _ _ _ _ _ _ _ _ _(.--.)   ",
+                                "   {{ { { { { { { { { { { ( '_')   ",
+                                "    >>>>>>>>>>>>>>>>>>>>>>>`--'>   ",
+                                "                                   ",
+                                "                                   "};
+
+    vector<string> playerMesh = {"              _O_                  ",
+                                  R"(            /     \                )",
+                                  R"(           |==/=\==|               )",
+                                  "           |  O O  |               ",
+                                  R"(            \  V  /                )",
+                                  R"(            /`---'\                )",
+                                  "            O'_:_`O                ",
+                                  "             -- --                 "};
+
+    vector<string> playerMesh2 = {"              _O_                  ",
+                                  R"(            /     \                )",
+                                  R"(           |==/=\==|               )",
+                                  "           |  O O  |               ",
+                                  R"(            \  V  /                )",
+                                  R"(            /`---'\                )",
+                                  "            O'_:_`O                ",
+                                  "             -- --                 "};
+/*
+    _O_    1    _____         _<>_          ___
+  /     \  1   |     |      /      \      /  _  \
+ |==/=\==| 1   |[/_\]|     |==\==/==|    |  / \  |
+ |  O O  | 1   / O O \     |   ><   |    |  |"|  |
+  \  V  /  1  /\  -  /\  ,-\   ()   /-.   \  X  /
+  /`---'\  1   /`---'\   V( `-====-' )V   /`---'\
+  O'_:_`O  1   O'M|M`O   (_____:|_____)   O'_|_`O
+   -- --   1    -- --      ----  ----      -- --
+*/
+
+    for (int h = 0; h < sceneHeight; h++)
+    {
+        for (int w = 0; w < sceneWidth; w++)
+        {
+            if (h == 0 && w == 0 ) // Top left corner
+                cout << (char)218;
+            else if (h == 0 && w == sceneWidth - 1 ) // Top right corner
+                cout << (char)191;
+            else if (h == sceneHeight - 1 && w == 0 ) // Bottom left corner
+                cout << (char)192;
+            else if (h == sceneHeight - 1 && w == sceneWidth - 1 ) // Bottom right corner
+                cout << (char)217;
+            else if (h == 0 || h == sceneHeight - 1) // Top and bottom lines
+                cout << (char)196;
+            else if (w == 0 || w == sceneWidth - 1) // Left and right lines
+                cout << (char)179;
+            else if (h >= (sceneHeight / 2) - 1 && h < sceneHeight && w > 5 && w <= 30) // Place to draw player
+            {
+                if (playerCounter < playerMesh2.size())
+                {
+                    cout << playerMesh[playerCounter];
+                    playerCounter++;
+                    w += 34;
+                }
+            }
+            else if (h > 0 && h <= sceneHeight / 2 && w >= sceneWidth - 40 && w < sceneWidth - 5) // Place to draw enemy
+            {
+                if (enemyCounter < enemyMesh.size())
+                {
+                    cout << enemyMesh[enemyCounter];
+                    enemyCounter++;
+                    w += 34;
+                }
+            }
+            else // Empty space -> TO DO
+                cout << (char)32;
+        }
+        cout << endl;
+    }
 }

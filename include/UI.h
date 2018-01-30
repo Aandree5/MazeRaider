@@ -4,30 +4,44 @@
 #include "Maze.h"
 #include "Player.h"
 
+using namespace std;
+
 class  UI
 {
     public:
+        UI(Maze* maze);
         // cout with colour   CHAR Overload
-        static void PrintC(char character, int colour);
+        void PrintC(char character, int colour);
         // cout with colour   STRING Overload
-        static void PrintC(std::string character, int colour);
+        void PrintC(string character, int colour);
         // change the text colour
-        static bool ChangeColour(int colour);
+        bool ChangeColour(int colour);
 
         // Build UI
-        static void ShowUI(Maze* maze, Player* player);
+        void ShowUI(Player* player);
 
     protected:
 
     private:
-        static int** m_maze;
+
+        //TEMP
+        bool inBattle;
+
+        // Printable maze, easier to print player and enemies, doesn't have to check on every loop cycle
+        int** printableMaze;
+
+        // Maze size
+        int mazeWidth;
+        int mazeHeight;
 
         // Print Maze
-        static void printMaze(Maze* maze, std::pair<int,int> playerPos);
+        void printMaze(pair<int,int> playerPos);
         // Print Timer, Scorn and Lives info
-        static void printStateInfo();
+        void printStateInfo();
         // Print User Possible Options
-        static void printUOptions(Maze* maze, Player* player);
+        void printUOptions(Player* player);
+        // Call battle scene
+        void printBattleScene();
 };
 
 #endif // UI_H
