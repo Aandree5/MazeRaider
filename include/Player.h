@@ -6,7 +6,7 @@ class Player
 {
     public:
         Player();
-        void move(int direction);
+        void move(char direction);
         void spawnPlayer(int x, int y);
         Maze* maze;
 

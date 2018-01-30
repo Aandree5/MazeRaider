@@ -14,7 +14,7 @@ Player::Player()
 {
 }
 
-void Player::move(int direction)
+void Player::move(char direction)
 {
     //check surroundings
     /*if(get<0>(maze->getDataMWH())[xPos - 1][yPos]=1)
@@ -23,6 +23,8 @@ void Player::move(int direction)
         rightM = false;
         */
     //move the player
+
+    std::cout << direction << std::endl;
 
     //give options
 }
