@@ -1,6 +1,6 @@
 #include <iostream>
-#include "UI.h"
 #include <tuple>
+#include "UI.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -23,7 +23,7 @@
 #endif // _WIN32
 
 #ifdef __linux__
-#define clearScreen() cout << "\033[2J\033[1;1H"
+#define clearScreen() std::cout << "\033[2J\033[1;1H"
 #define mazeWall "\u2588"
 #define mazePath "\u0020"
 #define red() std::cout << "\033[1;31m"
@@ -166,9 +166,9 @@ void UI::printStateInfo()
 // Print User Possible Options
 void UI::printUOptions(Maze* maze, Player* player)
 {
-    int userOption;
+    char userOption;
 
-    std::cout << std::endl << "Choose option:    8 - Up       4 - Left        6 - Right        2 - Down" << std::endl;
+    std::cout << std::endl << "Choose option:    w - Up       a - Left        d - Right        s - Down" << std::endl;
     std::cin >> userOption;
     player->move(userOption);
     UI::ShowUI(maze, player);
