@@ -1,5 +1,6 @@
 #include "Player.h"
 #include <iostream>
+#include <tuple>
 
 // Sorry forgot about it, this one needs to me here, it is the main function of your class, the one that is called
 // when we instantiate an object of the class in main.cpp
@@ -13,27 +14,27 @@ void Player::checkSurrounding(int x, int y)
     xPos = x;
     yPos = y;
     //check surroundings
-    if(get<0>(maze->getDataMWH())[xPos - 1][yPos]=1)
+    if(get<0>(maze->getDataMWH())[xPos - 1][yPos]==1)
     {
         pathFinder[2] = 1;
     }else{
         pathFinder[2] = 0;
     }
 
-    if(get<0>(maze->getDataMWH())[xPos + 1][yPos]=1)
+    if(get<0>(maze->getDataMWH())[xPos + 1][yPos]==1)
     {
         pathFinder[3] = 1;
     }else{
         pathFinder[3] = 0;
     }
 
-    if(get<0>(maze->getDataMWH())[xPos][yPos - 1]=1)
+    if(get<0>(maze->getDataMWH())[xPos][yPos - 1]==1)
     {
         pathFinder[0] = 1;
     }else{
         pathFinder[0] = 0;
     }
-    if(get<0>(maze->getDataMWH())[xPos][yPos + 1]=1)
+    if(get<0>(maze->getDataMWH())[xPos][yPos + 1]==1)
     {
         pathFinder[1] = 1;
     }else{
@@ -48,7 +49,7 @@ void Player::movePlayer(int direction)
     {
         while(get<0>(maze->getDataMWH())[xPos][yPos+1]!=1) //not yet reached a wall
         {
-            if(get<0>(maze->getDataMWH())[xPos-1][yPos]=1 || get<0>(maze->getDataMWH())[xPos+1][yPos]=1) //there's a path from either side
+            if(get<0>(maze->getDataMWH())[xPos-1][yPos]==1 || get<0>(maze->getDataMWH())[xPos+1][yPos]==1) //there's a path from either side
             {
                 checkSurrounding(xPos, yPos+steps);
                 break;
@@ -59,7 +60,7 @@ void Player::movePlayer(int direction)
     {
         while(get<0>(maze->getDataMWH())[xPos-1][yPos]!=1) //not yet reached a wall
         {
-            if(get<0>(maze->getDataMWH())[xPos][yPos+1]=1 || get<0>(maze->getDataMWH())[xPos][yPos-1]=1) //there's a path from either side
+            if(get<0>(maze->getDataMWH())[xPos][yPos+1]==1 || get<0>(maze->getDataMWH())[xPos][yPos-1]==1) //there's a path from either side
             {
                 checkSurrounding(xPos+steps, yPos);
                 steps = 0;
@@ -71,7 +72,7 @@ void Player::movePlayer(int direction)
     {
         while(get<0>(maze->getDataMWH())[xPos+1][yPos]!=1) //not yet reached a wall
         {
-            if(get<0>(maze->getDataMWH())[xPos][yPos+1]=1 || get<0>(maze->getDataMWH())[xPos][yPos-1]=1) //there's a path from either side
+            if(get<0>(maze->getDataMWH())[xPos][yPos+1]==1 || get<0>(maze->getDataMWH())[xPos][yPos-1]==1) //there's a path from either side
             {
                 checkSurrounding(xPos+steps, yPos);
                 steps = 0;
@@ -83,7 +84,7 @@ void Player::movePlayer(int direction)
     {
         while(get<0>(maze->getDataMWH())[xPos][yPos-1]!=1) //not yet reached a wall
         {
-            if(get<0>(maze->getDataMWH())[xPos-1][yPos]=1 || get<0>(maze->getDataMWH())[xPos+1][yPos]=1) //there's a path from either side
+            if(get<0>(maze->getDataMWH())[xPos-1][yPos]==1 || get<0>(maze->getDataMWH())[xPos+1][yPos]==1) //there's a path from either side
             {
                 checkSurrounding(xPos, yPos+steps);
                 steps = 0;
