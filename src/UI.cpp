@@ -23,6 +23,7 @@
 #endif // _WIN32
 
 #ifdef __linux__
+#define clearScreen() cout << "\033[2J\033[1;1H"
 #define mazeWall "\u2588"
 #define mazePath "\u0020"
 #define red() cout << "\033[1;31m"
