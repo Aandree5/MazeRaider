@@ -43,7 +43,7 @@ void Player::checkSurrounding(int x, int y)
 void Player::movePlayer(char direction)
 {
     int steps = 0;
-    if(direction=="s")
+    if(direction == 's')
     {
         while(get<0>(maze->getDataMWH())[xPos][yPos+1]!=1) //not yet reached a wall
         {
@@ -54,7 +54,7 @@ void Player::movePlayer(char direction)
             }
             steps+=1;
         }
-    }else if(direction=="a")
+    }else if(direction == 'a')
     {
         while(get<0>(maze->getDataMWH())[xPos-1][yPos]!=1) //not yet reached a wall
         {
@@ -66,7 +66,7 @@ void Player::movePlayer(char direction)
             }
             steps-=1;
         }
-    }else if(direction=="d")
+    }else if(direction=='d')
     {
         while(get<0>(maze->getDataMWH())[xPos+1][yPos]!=1) //not yet reached a wall
         {
@@ -78,7 +78,7 @@ void Player::movePlayer(char direction)
             }
             steps+=1;
         }
-    }else if(direction=="w")
+    }else if(direction=='w')
     {
         while(get<0>(maze->getDataMWH())[xPos][yPos-1]!=1) //not yet reached a wall
         {

@@ -14,16 +14,14 @@ class Player
         void spawnPlayer(int x, int y);
         void checkSurrounding(int x, int y);
         void movePlayer(char direction);
-        /*  down = 2
-            left = 4
-            right = 6
-            up = 8
-        */
-
-
 
         //variables
         vector<int> pathFinder;
+        /*  pathFinder[0] = up
+            pathFinder[1] = down
+            pathFinder[2] = left
+            pathFinder[3] = right
+        */
 
 
         Maze* maze;
