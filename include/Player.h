@@ -1,7 +1,6 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 #include "Maze.h"
-#include <tuple>
 #include <array>
 #include <vector>
 using namespace std;

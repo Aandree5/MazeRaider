@@ -13,8 +13,8 @@ int main()
 
     Player* player = new Player();
     player->maze = maze;
-    player->xPos = get<3>(maze->getDataMWH()).first;
-    player->yPos = get<3>(maze->getDataMWH()).second ;
+    player->xPos = maze->getMazeStart().first;
+    player->yPos = maze->getMazeStart().second ;
 
     ui->ShowUI(player);
     return 0;

@@ -7,7 +7,6 @@
 #include <vector>
 #include <time.h>
 #include <algorithm>
-#include <tuple>
 
 
 
@@ -197,9 +196,20 @@ void Maze::generateChests() {
 }
 
 /**
- * Print the maze to the console.
+ * Return private values.
  */
-std::tuple<int**, unsigned, unsigned, std::pair<int, int>> Maze::getDataMWH() {
 
-    return std::tuple<int**, unsigned, unsigned, std::pair<int, int>>(m_maze, m_width, m_height, m_start);
+int** Maze::getMazeArray()
+{
+    return m_maze;
+}
+
+std::pair<unsigned, unsigned> Maze::getMazeSizeWH()
+{
+    return std::make_pair(m_width, m_height);
+}
+
+std::pair<int,int> Maze::getMazeStart()
+{
+    return m_start;
 }

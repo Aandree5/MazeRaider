@@ -1,5 +1,4 @@
 #include <iostream>
-#include <tuple>
 #include "UI.h"
 
 #ifdef _WIN32
@@ -42,9 +41,9 @@
 
 UI::UI(Maze* maze)
 {
-    printableMaze = get<0>(maze->getDataMWH());
-    mazeWidth = get<1>(maze->getDataMWH());
-    mazeHeight = get<2>(maze->getDataMWH());
+    printableMaze = maze->getMazeArray();
+    mazeWidth = maze->getMazeSizeWH().first;
+    mazeHeight = maze->getMazeSizeWH().second;
 
     inBattle = false;
 }
