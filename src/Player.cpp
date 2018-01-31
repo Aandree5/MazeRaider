@@ -1,6 +1,4 @@
 #include "Player.h"
-#include <iostream>
-#include <tuple>
 
 // Sorry forgot about it, this one needs to me here, it is the main function of your class, the one that is called
 // when we instantiate an object of the class in main.cpp
@@ -42,10 +40,10 @@ void Player::checkSurrounding(int x, int y)
     }
 }
 
-void Player::movePlayer(int direction)
+void Player::movePlayer(char direction)
 {
     int steps = 0;
-    if(direction==2)
+    if(direction=="s")
     {
         while(get<0>(maze->getDataMWH())[xPos][yPos+1]!=1) //not yet reached a wall
         {
@@ -56,7 +54,7 @@ void Player::movePlayer(int direction)
             }
             steps+=1;
         }
-    }else if(direction==4)
+    }else if(direction=="a")
     {
         while(get<0>(maze->getDataMWH())[xPos-1][yPos]!=1) //not yet reached a wall
         {
@@ -68,7 +66,7 @@ void Player::movePlayer(int direction)
             }
             steps-=1;
         }
-    }else if(direction==6)
+    }else if(direction=="d")
     {
         while(get<0>(maze->getDataMWH())[xPos+1][yPos]!=1) //not yet reached a wall
         {
@@ -80,7 +78,7 @@ void Player::movePlayer(int direction)
             }
             steps+=1;
         }
-    }else if(direction==8)
+    }else if(direction=="w")
     {
         while(get<0>(maze->getDataMWH())[xPos][yPos-1]!=1) //not yet reached a wall
         {

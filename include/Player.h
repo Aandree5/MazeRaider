@@ -4,6 +4,7 @@
 #include <tuple>
 #include <array>
 #include <vector>
+using namespace std;
 
 class Player
 {
@@ -12,7 +13,7 @@ class Player
         //functions
         void spawnPlayer(int x, int y);
         void checkSurrounding(int x, int y);
-        void movePlayer(int direction);
+        void movePlayer(char direction);
         /*  down = 2
             left = 4
             right = 6

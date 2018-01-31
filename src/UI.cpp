@@ -177,14 +177,14 @@ void UI::printStateInfo()
 // Print User Possible Options
 void UI::printUOptions(Player* player)
 {
-    char userOption;
+    char userOption[1];
 
     cout << endl << endl << "Choose option:    w - Up       a - Left        d - Right        s - Down" << endl;
     cout << endl << "Test battle mode:    b" << endl;
     cin >> userOption;
 
     if (userOption != (char)98)
-        player->move(userOption);
+        player->movePlayer(userOption);
     else
         inBattle = !inBattle;
 
