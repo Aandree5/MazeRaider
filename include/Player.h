@@ -32,11 +32,6 @@ class Player
     private:
         int life;
 
-        bool upM = false;
-        bool downM = false;
-        bool rightM = false;
-        bool leftM = false;
-
 };
 
 #endif // PLAYER_H
