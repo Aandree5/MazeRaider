@@ -22,7 +22,7 @@ class Player
 
 
         //variables
-        vector<int> pathFinder;
+        std::vector<int> pathFinder;
 
 
         Maze* maze;

@@ -184,7 +184,7 @@ void UI::printUOptions(Player* player)
     cin >> userOption;
 
     if (userOption != (char)98)
-        player->move(userOption);
+        player->movePlayer(userOption);
     else
         inBattle = !inBattle;
 
