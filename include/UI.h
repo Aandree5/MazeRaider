@@ -26,6 +26,8 @@ class  UI
 
         //TEMP
         bool inBattle;
+        bool isPlayerAttacking = false;
+        bool isEnemyAttacking = false;
 
         // Printable maze, easier to print player and enemies, doesn't have to check on every loop cycle
         int** printableMaze;

@@ -179,13 +179,18 @@ void UI::printUOptions(Player* player)
     char userOption;
 
     cout << endl << endl << "Choose option:    w - Up       a - Left        d - Right        s - Down" << endl;
-    cout << endl << "Test battle mode:    b" << endl;
+    cout << endl << "Test battle mode:    b          Player Attack:    z        Enemy Attack:    x" << endl;
     cin >> userOption;
 
     if (userOption != (char)98)
         player->movePlayer(userOption);
     else
         inBattle = !inBattle;
+
+    if (userOption == (char)122)
+        isPlayerAttacking = !isPlayerAttacking;
+    if (userOption == (char)120)
+        isEnemyAttacking = !isEnemyAttacking;
 
     ShowUI(player);
 }
@@ -206,71 +211,94 @@ void UI::printBattleScene()
                                 "                                   ",
                                 "                                   "};
 
-    vector<string> playerMesh = {"              _O_                  ",
-                                  R"(            /     \                )",
-                                  R"(           |==/=\==|               )",
-                                  "           |  O O  |               ",
-                                  R"(            \  V  /                )",
+
+    vector<string> playerMesh = {"       _O_      ",
+                               R"(     /     \    )",
+                               R"(    |==/=\==|   )",
+                                 "    |  O O  |   ",
+                               R"(     \  V  /    )",
+                               R"(     /`---'\    )",
+                                 "     O'_:_`O    ",
+                                 "      -- --     "};
+
+    vector<string> playerMesh2 = {"             _____                 ",
+                                  "            |     |                ",
+                                  R"(            |[/_\]|                )",
+                                  R"(            / O O \                )",
+                                  R"(           /\  -  /\               )",
                                   R"(            /`---'\                )",
-                                  "            O'_:_`O                ",
+                                  "            O'M|M`O                ",
                                   "             -- --                 "};
 
-    vector<string> playerMesh2 = {"              _O_                  ",
-                                  R"(            /     \                )",
-                                  R"(           |==/=\==|               )",
-                                  "           |  O O  |               ",
-                                  R"(            \  V  /                )",
-                                  R"(            /`---'\                )",
-                                  "            O'_:_`O                ",
-                                  "             -- --                 "};
-/*
-    _O_    1    _____         _<>_          ___
-  /     \  1   |     |      /      \      /  _  \
- |==/=\==| 1   |[/_\]|     |==\==/==|    |  / \  |
- |  O O  | 1   / O O \     |   ><   |    |  |"|  |
-  \  V  /  1  /\  -  /\  ,-\   ()   /-.   \  X  /
-  /`---'\  1   /`---'\   V( `-====-' )V   /`---'\
-  O'_:_`O  1   O'M|M`O   (_____:|_____)   O'_|_`O
-   -- --   1    -- --      ----  ----      -- --
-*/
+    vector<string> playerMesh3 = {"      _<>_      ",
+                                R"(    /      \    )",
+                                R"(   |==\==/==|   )",
+                                  "   |   ><   |   ",
+                                R"( ,-\   ()   /-. )",
+                                  " V( `-====-' )V ",
+                                  " (_____:|_____) ",
+                                  "   ----  ----   "};
+
+    vector<string> playerMesh4 = {"               ___                 ",
+                                  R"(             /  _  \               )",
+                                  R"(            |  / \  |              )",
+                                  "            |  |*|  |              ",
+                                  R"(             \  X  /               )",
+                                  R"(             /`---'\               )",
+                                  "             O'_|_`O               ",
+                                  "              -- --                ",};
 
     for (int h = 0; h < sceneHeight; h++)
-    {
-        for (int w = 0; w < sceneWidth; w++)
         {
-            if (h == 0 && w == 0 ) // Top left corner
-                cout << (char)218;
-            else if (h == 0 && w == sceneWidth - 1 ) // Top right corner
-                cout << (char)191;
-            else if (h == sceneHeight - 1 && w == 0 ) // Bottom left corner
-                cout << (char)192;
-            else if (h == sceneHeight - 1 && w == sceneWidth - 1 ) // Bottom right corner
-                cout << (char)217;
-            else if (h == 0 || h == sceneHeight - 1) // Top and bottom lines
-                cout << (char)196;
-            else if (w == 0 || w == sceneWidth - 1) // Left and right lines
-                cout << (char)179;
-            else if (h >= (sceneHeight / 2) - 1 && h < sceneHeight && w > 5 && w <= 30) // Place to draw player
+            for (int w = 0; w < sceneWidth; w++)
             {
-                if (playerCounter < playerMesh2.size())
+                if (h == 0 && w == 0 ) // Top left corner
+                    cout << (char)218;
+                else if (h == 0 && w == sceneWidth - 1 ) // Top right corner
+                    cout << (char)191;
+                else if (h == sceneHeight - 1 && w == 0 ) // Bottom left corner
+                    cout << (char)192;
+                else if (h == sceneHeight - 1 && w == sceneWidth - 1 ) // Bottom right corner
+                    cout << (char)217;
+                else if (h == 0 || h == sceneHeight - 1) // Top and bottom lines
+                    cout << (char)196;
+                else if (w == 0 || w == sceneWidth - 1) // Left and right lines
+                    cout << (char)179;
+                else if (h >= (sceneHeight / 2) - 1 && h < sceneHeight && w > 5 && w <= 21) // Place to draw player
                 {
-                    cout << playerMesh[playerCounter];
-                    playerCounter++;
-                    w += 34;
+                    if (playerCounter < playerMesh2.size())
+                    {
+                        cout << playerMesh[playerCounter];
+                        playerCounter++;
+                        w += 15;
+                    }
                 }
-            }
-            else if (h > 0 && h <= sceneHeight / 2 && w >= sceneWidth - 40 && w < sceneWidth - 5) // Place to draw enemy
-            {
-                if (enemyCounter < enemyMesh.size())
+                else if (h > 0 && h <= sceneHeight / 2 && w >= sceneWidth - 40 && w < sceneWidth - 5) // Place to draw enemy
                 {
-                    cout << enemyMesh[enemyCounter];
-                    enemyCounter++;
-                    w += 34;
+                    if (enemyCounter < enemyMesh.size())
+                    {
+                        cout << enemyMesh[enemyCounter];
+                        enemyCounter++;
+                        w += 34;
+                    }
                 }
+                else // Empty space -> TO DO
+                    cout << (char)32;
             }
-            else // Empty space -> TO DO
-                cout << (char)32;
+            cout << endl;
         }
-        cout << endl;
-    }
+
+        if (isPlayerAttacking){
+
+        HANDLE hStdOut = GetStdHandle( STD_OUTPUT_HANDLE );
+
+                CONSOLE_SCREEN_BUFFER_INFO cbsi;
+        GetConsoleScreenBufferInfo(hStdOut, &cbsi);
+        COORD originalPos = cbsi.dwCursorPosition;
+        COORD pos = { 10, 5 };
+        SetConsoleCursorPosition( hStdOut, pos );
+            cout << "olaola";
+
+        SetConsoleCursorPosition( hStdOut, originalPos );
+        }
 }
