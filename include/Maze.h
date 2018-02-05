@@ -7,7 +7,8 @@
 class Maze {
 
     public:
-        Maze(unsigned width, unsigned height);
+        Maze(unsigned width, unsigned height, unsigned seed);
+        Maze(unsigned width, unsigned height) : Maze(width, height, 0) {}
         std::tuple<int**, unsigned, unsigned, std::pair<int, int>> getDataMWH();
         int** getMazeArray();
         std::pair<unsigned, unsigned> getMazeSizeWH();
