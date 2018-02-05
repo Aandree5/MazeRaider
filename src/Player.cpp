@@ -42,21 +42,41 @@ void Player::checkSurrounding(int x, int y)
 
 void Player::movePlayer(char direction)
 {
-    int steps = 0;
+    int steps = 1;
     if(direction == 's')
     {
-        while(maze->getMazeArray()[xPos][yPos+1]!=1) //not yet reached a wall
+        while(maze->getMazeArray()[xPos][yPos+steps]!=1)
         {
-            if(maze->getMazeArray()[xPos-1][yPos]==1 || maze->getMazeArray()[xPos+1][yPos]==1) //there's a path from either side
+            steps+=1;
+            if(maze->getMazeArray()[xPos-1][yPos+steps] == 1)//|| maze->getMazeArray()[xPos+1][yPos+steps-1]==1)
+            {
+                break;
+            }
+
+        }
+        yPos += steps-1;
+        /*
+        while(maze->getMazeArray()[xPos][yPos+steps]!=1) //not yet reached a wall going down
+        {
+            yPos += steps;
+            if(maze->getMazeArray()[xPos-steps][yPos]==1 || maze->getMazeArray()[xPos+steps][yPos]==1) //there's a path from either side
             {
                 checkSurrounding(xPos, yPos+steps);
+                yPos += steps;
                 break;
             }
             steps+=1;
-        }
-    }else if(direction == 'a')
+        }*/
+    }
+    else if(direction == 'a')
     {
-        while(maze->getMazeArray()[xPos-1][yPos]!=1) //not yet reached a wall
+        while(maze->getMazeArray()[xPos-steps][yPos]!=1)
+        {
+            steps+=1;
+        }
+        xPos -= steps-1;
+        /*
+        while(maze->getMazeArray()[xPos-1][yPos]!=1) //not yet reached a wall going left
         {
             if(maze->getMazeArray()[xPos][yPos+1]==1 || maze->getMazeArray()[xPos][yPos-1]==1) //there's a path from either side
             {
@@ -65,10 +85,16 @@ void Player::movePlayer(char direction)
                 break;
             }
             steps-=1;
-        }
+        }*/
     }else if(direction=='d')
     {
-        while(maze->getMazeArray()[xPos+1][yPos]!=1) //not yet reached a wall
+        while(maze->getMazeArray()[xPos+steps][yPos]!=1)
+        {
+            steps+=1;
+        }
+        xPos += steps-1;
+        /*
+        while(maze->getMazeArray()[xPos+1][yPos]!=1) //not yet reached a wall going right
         {
             if(maze->getMazeArray()[xPos][yPos+1]==1 || maze->getMazeArray()[xPos][yPos-1]==1) //there's a path from either side
             {
@@ -77,10 +103,16 @@ void Player::movePlayer(char direction)
                 break;
             }
             steps+=1;
-        }
+        }*/
     }else if(direction=='w')
     {
-        while(maze->getMazeArray()[xPos][yPos-1]!=1) //not yet reached a wall
+        while(maze->getMazeArray()[xPos][yPos-steps]!=1)
+        {
+            steps+=1;
+        }
+        yPos -= steps-1;
+        /*
+        while(maze->getMazeArray()[xPos][yPos-1]!=1) //not yet reached a wall going up
         {
             if(maze->getMazeArray()[xPos-1][yPos]==1 || maze->getMazeArray()[xPos+1][yPos]==1) //there's a path from either side
             {
@@ -89,10 +121,9 @@ void Player::movePlayer(char direction)
                 break;
             }
             steps-=1;
-        }
+        }*/
     }
 }
-
 
 void Player::spawnPlayer(int x, int y)
 {
