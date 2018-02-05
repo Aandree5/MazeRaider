@@ -1,15 +1,17 @@
 #include "Maze.h"
 #include "UI.h"
-#include <iostream>
 #include "Player.h"
+#include "Score.h"
+#include <iostream>
 #include <tuple>
 
 using namespace std;
 
 int main()
 {
+    Score* score = new Score();
     Maze* maze = new Maze(31, 31);
-    UI* ui = new UI(maze);
+    UI* ui = new UI(maze, score);
 
     Player* player = new Player();
     player->maze = maze;

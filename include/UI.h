@@ -3,6 +3,7 @@
 #include <string>
 #include "Maze.h"
 #include "Player.h"
+#include "Score.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -47,7 +48,7 @@ using namespace std;
 class  UI
 {
     public:
-        UI(Maze* maze);
+        UI(Maze* maze, Score* score);
         // cout with colour   CHAR Overload
         void PrintC(char character, int colour);
         // cout with colour   STRING Overload
@@ -66,6 +67,8 @@ class  UI
         bool inBattle;
         bool isPlayerAttacking = false;
         bool isEnemyAttacking = false;
+
+        int hScore;
 
         // Printable maze, easier to print player and enemies, doesn't have to check on every loop cycle
         int** printableMaze;

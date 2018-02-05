@@ -1,11 +1,13 @@
 #include <iostream>
 #include "UI.h"
 
-UI::UI(Maze* maze)
+UI::UI(Maze* maze, Score* score)
 {
     printableMaze = maze->getMazeArray();
     mazeWidth = maze->getMazeSizeWH().first;
     mazeHeight = maze->getMazeSizeWH().second;
+
+    hScore = score->getHScore();
 
     inBattle = false;
 }
@@ -135,7 +137,7 @@ void  UI::printMaze(pair<int,int> playerPos)
 // Print Timer, Scorn and Lives info
 void UI::printStateInfo()
 {
-    cout << "Timer: 0           Score: 0            Lives: 3/3" << endl << endl;
+    cout << "Timer: 0           Score: " << hScore << "            Lives: 3/3" << endl << endl;
 }
 
 // Print User Possible Options
