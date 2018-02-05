@@ -17,6 +17,8 @@ void Player::movePlayer(char direction)
             if(maze->getMazeArray()[xPos][yPos+steps]==2)
             {
                 //connect to database and change values when a chest is encountered
+                chestEvent();
+
             }
             if(maze->getMazeArray()[xPos-1][yPos+steps] == 0 || maze->getMazeArray()[xPos+1][yPos+steps] == 0)
             {
@@ -69,6 +71,27 @@ void Player::movePlayer(char direction)
 
     }
 }
+
+
+void Player::chestEvent()
+{
+    /*
+    random rewards or drops
+    - health
+    - sword upgrade
+    - armor upgrade
+    - potions
+    - keys
+    - scores
+    */
+    int randomScore, addHealth, addArmor, addKeys;
+    randomScore = rand() % 100 + 1;
+    addArmor = rand() % 10 + 1;
+    addHealth = rand() % 10 + 1;
+    addKeys = rand() % 2 + 1;
+
+}
+
 
 void Player::spawnPlayer(int x, int y)
 {

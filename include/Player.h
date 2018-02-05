@@ -3,6 +3,7 @@
 #include "Maze.h"
 #include <array>
 #include <vector>
+#include <cstdlib> //random generation
 using namespace std;
 
 class Player
@@ -12,16 +13,9 @@ class Player
         //functions
         void spawnPlayer(int x, int y);
         void movePlayer(char direction);
+        void chestEvent();
 
         //variables
-        vector<int> pathFinder;
-        /*  pathFinder[0] = up
-            pathFinder[1] = down
-            pathFinder[2] = left
-            pathFinder[3] = right
-        */
-
-
         Maze* maze;
         int xPos;
         int yPos;
