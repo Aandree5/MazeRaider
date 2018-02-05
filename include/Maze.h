@@ -9,6 +9,9 @@ class Maze {
     public:
         Maze(unsigned width, unsigned height);
         std::tuple<int**, unsigned, unsigned, std::pair<int, int>> getDataMWH();
+        int** getMazeArray();
+        std::pair<unsigned, unsigned> getMazeSizeWH();
+        std::pair<int,int> getMazeStart();
 
     protected:
 
