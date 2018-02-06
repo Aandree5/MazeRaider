@@ -14,12 +14,6 @@ void Player::movePlayer(char direction)
     {
         while(maze->getMazeArray()[xPos][yPos+steps]!=1)  //this works
         {
-            if(maze->getMazeArray()[xPos][yPos+steps]==2)
-            {
-                //connect to database and change values when a chest is encountered
-                chestEvent();
-
-            }
             if(maze->getMazeArray()[xPos-1][yPos+steps] == 0 || maze->getMazeArray()[xPos+1][yPos+steps] == 0)
             {
                 steps+=1;
@@ -72,6 +66,15 @@ void Player::movePlayer(char direction)
     }
 }
 
+
+void Player::checkSurrounding(int xPos, int yPos)
+{
+    if(maze->getMazeArray()[xPos-1][yPos]==2 || maze->getMazeArray()[xPos+1][yPos]==2 || maze->getMazeArray()[xPos][yPos-1]==2 || maze->getMazeArray()[xPos][yPos+1]==2)
+    {
+        //connect to database and change values when a chest is encountered
+        chestEvent();
+    }
+}
 
 void Player::chestEvent()
 {

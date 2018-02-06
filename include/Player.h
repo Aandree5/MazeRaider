@@ -13,6 +13,7 @@ class Player
         //functions
         void spawnPlayer(int x, int y);
         void movePlayer(char direction);
+        void checkSurrounding(int x, int y);
         void chestEvent();
 
         //variables
