@@ -12,8 +12,12 @@
 
 /**
  * Constructor.
+ *
+ * Width - Unsigned Int - Width of the maze.
+ * Seight - Unsigned Int - Height of the maze.
+ * Seed - Unsigned Int - The seed of the maze.
  */
-Maze::Maze(unsigned width, unsigned height) : m_width(width), m_height(height) {
+Maze::Maze(unsigned width, unsigned height, unsigned seed) : m_width(width), m_height(height) {
 
     // Check that the width and height given are odd numbers.
     if(m_width % 2 == 0 || m_height % 2 == 0) {
@@ -21,7 +25,11 @@ Maze::Maze(unsigned width, unsigned height) : m_width(width), m_height(height) {
     }
 
     // Initialise random number generator.
-    srand(time(NULL));
+    if(seed == 0) { // Set random seed.
+        srand(time(NULL));
+    } else {        // Use given seed.
+        srand(seed);
+    }
 
     // Create a new 2D array of width and height and fill with 1's.
     m_maze = Utils::create2DIntArray(m_width, m_height, 1);

@@ -7,90 +7,92 @@ Player::Player()
 {
 }
 
-void Player::checkSurrounding(int x, int y)
+void Player::movePlayer(char direction)
 {
-    xPos = x;
-    yPos = y;
-    //check surroundings
-    if(maze->getMazeArray()[xPos - 1][yPos]==1)
+    int steps = 1;
+    if(direction == 's')
     {
-        pathFinder[2] = 1;
-    }else{
-        pathFinder[2] = 0;
-    }
+        while(maze->getMazeArray()[xPos][yPos+steps]!=1)  //this works
+        {
+            if(maze->getMazeArray()[xPos-1][yPos+steps] == 0 || maze->getMazeArray()[xPos+1][yPos+steps] == 0)
+            {
+                steps+=1;
+                break;
+            }
+            steps+=1;
 
-    if(maze->getMazeArray()[xPos + 1][yPos]==1)
-    {
-        pathFinder[3] = 1;
-    }else{
-        pathFinder[3] = 0;
+        }
+        yPos += steps-1;
     }
+    else if(direction == 'a')
+    {
+        while(maze->getMazeArray()[xPos-steps][yPos]!=1)
+        {
+            if(maze->getMazeArray()[xPos-steps][yPos+1] == 0 || maze->getMazeArray()[xPos-steps][yPos-1] == 0)
+            {
+                steps+=1;
+                break;
+            }
+            steps+=1;
+        }
+        xPos -= steps-1;
 
-    if(maze->getMazeArray()[xPos][yPos - 1]==1)
+    }else if(direction=='d')
     {
-        pathFinder[0] = 1;
-    }else{
-        pathFinder[0] = 0;
-    }
-    if(maze->getMazeArray()[xPos][yPos + 1]==1)
+        while(maze->getMazeArray()[xPos+steps][yPos]!=1)
+        {
+            if(maze->getMazeArray()[xPos+steps][yPos+1] == 0 || maze->getMazeArray()[xPos+steps][yPos-1] == 0)
+            {
+                steps+=1;
+                break;
+            }
+            steps+=1;
+        }
+        xPos += steps-1;
+
+    }else if(direction=='w')
     {
-        pathFinder[1] = 1;
-    }else{
-        pathFinder[1] = 0;
+        while(maze->getMazeArray()[xPos][yPos-steps]!=1)
+        {
+            if(maze->getMazeArray()[xPos-1][yPos-steps] == 0 || maze->getMazeArray()[xPos+1][yPos-steps] == 0)
+            {
+                steps+=1;
+                break;
+            }
+            steps+=1;
+        }
+        yPos -= steps-1;
+
     }
 }
 
-void Player::movePlayer(char direction)
+
+void Player::checkSurrounding(int xPos, int yPos)
 {
-    int steps = 0;
-    if(direction == 's')
+    if(maze->getMazeArray()[xPos-1][yPos]==2 || maze->getMazeArray()[xPos+1][yPos]==2 || maze->getMazeArray()[xPos][yPos-1]==2 || maze->getMazeArray()[xPos][yPos+1]==2)
     {
-        while(maze->getMazeArray()[xPos][yPos+1]!=1) //not yet reached a wall
-        {
-            if(maze->getMazeArray()[xPos-1][yPos]==1 || maze->getMazeArray()[xPos+1][yPos]==1) //there's a path from either side
-            {
-                checkSurrounding(xPos, yPos+steps);
-                break;
-            }
-            steps+=1;
-        }
-    }else if(direction == 'a')
-    {
-        while(maze->getMazeArray()[xPos-1][yPos]!=1) //not yet reached a wall
-        {
-            if(maze->getMazeArray()[xPos][yPos+1]==1 || maze->getMazeArray()[xPos][yPos-1]==1) //there's a path from either side
-            {
-                checkSurrounding(xPos+steps, yPos);
-                steps = 0;
-                break;
-            }
-            steps-=1;
-        }
-    }else if(direction=='d')
-    {
-        while(maze->getMazeArray()[xPos+1][yPos]!=1) //not yet reached a wall
-        {
-            if(maze->getMazeArray()[xPos][yPos+1]==1 || maze->getMazeArray()[xPos][yPos-1]==1) //there's a path from either side
-            {
-                checkSurrounding(xPos+steps, yPos);
-                steps = 0;
-                break;
-            }
-            steps+=1;
-        }
-    }else if(direction=='w')
-    {
-        while(maze->getMazeArray()[xPos][yPos-1]!=1) //not yet reached a wall
-        {
-            if(maze->getMazeArray()[xPos-1][yPos]==1 || maze->getMazeArray()[xPos+1][yPos]==1) //there's a path from either side
-            {
-                checkSurrounding(xPos, yPos+steps);
-                steps = 0;
-                break;
-            }
-            steps-=1;
-        }
+        //connect to database and change values when a chest is encountered
+        chestEvent();
     }
+}
+
+void Player::chestEvent()
+{
+    /*
+    random rewards or drops
+    - health
+    - sword upgrade
+    - armor upgrade
+    - potions
+    - keys
+    - scores
+    */
+    int randomScore, addHealth, addArmor, addKeys;
+    randomScore = rand() % 100 + 1;
+    addArmor = rand() % 10 + 1;
+    addHealth = rand() % 10 + 1;
+    addKeys = rand() % 2 + 1;
+
 }
 
 
