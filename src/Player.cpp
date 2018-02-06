@@ -19,6 +19,11 @@ void Player::movePlayer(char direction)
                 steps+=1;
                 break;
             }
+            else if(maze->getMazeArray()[xPos][yPos+steps] == 3)
+            {
+                chestEvent();
+                break;
+            }
             steps+=1;
 
         }
@@ -31,6 +36,11 @@ void Player::movePlayer(char direction)
             if(maze->getMazeArray()[xPos-steps][yPos+1] == 0 || maze->getMazeArray()[xPos-steps][yPos-1] == 0)
             {
                 steps+=1;
+                break;
+            }
+            else if(maze->getMazeArray()[xPos-steps][yPos] == 3)
+            {
+                chestEvent();
                 break;
             }
             steps+=1;
@@ -46,6 +56,11 @@ void Player::movePlayer(char direction)
                 steps+=1;
                 break;
             }
+            else if(maze->getMazeArray()[xPos+steps][yPos] == 3)
+            {
+                chestEvent();
+                break;
+            }
             steps+=1;
         }
         xPos += steps-1;
@@ -59,20 +74,15 @@ void Player::movePlayer(char direction)
                 steps+=1;
                 break;
             }
+            else if(maze->getMazeArray()[xPos][yPos-steps] == 3)
+            {
+                chestEvent();
+                break;
+            }
             steps+=1;
         }
         yPos -= steps-1;
 
-    }
-}
-
-
-void Player::checkSurrounding(int xPos, int yPos)
-{
-    if(maze->getMazeArray()[xPos-1][yPos]==2 || maze->getMazeArray()[xPos+1][yPos]==2 || maze->getMazeArray()[xPos][yPos-1]==2 || maze->getMazeArray()[xPos][yPos+1]==2)
-    {
-        //connect to database and change values when a chest is encountered
-        chestEvent();
     }
 }
 
