@@ -1,13 +1,16 @@
 #include <iostream>
 #include "UI.h"
+#include "Maze.h"
+#include "Player.h"
+#include "Score.h"
+#include "LevelManager.h"
 
-UI::UI(Maze* maze, Score* score)
+UI::UI(LevelManager* lvlman)
 {
-    printableMaze = maze->getMazeArray();
-    mazeWidth = maze->getMazeSizeWH().first;
-    mazeHeight = maze->getMazeSizeWH().second;
-
-    hScore = score->getHScore();
+    levelManager = lvlman;
+    hScore = lvlman->score->getHScore();
+    playerOldPos = make_pair(make_pair(lvlman->player->xPos, lvlman->player->yPos),
+                              lvlman->maze->getMazeArray()[lvlman->player->xPos][lvlman->player->yPos]);
 
     inBattle = false;
 }
@@ -83,35 +86,43 @@ void UI::PrintC(string character, int colour = 7)
 }
 
 // Build UI
-void  UI::ShowUI(Player* player)
+void  UI::ShowUI()
 {
     while (true)
     {
-    clearScreen();
+        clearScreen();
 
-    UI::printStateInfo();
-    if (!inBattle)
-        printMaze(make_pair(player->xPos, player->yPos));
-    else
-        printBattleScene();
+        UI::printStateInfo();
+        if (!inBattle)
+            printMaze();
+        else
+            printBattleScene();
 
-    UI::printUOptions(player);
+        UI::printUOptions();
     }
 }
 
 // Print Maze
-void  UI::printMaze(pair<int,int> playerPos)
+void  UI::printMaze()
 {
-    // Get player position
-    printableMaze[playerPos.first][playerPos.second] = 2;
+    // Get player position, 2 = Player
+    if (levelManager->maze->getMazeArray()[levelManager->player->xPos][levelManager->player->yPos] != 2)
+    {
+        // Replace player old position and store the new "old" position to replace later
+        levelManager->maze->getMazeArray()[playerOldPos.first.first][playerOldPos.first.second] = playerOldPos.second;
+        playerOldPos = make_pair(make_pair(levelManager->player->xPos, levelManager->player->yPos),
+                              levelManager->maze->getMazeArray()[levelManager->player->xPos][levelManager->player->yPos]);
+
+        levelManager->maze->getMazeArray()[levelManager->player->xPos][levelManager->player->yPos] = 2;
+    }
 
     // Print maze with objects
-    for(int h = 0; h < mazeWidth ; h++) {
+    for(int h = 0; h < levelManager->maze->getMazeSizeWH().second ; h++) {
         cout << endl;
 
-        for(int w = 0; w < mazeHeight ; w++)
+        for(int w = 0; w < levelManager->maze->getMazeSizeWH().first ; w++)
             {
-            switch ( printableMaze[w][h]){
+            switch ( levelManager->maze->getMazeArray()[w][h]){
             case 0: // 0: Path
                 PrintC( mazePath );
                 break;
@@ -125,7 +136,7 @@ void  UI::printMaze(pair<int,int> playerPos)
                 PrintC( mazeWall, 14);
                 break;
             default:
-                PrintC( printableMaze[w][h] );
+                PrintC( levelManager->maze->getMazeArray()[w][h] );
                 break;
             }
         }
@@ -141,7 +152,7 @@ void UI::printStateInfo()
 }
 
 // Print User Possible Options
-void UI::printUOptions(Player* player)
+void UI::printUOptions()
 {
     char userOption;
 
@@ -150,7 +161,7 @@ void UI::printUOptions(Player* player)
     cin >> userOption;
 
     if (userOption != (char)98)
-        player->movePlayer(userOption);
+        levelManager->player->movePlayer(userOption);
     else
         inBattle = !inBattle;
 

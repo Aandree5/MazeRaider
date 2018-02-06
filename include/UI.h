@@ -1,9 +1,6 @@
 #ifndef UI_H
 #define UI_H
 #include <string>
-#include "Maze.h"
-#include "Player.h"
-#include "Score.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -45,10 +42,12 @@
 
 using namespace std;
 
+class LevelManager;
+
 class  UI
 {
     public:
-        UI(Maze* maze, Score* score);
+        UI(LevelManager* lvlman);
         // cout with colour   CHAR Overload
         void PrintC(char character, int colour);
         // cout with colour   STRING Overload
@@ -57,7 +56,7 @@ class  UI
         bool ChangeColour(int colour);
 
         // Build UI
-        void ShowUI(Player* player);
+        void ShowUI();
 
     protected:
 
@@ -70,19 +69,18 @@ class  UI
 
         int hScore;
 
-        // Printable maze, easier to print player and enemies, doesn't have to check on every loop cycle
-        int** printableMaze;
+        // Pointer to level manager
+        LevelManager* levelManager;
 
-        // Maze size
-        int mazeWidth;
-        int mazeHeight;
+        // Get the "thing" in that new position so we can replace it after player move
+        pair<pair<int, int>, int> playerOldPos;
 
         // Print Maze
-        void printMaze(pair<int,int> playerPos);
+        void printMaze();
         // Print Timer, Scorn and Lives info
         void printStateInfo();
         // Print User Possible Options
-        void printUOptions(Player* player);
+        void printUOptions();
         // Call battle scene
         void printBattleScene();
         // Handles player attack type

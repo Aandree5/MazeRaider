@@ -1,8 +1,10 @@
 #ifndef LEVELMANAGER_H
 #define LEVELMANAGER_H
-#include "UI.h"
-#include "Maze.h"
-#include "Player.h"
+
+class UI;
+class Maze;
+class Player;
+class Score;
 
 class LevelManager
 {
@@ -12,6 +14,7 @@ class LevelManager
         UI* ui;
         Maze* maze;
         Player* player;
+        Score* score;
 
     protected:
 
