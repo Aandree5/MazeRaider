@@ -2,13 +2,12 @@
 #include "UI.h"
 #include "Maze.h"
 #include "Player.h"
-#include "Score.h"
+#include "ScoreTime.h"
 #include "LevelManager.h"
 
 UI::UI(LevelManager* lvlman)
 {
     levelManager = lvlman;
-    hScore = lvlman->score->getHScore();
     playerOldPos = make_pair(make_pair(lvlman->player->xPos, lvlman->player->yPos),
                               lvlman->maze->getMazeArray()[lvlman->player->xPos][lvlman->player->yPos]);
 
@@ -148,7 +147,7 @@ void  UI::printMaze()
 // Print Timer, Scorn and Lives info
 void UI::printStateInfo()
 {
-    cout << "Timer: 0           Score: " << hScore << "            Lives: 3/3" << endl << endl;
+    cout << "Timer: " << levelManager->scoretime->getTime() << "           Score: " << levelManager->scoretime->getHScore() << "            Lives: 3/3" << endl << endl;
 }
 
 // Print User Possible Options

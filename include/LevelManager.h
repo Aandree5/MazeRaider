@@ -4,7 +4,7 @@
 class UI;
 class Maze;
 class Player;
-class Score;
+class ScoreTime;
 
 class LevelManager
 {
@@ -14,7 +14,7 @@ class LevelManager
         UI* ui;
         Maze* maze;
         Player* player;
-        Score* score;
+        ScoreTime* scoretime;
 
     protected:
 

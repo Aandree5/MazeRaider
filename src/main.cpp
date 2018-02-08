@@ -1,7 +1,4 @@
 #include "Maze.h"
-#include "UI.h"
-#include "Player.h"
-#include "Score.h"
 #include "LevelManager.h"
 #include <iostream>
 #include <tuple>

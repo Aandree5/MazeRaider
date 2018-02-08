@@ -67,8 +67,6 @@ class  UI
         bool isPlayerAttacking = false;
         bool isEnemyAttacking = false;
 
-        int hScore;
-
         // Pointer to level manager
         LevelManager* levelManager;
 

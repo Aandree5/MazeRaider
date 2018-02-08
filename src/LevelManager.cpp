@@ -2,13 +2,13 @@
 #include "UI.h"
 #include "Maze.h"
 #include "Player.h"
-#include "Score.h"
+#include "ScoreTime.h"
 
 LevelManager::LevelManager()
 {
     maze = new Maze(31, 31);
     player = new Player();
-    score = new Score();
+    scoretime = new ScoreTime();
 
     player->maze = maze;
     player->xPos = maze->getMazeStart().first;
