@@ -39,13 +39,13 @@
 		<Unit filename="include/LevelManager.h" />
 		<Unit filename="include/Maze.h" />
 		<Unit filename="include/Player.h" />
-		<Unit filename="include/Score.h" />
+		<Unit filename="include/ScoreTime.h" />
 		<Unit filename="include/UI.h" />
 		<Unit filename="include/Utils.h" />
 		<Unit filename="src/LevelManager.cpp" />
 		<Unit filename="src/Maze.cpp" />
 		<Unit filename="src/Player.cpp" />
-		<Unit filename="src/Score.cpp" />
+		<Unit filename="src/ScoreTime.cpp" />
 		<Unit filename="src/UI.cpp" />
 		<Unit filename="src/Utils.cpp" />
 		<Unit filename="src/main.cpp" />
