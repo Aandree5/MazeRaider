@@ -82,9 +82,10 @@ class  UI
 
         // Check if it's in battle
         bool inBattle;
-
         // Player or Enemy attacking
         bool TPlayerFEnemy = true;
+        // If player can attack
+        bool playerTurn = true;
 
         // Pointer to level manager
         LevelManager* levelManager;
@@ -93,21 +94,23 @@ class  UI
         pair<pair<int, int>, int> playerOldPos;
 
         // Print Maze
-        void printMaze();
+        void PrintMaze();
         // Print Timer, Scorn and Lives info
-        void printStateInfo();
+        void PrintStateInfo();
         // Print User Possible Options
-        void printUOptions();
+        void PrintUOptions();
         // Call battle scene
-        void printBattleScene();
+        int BattleScene();
         // Handles player attack type
         void PlayAttack(int attackNr, int attackColor, int animSpeed);
         // Check health color
-        int healthColor(int health);
-        // Screen for gameover
-        void showGameOver();
+        int HealthColor(int health);
         // Screen for enemy killed
-        void showEnemyKilled();
+        void ResetBattleScene();
+        // Screen for gameover
+        void EnemyAttack();
+        // Screen for gameover
+        void ShowGameOver();
 
         // Meshes
         vector<vector<string>> enemyMesh = {{"                                   ",

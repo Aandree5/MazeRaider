@@ -101,22 +101,33 @@ void UI::PrintC(string character, int color = 7, bool twoChar = false)
 // Build UI
 void  UI::ShowUI()
 {
-    while (true)
+    int battleState = 0; // 0 = Battle Continues  |  1 = Player Lost (GameOver)  |  2 = Enemy Killed
+    while (true && battleState != 1)
     {
         clearScreen();
+        battleState = 0;
 
-        UI::printStateInfo();
+        PrintStateInfo();
         if (!inBattle)
-            printMaze();
+            PrintMaze();
         else
-            printBattleScene();
+            battleState = BattleScene();
 
-        UI::printUOptions();
+        if (battleState == 1)
+            break;
+        else if (battleState == 2)
+            continue;
+
+        if (playerTurn)
+            PrintUOptions();
     }
+
+    if (battleState == 1)
+        ShowGameOver();
 }
 
 // Print Maze
-void  UI::printMaze()
+void  UI::PrintMaze()
 {
     // Get player position, 2 = Player
     if (levelManager->maze->getMazeArray()[levelManager->player->xPos][levelManager->player->yPos] != 2)
@@ -159,13 +170,13 @@ void  UI::printMaze()
 }
 
 // Print Timer, Scorn and Lives info
-void UI::printStateInfo()
+void UI::PrintStateInfo()
 {
     cout << "Timer: " << levelManager->scoretime->getTime() << "           Score: " << levelManager->scoretime->getHScore() << "            Lives: 3/3" << endl << endl;
 }
 
 // Print User Possible Options
-void UI::printUOptions()
+void UI::PrintUOptions()
 {
     char userOption;
 
@@ -182,22 +193,15 @@ void UI::printUOptions()
     }
     else
     {
-        cout << endl << "Player Attack:    z        Enemy Attack:    x                  Run:     r" << endl;
+        cout << endl << "Attack:    z        Run:     r" << endl;
         cin >> userOption;
 
         // Player attacks
         if (userOption == (char)122)
         {
+            playerTurn = false;
             TPlayerFEnemy = true;
             enemyHealth -= 10;
-            PlayAttack(1, 10, 5);
-        }
-
-        // Enemy attacks
-        else if (userOption == (char)120)
-        {
-            TPlayerFEnemy = false;
-            playerHealth -= 10;
             PlayAttack(1, 10, 5);
         }
 
@@ -211,7 +215,7 @@ void UI::printUOptions()
     }
 }
 
-void UI::printBattleScene()
+int UI::BattleScene()
 {
     int sceneWidth = 100;
     int sceneHeight = 15;
@@ -225,9 +229,15 @@ void UI::printBattleScene()
     int eHealth = (int)round((enemyHealth * 20) / enemyMaxHealth);
 
     if (playerHealth <= 0)
-        showGameOver();
+    {
+        ResetBattleScene();
+        return 1;
+    }
     else if (enemyHealth <= 0)
-        showEnemyKilled();
+    {
+       ResetBattleScene();
+       return 2;
+    }
     else
     {
         // Print battle scene
@@ -274,13 +284,13 @@ void UI::printBattleScene()
 // Player Health
                 else if (w >= 5 && w <= (pHealth + 5) && h == 3)
                 {
-                    PrintC("#", healthColor(pHealth));
+                    PrintC("#", HealthColor(pHealth));
                 }
 
 // Enemy Health
                 else if (w >= 68 && w <= (eHealth + 68) && h == 11)
                 {
-                    PrintC("#", healthColor(eHealth));
+                    PrintC("#", HealthColor(eHealth));
                 }
 
 // Place to draw player
@@ -312,6 +322,11 @@ void UI::printBattleScene()
             cout << endl;
         }
     }
+
+    if (!playerTurn)
+        EnemyAttack();
+
+    return 0;
 }
 
 void UI::PlayAttack(int attackNr, int attackColor, int animSpeed)
@@ -332,8 +347,8 @@ void UI::PlayAttack(int attackNr, int attackColor, int animSpeed)
         case 0:
             if (TPlayerFEnemy)
             {
-                SHORT xPos = 22;
-                SHORT yPos = 12;
+                int xPos = 22;
+                int yPos = 12;
 
                 for (int i = 0; i <= 38; i++)
                 {
@@ -368,8 +383,8 @@ void UI::PlayAttack(int attackNr, int attackColor, int animSpeed)
             }
             else
             {
-                SHORT xPos = 60;
-                SHORT yPos = 7;
+                int xPos = 60;
+                int yPos = 7;
 
                 for (int i = 38; i >= 0; i--)
                 {
@@ -406,8 +421,8 @@ void UI::PlayAttack(int attackNr, int attackColor, int animSpeed)
         case 1:
             if (TPlayerFEnemy)
             {
-                SHORT xPos = 22;
-                SHORT yPos = 12;
+                int xPos = 22;
+                int yPos = 12;
 
                 for (int i = 0; i <= 38; i++)
                 {
@@ -458,8 +473,8 @@ void UI::PlayAttack(int attackNr, int attackColor, int animSpeed)
             }
             else
             {
-                SHORT xPos = 60;
-                SHORT yPos = 7;
+                int xPos = 60;
+                int yPos = 7;
 
                 for (int i = 38; i >= 0; i--)
                 {
@@ -521,7 +536,7 @@ void UI::PlayAttack(int attackNr, int attackColor, int animSpeed)
     #endif // __linux__
 }
 
-int UI::healthColor(int health)
+int UI::HealthColor(int health)
 {
     if (health > 10)
         return 34;
@@ -531,16 +546,24 @@ int UI::healthColor(int health)
          return 68;
 }
 
-void UI::showGameOver()
+void UI::ResetBattleScene()
 {
     playerHealth = playerMaxHealth;
     enemyHealth = enemyMaxHealth;
     inBattle = false;
+    playerTurn = true;
 }
 
-void UI::showEnemyKilled()
+void UI::EnemyAttack()
 {
-    playerHealth = playerMaxHealth;
-    enemyHealth = enemyMaxHealth;
-    inBattle = false;
+    playerTurn = true;
+    TPlayerFEnemy = false;
+    playerHealth -= 10;
+    PlayAttack(1, 10, 5);
+}
+
+void UI::ShowGameOver()
+{
+    clearScreen();
+    cout << "Game Over!";
 }
