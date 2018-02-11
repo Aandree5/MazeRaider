@@ -18,12 +18,12 @@ void Player::movePlayer(char direction)
             {
                 steps+=1;
                 break;
-            }/*
+            }
             else if(maze->getMazeArray()[xPos][yPos+steps] == 3)
             {
                 Player::chestEvent();
                 break;
-            }*/
+            }
             steps+=1;
 
         }
@@ -37,12 +37,12 @@ void Player::movePlayer(char direction)
             {
                 steps+=1;
                 break;
-            }/*
+            }
             else if(maze->getMazeArray()[xPos-steps][yPos] == 3)
             {
                 Player::chestEvent();
                 break;
-            }*/
+            }
             steps+=1;
         }
         xPos -= steps-1;
@@ -55,12 +55,12 @@ void Player::movePlayer(char direction)
             {
                 steps+=1;
                 break;
-            }/*
+            }
             else if(maze->getMazeArray()[xPos+steps][yPos] == 3)
             {
                 Player::chestEvent();
                 break;
-            }*/
+            }
             steps+=1;
         }
         xPos += steps-1;
@@ -73,12 +73,12 @@ void Player::movePlayer(char direction)
             {
                 steps+=1;
                 break;
-            }/*
+            }
             else if(maze->getMazeArray()[xPos][yPos-steps] == 3)
             {
                 Player::chestEvent();
                 break;
-            }*/
+            }
             steps+=1;
         }
         yPos -= steps-1;
@@ -86,7 +86,7 @@ void Player::movePlayer(char direction)
     }
 }
 
-void Player::chestEvent()
+void Player::chestEvent(void)
 {
     /*
     random rewards or drops
