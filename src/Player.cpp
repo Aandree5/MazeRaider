@@ -1,12 +1,17 @@
 #include "Player.h"
 
-
-// Sorry forgot about it, this one needs to me here, it is the main function of your class, the one that is called
-// when we instantiate an object of the class in main.cpp
-// usually where you would define the default values of the variables
 Player::Player()
 {
 }
+/*
+check to see if player has key to open exit
+
+
+
+
+*/
+
+
 
 void Player::movePlayer(char direction)
 {
