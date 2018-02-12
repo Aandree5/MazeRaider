@@ -55,40 +55,34 @@
 using namespace std;
 
 class LevelManager;
+class BattleScene;
 
 class  UI
 {
     public:
         UI(LevelManager* lvlman);
         // cout with colour   CHAR Overload
-        void PrintC(char character, int color, bool twoChar);
+        void PrintC(char character, int color = 7, bool twoChar = false);
         // cout with colour   STRING Overload
-        void PrintC(string character, int color, bool twoChar);
+        void PrintC(string character, int color = 7, bool twoChar = false);
         // change the text colour
         bool ChangeColor(int color);
 
         // Build UI
         void ShowUI();
 
+
+        // Check if it's in battle
+        bool inBattle;
+
     protected:
 
     private:
 
-        //TEMP
-        int playerHealth = 100;
-        int playerMaxHealth = 100;
-        int enemyHealth = 100;
-        int enemyMaxHealth = 100;
-
-        // Check if it's in battle
-        bool inBattle;
-        // Player or Enemy attacking
-        bool TPlayerFEnemy = true;
-        // If player can attack
-        bool playerTurn = true;
-
         // Pointer to level manager
-        LevelManager* levelManager;
+        LevelManager* lvlManager;
+
+        BattleScene* btlScene;
 
         // Get the "thing" in that new position so we can replace it after player move
         pair<pair<int, int>, int> playerOldPos;
@@ -99,65 +93,9 @@ class  UI
         void PrintStateInfo();
         // Print User Possible Options
         void PrintUOptions();
-        // Call battle scene
-        int BattleScene();
-        // Handles player attack type
-        void PlayAttack(int attackNr, int attackColor, int animSpeed);
-        // Check health color
-        int HealthColor(int health);
-        // Screen for enemy killed
-        void ResetBattleScene();
-        // Screen for gameover
-        void EnemyAttack();
         // Screen for gameover
         void ShowGameOver();
 
-        // Meshes
-        vector<vector<string>> enemyMesh = {{"                                   ",
-                                        "                          .    .   ",
-                                        "                           )  (    ",
-                                        "     _ _ _ _ _ _ _ _ _ _ _(.--.)   ",
-                                        "   {{ { { { { { { { { { { ( '_')   ",
-                                        "    >>>>>>>>>>>>>>>>>>>>>>>`--'>   ",
-                                        "                                   ",
-                                        "                                   "}};
-
-
-    vector<vector<string>> playerMesh = {{"       _O_      ",
-                                       R"(     /     \    )",
-                                       R"(    |==/=\==|   )",
-                                         "    |  O O  |   ",
-                                       R"(     \  V  /    )",
-                                       R"(     /`---'\    )",
-                                         "     O'_:_`O    ",
-                                         "      -- --     "},
-
-                                         {"      _____     ",
-                                          "     |     |    ",
-                                        R"(     |[/_\]|    )",
-                                        R"(     / O O \    )",
-                                        R"(    /\  -  /\   )",
-                                        R"(     /`---'\    )",
-                                          "     O'M|M`O    ",
-                                          "      -- --     "},
-
-                                          {"      _<>_      ",
-                                        R"(    /      \    )",
-                                        R"(   |==\==/==|   )",
-                                          "   |   ><   |   ",
-                                        R"( ,-\   ()   /-. )",
-                                          " V( `-====-' )V ",
-                                          " (_____:|_____) ",
-                                          "   ----  ----   "},
-
-                                          {"       ___      ",
-                                        R"(     /  _  \    )",
-                                        R"(    |  / \  |   )",
-                                          "    |  |*|  |   ",
-                                        R"(     \  X  /    )",
-                                        R"(     /`---'\    )",
-                                          "     O'_|_`O    ",
-                                          "      -- --     ",}};
 };
 
 #endif // UI_H

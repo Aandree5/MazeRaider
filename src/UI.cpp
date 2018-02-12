@@ -1,17 +1,18 @@
-#include <math.h>
 #include "UI.h"
 #include "Maze.h"
 #include "Player.h"
 #include "ScoreTime.h"
 #include "LevelManager.h"
+#include "BattleScene.h"
 
 UI::UI(LevelManager* lvlman)
 {
-    levelManager = lvlman;
+    lvlManager = lvlman;
     playerOldPos = make_pair(make_pair(lvlman->player->xPos, lvlman->player->yPos),
                               lvlman->maze->getMazeArray()[lvlman->player->xPos][lvlman->player->yPos]);
 
     inBattle = false;
+    btlScene = nullptr;
 }
 
 bool UI::ChangeColor(int color)
@@ -69,7 +70,7 @@ bool UI::ChangeColor(int color)
 }
 
 // cout with color   CHAR Overload
-void UI::PrintC(char character, int color = 7, bool twoChar = false)
+void UI::PrintC(char character, int color, bool twoChar)
 {
     bool needsReset = ChangeColor(color);
 
@@ -84,7 +85,7 @@ void UI::PrintC(char character, int color = 7, bool twoChar = false)
 }
 
 // cout with color   STRING Overload
-void UI::PrintC(string character, int color = 7, bool twoChar = false)
+void UI::PrintC(string character, int color, bool twoChar)
 {
     bool needsReset = ChangeColor(color);
 
@@ -111,14 +112,22 @@ void  UI::ShowUI()
         if (!inBattle)
             PrintMaze();
         else
-            battleState = BattleScene();
+            battleState = btlScene->BuildScene();
 
         if (battleState == 1)
+        {
+            delete btlScene;
+            btlScene = nullptr;
             break;
+        }
         else if (battleState == 2)
+        {
+            delete btlScene;
+            btlScene = nullptr;
             continue;
+        }
 
-        if (playerTurn)
+        if (btlScene == nullptr || btlScene->TPlayerFEnemy)
             PrintUOptions();
     }
 
@@ -130,23 +139,23 @@ void  UI::ShowUI()
 void  UI::PrintMaze()
 {
     // Get player position, 2 = Player
-    if (levelManager->maze->getMazeArray()[levelManager->player->xPos][levelManager->player->yPos] != 2)
+    if (lvlManager->maze->getMazeArray()[lvlManager->player->xPos][lvlManager->player->yPos] != 2)
     {
         // Replace player old position and store the new "old" position to replace later
-        levelManager->maze->getMazeArray()[playerOldPos.first.first][playerOldPos.first.second] = playerOldPos.second;
-        playerOldPos = make_pair(make_pair(levelManager->player->xPos, levelManager->player->yPos),
-                              levelManager->maze->getMazeArray()[levelManager->player->xPos][levelManager->player->yPos]);
+        lvlManager->maze->getMazeArray()[playerOldPos.first.first][playerOldPos.first.second] = playerOldPos.second;
+        playerOldPos = make_pair(make_pair(lvlManager->player->xPos, lvlManager->player->yPos),
+                              lvlManager->maze->getMazeArray()[lvlManager->player->xPos][lvlManager->player->yPos]);
 
-        levelManager->maze->getMazeArray()[levelManager->player->xPos][levelManager->player->yPos] = 2;
+        lvlManager->maze->getMazeArray()[lvlManager->player->xPos][lvlManager->player->yPos] = 2;
     }
 
     // Print maze with objects
-    for(int h = 0; h < levelManager->maze->getMazeSizeWH().second ; h++) {
+    for(int h = 0; h < lvlManager->maze->getMazeSizeWH().second ; h++) {
         cout << endl;
 
-        for(int w = 0; w < levelManager->maze->getMazeSizeWH().first ; w++)
+        for(int w = 0; w < lvlManager->maze->getMazeSizeWH().first ; w++)
             {
-            switch ( levelManager->maze->getMazeArray()[w][h]){
+            switch ( lvlManager->maze->getMazeArray()[w][h]){
             case 0: // 0: Path
                 PrintC( mazePath, 7, true);
                 break;
@@ -160,7 +169,7 @@ void  UI::PrintMaze()
                 PrintC( mazeWall, 14, true );
                 break;
             default:
-                PrintC( levelManager->maze->getMazeArray()[w][h], 7, true );
+                PrintC( lvlManager->maze->getMazeArray()[w][h], 7, true );
                 break;
             }
         }
@@ -172,7 +181,7 @@ void  UI::PrintMaze()
 // Print Timer, Scorn and Lives info
 void UI::PrintStateInfo()
 {
-    cout << "Timer: " << levelManager->scoretime->getTime() << "           Score: " << levelManager->scoretime->getHScore() << "            Lives: 3/3" << endl << endl;
+    cout << "Timer: " << lvlManager->scoretime->getTime() << "           Score: " << lvlManager->scoretime->getHScore() << "            Lives: 3/3" << endl << endl;
 }
 
 // Print User Possible Options
@@ -187,379 +196,37 @@ void UI::PrintUOptions()
 
 
         if (userOption != (char)98)
-            levelManager->player->movePlayer(userOption);
+            lvlManager->player->movePlayer(userOption);
         else
-            inBattle = true;
+            btlScene = new BattleScene(lvlManager);
     }
     else
     {
-        cout << endl << "Attack:    z        Run:     r" << endl;
+        cout << endl;
+        cout << "Attack:    a        Defend:    d" << endl;
+        cout << "  Heal:    h           Run:    r" << endl;
         cin >> userOption;
 
         // Player attacks
-        if (userOption == (char)122)
-        {
-            playerTurn = false;
-            TPlayerFEnemy = true;
-            enemyHealth -= 10;
-            PlayAttack(1, 10, 5);
-        }
+        if (userOption == (char)97)
+            btlScene->PlayerAttack(1, 10, 10, 5);
+
+        // Player defends
+        else if (userOption == (char)100)
+            btlScene->PlayerDefend(1, 3, 150);
+
+        // Player heals
+        else if (userOption == (char)104)
+            btlScene->PlayerHeal(1, 10, 2, 150);
 
         // Player runs
         else if (userOption == (char)114)
         {
-            playerHealth = playerMaxHealth;
-            enemyHealth = enemyMaxHealth;
             inBattle = false;
+            delete btlScene;
+            btlScene = nullptr;
         }
     }
-}
-
-int UI::BattleScene()
-{
-    int sceneWidth = 100;
-    int sceneHeight = 15;
-    int playerCounter = 0;
-    int enemyCounter = 0;
-    int playerWidth = 16;
-    int enemyWidth = 35;
-
-    // Health to draw - 20 is the maximum character for health
-    int pHealth = (int)round((playerHealth * 20) / playerMaxHealth);
-    int eHealth = (int)round((enemyHealth * 20) / enemyMaxHealth);
-
-    if (playerHealth <= 0)
-    {
-        ResetBattleScene();
-        return 1;
-    }
-    else if (enemyHealth <= 0)
-    {
-       ResetBattleScene();
-       return 2;
-    }
-    else
-    {
-        // Print battle scene
-        for (int h = 0; h < sceneHeight; h++)
-        {
-            for (int w = 0; w < sceneWidth; w++)
-            {
-// Top left corner
-                if (h == 0 && w == 0 )
-                {
-                    cout << (char)218;
-                }
-
-// Top right corner
-                else if (h == 0 && w == sceneWidth - 1 )
-                {
-                    cout << (char)191;
-                }
-
-// Bottom left corner
-                else if (h == sceneHeight - 1 && w == 0 )
-                {
-                    cout << (char)192;
-                }
-
-// Bottom right corner
-                else if (h == sceneHeight - 1 && w == sceneWidth - 1 )
-                {
-                    cout << (char)217;
-                }
-
-// Top and bottom lines
-                else if (h == 0 || h == sceneHeight - 1)
-                {
-                    cout << (char)196;
-                }
-
-// Left and right lines
-                else if (w == 0 || w == sceneWidth - 1)
-                {
-                    cout << (char)179;
-                }
-
-// Player Health
-                else if (w >= 5 && w <= (pHealth + 5) && h == 3)
-                {
-                    PrintC("#", HealthColor(pHealth));
-                }
-
-// Enemy Health
-                else if (w >= 68 && w <= (eHealth + 68) && h == 11)
-                {
-                    PrintC("#", HealthColor(eHealth));
-                }
-
-// Place to draw player
-                else if (h >= (sceneHeight / 2) - 1 && h < sceneHeight && w > 5 && w <= (playerWidth + 5))
-                {
-                    if (playerCounter < playerMesh[1].size())
-                    {
-                        cout << playerMesh[1][playerCounter];
-                        playerCounter++;
-                        w += 15;
-                    }
-                }
-
-// Place to draw enemy
-                else if (h > 0 && h <= sceneHeight / 2 && w >= sceneWidth - (enemyWidth + 5) && w < sceneWidth - 5)
-                {
-                    if (enemyCounter < enemyMesh[0].size())
-                    {
-                        cout << enemyMesh[0][enemyCounter];
-                        enemyCounter++;
-                        w += 34;
-                    }
-                }
-
-// Empty space
-                else
-                    cout << (char)32;
-            }
-            cout << endl;
-        }
-    }
-
-    if (!playerTurn)
-        EnemyAttack();
-
-    return 0;
-}
-
-void UI::PlayAttack(int attackNr, int attackColor, int animSpeed)
-{
-    #ifdef _WIN32
-        HANDLE hStdOut = GetStdHandle( STD_OUTPUT_HANDLE );
-        CONSOLE_SCREEN_BUFFER_INFO cbsi;
-        GetConsoleScreenBufferInfo(hStdOut, &cbsi);
-        COORD originalPos = cbsi.dwCursorPosition;
-    #endif // _WIN32
-
-    #ifdef __linux__
-        cout << "\033[s";
-    #endif // __linux__
-
-    switch (attackNr)
-    {
-        case 0:
-            if (TPlayerFEnemy)
-            {
-                int xPos = 22;
-                int yPos = 12;
-
-                for (int i = 0; i <= 38; i++)
-                {
-                    cursorPosition( hStdOut, xPos, yPos ); // Main
-                    PrintC(mazeWall, attackColor);
-                    cursorPosition( hStdOut, xPos + 1, yPos ); // Front
-                    PrintC(mazeWall, attackColor);
-                    cursorPosition( hStdOut, xPos - 1, yPos ); // Back
-                    PrintC(mazeWall, attackColor);
-                    cursorPosition( hStdOut, xPos, yPos + 1 ); // Bottom
-                    PrintC(attackBottom, attackColor);
-                    cursorPosition( hStdOut, xPos + 1, yPos + 1 ); // Bottom Front
-                    PrintC(attackBottom, attackColor);
-
-                    Sleep(animSpeed);
-
-                    cursorPosition( hStdOut, xPos, yPos ); // Main
-                    PrintC(mazePath);
-                    cursorPosition( hStdOut, xPos + 1, yPos ); // Front
-                    PrintC(mazePath);
-                    cursorPosition( hStdOut, xPos - 1, yPos ); // Back
-                    PrintC(mazePath);
-                    cursorPosition( hStdOut, xPos, yPos + 1 ); // Bottom
-                    PrintC(mazePath);
-                    cursorPosition( hStdOut, xPos + 1, yPos + 1 ); // Bottom Front
-                    PrintC(mazePath);
-
-                    xPos++;
-                    if (i % 7 == 0)
-                        yPos--;
-                }
-            }
-            else
-            {
-                int xPos = 60;
-                int yPos = 7;
-
-                for (int i = 38; i >= 0; i--)
-                {
-                    cursorPosition( hStdOut, xPos, yPos ); // Main
-                    PrintC(mazeWall, attackColor);
-                    cursorPosition( hStdOut, xPos, yPos - 1 ); // Top
-                    PrintC(attackTop, attackColor);
-                    cursorPosition( hStdOut, xPos - 1, yPos - 1 ); // Top Front
-                    PrintC(attackTop, attackColor);
-                    cursorPosition( hStdOut, xPos - 1, yPos ); // Front
-                    PrintC(mazeWall, attackColor);
-                    cursorPosition( hStdOut, xPos + 1, yPos ); // Back
-                    PrintC(mazeWall, attackColor);
-
-                    Sleep(animSpeed);
-
-                    cursorPosition( hStdOut, xPos, yPos ); // Main
-                    PrintC(mazePath);
-                    cursorPosition( hStdOut, xPos, yPos - 1 ); // Bottom
-                    PrintC(mazePath);
-                    cursorPosition( hStdOut, xPos - 1, yPos - 1 ); // Bottom Front
-                    PrintC(mazePath);
-                    cursorPosition( hStdOut, xPos - 1, yPos ); // Front
-                    PrintC(mazePath);
-                    cursorPosition( hStdOut, xPos + 1, yPos ); // Back
-                    PrintC(mazePath);
-
-                    xPos--;
-                    if (i % 7 == 0)
-                        yPos++;
-                }
-            }
-            break;
-        case 1:
-            if (TPlayerFEnemy)
-            {
-                int xPos = 22;
-                int yPos = 12;
-
-                for (int i = 0; i <= 38; i++)
-                {
-                    cursorPosition( hStdOut, xPos, yPos ); // Main Middle
-                    PrintC(mazeWall, attackColor);
-                    cursorPosition( hStdOut, xPos + 2, yPos - 1 ); // Front Middle
-                    PrintC(mazeWall, attackColor);
-                    cursorPosition( hStdOut, xPos - 2, yPos + 1 ); // Back Middle
-                    PrintC(mazeWall, attackColor);
-                    cursorPosition( hStdOut, xPos, yPos - 2 ); // Main Top
-                    PrintC(mazeWall, attackColor);
-                    cursorPosition( hStdOut, xPos + 2, yPos - 3 ); // Front Top
-                    PrintC(mazeWall, attackColor);
-                    cursorPosition( hStdOut, xPos - 2, yPos - 1 ); // Back Top
-                    PrintC(mazeWall, attackColor);
-                    cursorPosition( hStdOut, xPos, yPos + 2 ); // Main Bottom
-                    PrintC(mazeWall, attackColor);
-                    cursorPosition( hStdOut, xPos + 2, yPos + 1 ); // Front Bottom
-                    PrintC(mazeWall, attackColor);
-                    cursorPosition( hStdOut, xPos - 2, yPos + 3 ); // Back Bottom
-                    PrintC(mazeWall, attackColor);
-
-                    Sleep(animSpeed);
-
-                    cursorPosition( hStdOut, xPos, yPos ); // Main Middle
-                    PrintC(mazePath);
-                    cursorPosition( hStdOut, xPos + 2, yPos - 1 ); // Front Middle
-                    PrintC(mazePath);
-                    cursorPosition( hStdOut, xPos - 2, yPos + 1 ); // Back Middle
-                    PrintC(mazePath);
-                    cursorPosition( hStdOut, xPos, yPos - 2 ); // Main Top
-                    PrintC(mazePath);
-                    cursorPosition( hStdOut, xPos + 2, yPos - 3 ); // Front Top
-                    PrintC(mazePath);
-                    cursorPosition( hStdOut, xPos - 2, yPos - 1 ); // Back Top
-                    PrintC(mazePath);
-                    cursorPosition( hStdOut, xPos, yPos + 2); // Main Bottom
-                    PrintC(mazePath);
-                    cursorPosition( hStdOut, xPos + 2, yPos + 1 ); // Front Bottom
-                    PrintC(mazePath);
-                    cursorPosition( hStdOut, xPos - 2, yPos + 3 ); // Back Bottom
-                    PrintC(mazePath);
-
-                    xPos++;
-                    if (i % 7 == 0)
-                        yPos--;
-                }
-            }
-            else
-            {
-                int xPos = 60;
-                int yPos = 7;
-
-                for (int i = 38; i >= 0; i--)
-                {
-                    cursorPosition( hStdOut, xPos, yPos ); // Main Middle
-                    PrintC(mazeWall, attackColor);
-                    cursorPosition( hStdOut, xPos - 2, yPos + 1 ); // Front Middle
-                    PrintC(mazeWall, attackColor);
-                    cursorPosition( hStdOut, xPos + 2, yPos - 1 ); // Back Middle
-                    PrintC(mazeWall, attackColor);
-                    cursorPosition( hStdOut, xPos, yPos - 2 ); // Main Top
-                    PrintC(mazeWall, attackColor);
-                    cursorPosition( hStdOut, xPos - 2, yPos - 1 ); // Front Top
-                    PrintC(mazeWall, attackColor);
-                    cursorPosition( hStdOut, xPos + 2, yPos - 3 ); // Back Top
-                    PrintC(mazeWall, attackColor);
-                    cursorPosition( hStdOut, xPos, yPos + 2 ); // Main Bottom
-                    PrintC(mazeWall, attackColor);
-                    cursorPosition( hStdOut, xPos - 2, yPos + 3 ); // Front Bottom
-                    PrintC(mazeWall, attackColor);
-                    cursorPosition( hStdOut, xPos + 2, yPos + 1 ); // Back Bottom
-                    PrintC(mazeWall, attackColor);
-
-                    Sleep(animSpeed);
-
-                    cursorPosition( hStdOut, xPos, yPos ); // Main Middle
-                    PrintC(mazePath);
-                    cursorPosition( hStdOut, xPos - 2, yPos + 1 ); // Front Middle
-                    PrintC(mazePath);
-                    cursorPosition( hStdOut, xPos + 2, yPos - 1 ); // Back Middle
-                    PrintC(mazePath);
-                    cursorPosition( hStdOut, xPos, yPos - 2 ); // Main Top
-                    PrintC(mazePath);
-                    cursorPosition( hStdOut, xPos - 2, yPos - 1 ); // Front Top
-                    PrintC(mazePath);
-                    cursorPosition( hStdOut, xPos + 2, yPos - 3 ); // Back Top
-                    PrintC(mazePath);
-                    cursorPosition( hStdOut, xPos, yPos + 2 ); // Main Bottom
-                    PrintC(mazePath);
-                    cursorPosition( hStdOut, xPos - 2, yPos + 3 ); // Front Bottom
-                    PrintC(mazePath);
-                    cursorPosition( hStdOut, xPos + 2, yPos + 1 ); // Back Bottom
-                    PrintC(mazePath);
-
-                    xPos--;
-                    if (i % 7 == 0)
-                        yPos++;
-                }
-            }
-            break;
-    }
-
-
-    #ifdef _WIN32
-        SetConsoleCursorPosition( hStdOut, originalPos );
-    #endif // _WIN32
-
-    #ifdef __linux__
-        cout << "\033[u";
-    #endif // __linux__
-}
-
-int UI::HealthColor(int health)
-{
-    if (health > 10)
-        return 34;
-    else if (health > 5)
-         return 238;
-    else
-         return 68;
-}
-
-void UI::ResetBattleScene()
-{
-    playerHealth = playerMaxHealth;
-    enemyHealth = enemyMaxHealth;
-    inBattle = false;
-    playerTurn = true;
-}
-
-void UI::EnemyAttack()
-{
-    playerTurn = true;
-    TPlayerFEnemy = false;
-    playerHealth -= 10;
-    PlayAttack(1, 10, 5);
 }
 
 void UI::ShowGameOver()
