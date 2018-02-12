@@ -109,6 +109,18 @@ int BattleScene::BuildScene()
                     w += eValue.size() - 1;
                 }
 
+// Draw player shield
+                else if(w == 27 && h == 3 && isPlayerDefending)
+                {
+                    lvlManager->ui->PrintC(shield, 11);
+                }
+
+// Draw enemy shield
+                else if(w == 66 && h == 11 && isEnemyDefending)
+                {
+                    lvlManager->ui->PrintC(shield, 11);
+                }
+
 // Place to draw player
                 else if (h >= (sceneHeight / 2) - 1 && h < sceneHeight && w > 5 && w <= (playerWidth + 5))
                 {
@@ -169,51 +181,48 @@ int BattleScene::HealthColor(int health, bool TBackFFront)
 
 void BattleScene::UpdateHealth()
 {
-
     HANDLE hStdOut = GetStdHandle( STD_OUTPUT_HANDLE );
-        CONSOLE_SCREEN_BUFFER_INFO cbsi;
-        GetConsoleScreenBufferInfo(hStdOut, &cbsi);
-        COORD originalPos = cbsi.dwCursorPosition;
+    CONSOLE_SCREEN_BUFFER_INFO cbsi;
+    GetConsoleScreenBufferInfo(hStdOut, &cbsi);
+    COORD originalPos = cbsi.dwCursorPosition;
+
+    vector<int> x = {5, 5, 68, 68};
+    vector<int> y = {5, 7, 13, 15};
 
     // Health to draw - 20 is the maximum character for health
     int pHealth = (int)round((playerHealth * 20) / playerMaxHealth);
     int eHealth = (int)round((enemyHealth * 20) / enemyMaxHealth);
 
-    int x = 5;
-    int y = 5;
-    for (int i = 0; i <= eHealth; i++)
+    for(int p = 0; p < x.size();p++)
     {
-        cursorPosition( hStdOut, x + i, y );
-        lvlManager->ui->PrintC(mazeWall, HealthColor(pHealth));
+        if(p % 2 == 0)
+        {
+            for(int i = 0; i <=20;i++)
+            {
+                cursorPosition( hStdOut, x[p] + i, y[p] );
+                if (i > pHealth)
+                    lvlManager->ui->PrintC(mazePath);
+                else
+                    lvlManager->ui->PrintC(mazeWall, HealthColor(pHealth));
+            }
+        }
+        else
+        {
+            for(int i = 0; i <=20;i++)
+            {
+                cursorPosition( hStdOut, x[p] + i, y[p] );
+                lvlManager->ui->PrintC(mazePath);
+            }
+
+            cursorPosition( hStdOut, x[p], y[p] );
+            lvlManager->ui->PrintC(to_string(playerHealth), HealthColor(pHealth, false));
+            lvlManager->ui->PrintC("/" + to_string(playerMaxHealth));
+        }
     }
-
-    x = 5;
-    y = 7;
-
-    cursorPosition( hStdOut, x, y );
-    string pValue = to_string(playerHealth) + "/" + to_string(playerMaxHealth);
-    lvlManager->ui->PrintC(to_string(playerHealth), HealthColor(pHealth, false));
-    lvlManager->ui->PrintC("/" + to_string(playerMaxHealth));
-
-    x = 68;
-    y = 13;
-    for (int i = 0; i <= eHealth; i++)
-    {
-        cursorPosition( hStdOut, x + i, y );
-        lvlManager->ui->PrintC(mazeWall, HealthColor(eHealth));
-    }
-
-    x = 68;
-    y = 15;
-
-    cursorPosition( hStdOut, x, y );
-    string eValue = to_string(enemyHealth) + "/" + to_string(enemyMaxHealth);
-    lvlManager->ui->PrintC(to_string(enemyHealth), HealthColor(pHealth, false));
-    lvlManager->ui->PrintC("/" + to_string(enemyMaxHealth));
-
 
     cursorPosition( hStdOut, originalPos.X, originalPos.Y );
 }
+
 
 void BattleScene::PlayAttack(int num, int color, int speed)
 {
@@ -551,9 +560,9 @@ void BattleScene::PlayHeal(int num, int color, int speed)
                     for (int y = 0; y < 7 - x; y++)
                     {
                         cursorPosition(hStdOut, xPos + x, yPos - y);
-                        lvlManager->ui->PrintC(mazeWall, color);
+                        lvlManager->ui->PrintC(heal, color);
                         cursorPosition(hStdOut, xPos + 2 + x, yPos - y + 1);
-                        lvlManager->ui->PrintC(mazeWall, color);
+                        lvlManager->ui->PrintC(heal, color);
                         Sleep(speed / 2);
                     }
 
@@ -579,9 +588,9 @@ void BattleScene::PlayHeal(int num, int color, int speed)
                     for (int y = 0; y < 7 - x; y++)
                     {
                         cursorPosition(hStdOut, xPos - x, yPos - y);
-                        lvlManager->ui->PrintC(mazeWall, color);
+                        lvlManager->ui->PrintC(heal, color);
                         cursorPosition(hStdOut, xPos - 2 - x, yPos - y + 1);
-                        lvlManager->ui->PrintC(mazeWall, color);
+                        lvlManager->ui->PrintC(heal, color);
                         Sleep(speed / 2);
                     }
 
@@ -609,20 +618,20 @@ void BattleScene::PlayHeal(int num, int color, int speed)
                     for (int y = 0; y < 3; y++)
                     {
                         cursorPosition(hStdOut, xPos + x, yPos - y - 1);
-                        lvlManager->ui->PrintC(mazeWall, color);
+                        lvlManager->ui->PrintC(heal, color);
                         cursorPosition(hStdOut, xPos - 2 + x, yPos - y );
-                        lvlManager->ui->PrintC(mazeWall, color);
+                        lvlManager->ui->PrintC(heal, color);
                         cursorPosition(hStdOut, xPos + 2 + x, yPos - y + 1);
-                        lvlManager->ui->PrintC(mazeWall, color);
+                        lvlManager->ui->PrintC(heal, color);
 
                         Sleep(speed);
 
                         cursorPosition(hStdOut, xPos + x, yPos - y - 1);
-                        lvlManager->ui->PrintC(mazePath);
+                        lvlManager->ui->PrintC(heal);
                         cursorPosition(hStdOut, xPos - 2 + x, yPos - y );
-                        lvlManager->ui->PrintC(mazePath);
+                        lvlManager->ui->PrintC(heal);
                         cursorPosition(hStdOut, xPos + 2 + x, yPos - y + 1);
-                        lvlManager->ui->PrintC(mazePath);
+                        lvlManager->ui->PrintC(heal);
                     }
                 }
             }
@@ -636,11 +645,11 @@ void BattleScene::PlayHeal(int num, int color, int speed)
                     for (int y = 0; y < 3; y++)
                     {
                         cursorPosition(hStdOut, xPos - x, yPos - y - 1);
-                        lvlManager->ui->PrintC(mazeWall, color);
+                        lvlManager->ui->PrintC(heal, color);
                         cursorPosition(hStdOut, xPos - 2 - x, yPos - y );
-                        lvlManager->ui->PrintC(mazeWall, color);
+                        lvlManager->ui->PrintC(heal, color);
                         cursorPosition(hStdOut, xPos + 2 - x, yPos - y + 1);
-                        lvlManager->ui->PrintC(mazeWall, color);
+                        lvlManager->ui->PrintC(heal, color);
 
                         Sleep(speed);
 

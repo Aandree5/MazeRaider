@@ -4,6 +4,7 @@
 #include "ScoreTime.h"
 #include "LevelManager.h"
 #include "BattleScene.h"
+#include <mysql.h>
 
 UI::UI(LevelManager* lvlman)
 {
@@ -182,6 +183,37 @@ void  UI::PrintMaze()
 void UI::PrintStateInfo()
 {
     cout << "Timer: " << lvlManager->scoretime->getTime() << "           Score: " << lvlManager->scoretime->getHScore() << "            Lives: 3/3" << endl << endl;
+
+     MYSQL* connection;
+     MYSQL_ROW row;
+      connection = mysql_init(0);
+
+     if(connection)
+        cout<<"connection successful "<<endl;
+     else
+        cout<<"connection problem: "<<mysql_error(connection)<<endl;
+
+    connection = mysql_real_connect(connection,"server1.jesseprescott.co.uk","jessepre","Mazeraider123?","jessepre_mazeraider",0,NULL,0);
+    if(connection){
+        cout<<"Connected"<<connection<<endl;
+
+        string username,password;
+        cout<<"enter username: "<<endl; cin>>username;
+        cout<<"enter password: "<<endl; cin>>password;
+
+        string query="select * from information where username='"+username+"' and password='"+password+"';";
+
+        int queryResult = mysql_query(connection, query.c_str());
+        MYSQL_RES* result = mysql_store_result(connection);
+
+        if (mysql_num_rows(result) >= 1)
+        {
+            cout<<"Welcome to the game"<<endl;
+        }
+        else{
+            cout<<"Please try again"<<endl;
+        }
+    }
 }
 
 // Print User Possible Options

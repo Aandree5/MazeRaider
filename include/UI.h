@@ -12,6 +12,8 @@
 #define mazePath (char)32
 #define attackBottom (char)223
 #define attackTop (char)220
+#define heal (char)207
+#define shield (char)245
 #define cursorPosition(h, x, y) SetConsoleCursorPosition( h, { x, y } )
 #define red SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12)
 #define blue SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 9)
