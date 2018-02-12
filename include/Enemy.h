@@ -8,10 +8,13 @@
 
 using namespace std;
 
+class Maze;
 
 class Enemy
 {
     public:
+        Enemy(Maze* m);
+
         //functions
         void moveEnemy(void);
 

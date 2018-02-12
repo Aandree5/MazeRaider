@@ -1,9 +1,29 @@
 #include "Enemy.h"
 
-/*Enemy::Enemy()
+Enemy::Enemy(Maze* m)
 {
+    maze = m;
+
+    //spawn enemy
+    int x,y;
+    x = rand() % 29 + 1;
+    y = rand() % 29 + 1;
+    cout << x << endl;
+    cout << y;
+    for(int i = 0; i<10;i++)
+    {
+        if(maze->getMazeArray()[x][y]==0)
+        {
+            break;
+        }
+        x = rand() % 29 + 1;
+        y = rand() % 29 + 1;
+    }
+    xPosEnemy = x;
+    yPosEnemy = y;
+
 }
-*/
+
 void Enemy::moveEnemy(void)
 {
     ranDecision = rand() % 5 + 1;

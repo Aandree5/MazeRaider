@@ -1,6 +1,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 #include "Maze.h"
+#include "Enemy.h"
 #include <array>
 #include <vector>
 #include <cstdlib> //random generation

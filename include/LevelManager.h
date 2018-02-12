@@ -4,6 +4,7 @@
 class UI;
 class Maze;
 class Player;
+class Enemy;
 class ScoreTime;
 
 class LevelManager
@@ -15,6 +16,7 @@ class LevelManager
         Maze* maze;
         Player* player;
         ScoreTime* scoretime;
+        Enemy* enemy;
 
     protected:
 

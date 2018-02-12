@@ -5,7 +5,7 @@ Player::Player()
 }
 /*
 check to see if player has key to open exit
-
+check to see if player meets enemy
 
 
 
@@ -32,6 +32,7 @@ void Player::movePlayer(char direction)
             }
             steps+=1;
 
+
         }
         yPos += steps-1;
     }
@@ -50,6 +51,7 @@ void Player::movePlayer(char direction)
                 break;
             }
             steps+=1;
+
         }
         xPos -= steps-1;
 
@@ -68,6 +70,7 @@ void Player::movePlayer(char direction)
                 break;
             }
             steps+=1;
+
         }
         xPos += steps-1;
 
@@ -86,6 +89,7 @@ void Player::movePlayer(char direction)
                 break;
             }
             steps+=1;
+
         }
         yPos -= steps-1;
 

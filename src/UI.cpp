@@ -4,6 +4,7 @@
 #include "ScoreTime.h"
 #include "LevelManager.h"
 #include "BattleScene.h"
+#include "Enemy.h"
 
 UI::UI(LevelManager* lvlman)
 {
@@ -149,6 +150,18 @@ void  UI::PrintMaze()
         lvlManager->maze->getMazeArray()[lvlManager->player->xPos][lvlManager->player->yPos] = 2;
     }
 
+        // Get player position, 2 = Player
+    if (lvlManager->maze->getMazeArray()[lvlManager->enemy->xPosEnemy][lvlManager->enemy->yPosEnemy] != 4)
+    {
+        // Replace player old position and store the new "old" position to replace later
+        lvlManager->maze->getMazeArray()[enemyOldPos.first.first][enemyOldPos.first.second] = enemyOldPos.second;
+        enemyOldPos = make_pair(make_pair(lvlManager->enemy->xPosEnemy, lvlManager->enemy->yPosEnemy),
+                              lvlManager->maze->getMazeArray()[lvlManager->enemy->xPosEnemy][lvlManager->enemy->yPosEnemy]);
+
+        lvlManager->maze->getMazeArray()[lvlManager->enemy->xPosEnemy][lvlManager->enemy->yPosEnemy] = 4;
+    }
+
+
     // Print maze with objects
     for(int h = 0; h < lvlManager->maze->getMazeSizeWH().second ; h++) {
         cout << endl;
@@ -167,6 +180,9 @@ void  UI::PrintMaze()
                 break;
             case 3: // 3: Chest
                 PrintC( mazeWall, 14, true );
+                break;
+            case 4: // 3: Chest
+                PrintC( mazeWall, 15, true );
                 break;
             default:
                 PrintC( lvlManager->maze->getMazeArray()[w][h], 7, true );
@@ -196,7 +212,10 @@ void UI::PrintUOptions()
 
 
         if (userOption != (char)98)
+        {
             lvlManager->player->movePlayer(userOption);
+            lvlManager->enemy->moveEnemy();
+        }
         else
             btlScene = new BattleScene(lvlManager);
     }

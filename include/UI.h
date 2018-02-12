@@ -86,6 +86,8 @@ class  UI
 
         // Get the "thing" in that new position so we can replace it after player move
         pair<pair<int, int>, int> playerOldPos;
+        // Get the "thing" in that new position so we can replace it after player move
+        pair<pair<int, int>, int> enemyOldPos;
 
         // Print Maze
         void PrintMaze();
