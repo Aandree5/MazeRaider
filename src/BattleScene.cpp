@@ -82,13 +82,13 @@ int BattleScene::BuildScene()
 // Player Health bar
                 else if (w >= 5 && w <= (pHealth + 5) && h == 3)
                 {
-                    lvlManager->ui->PrintC("#", HealthColor(pHealth));
+                    lvlManager->ui->PrintC(mazeWall, HealthColor(pHealth));
                 }
 
 // Enemy Health bar
                 else if (w >= 68 && w <= (eHealth + 68) && h == 11)
                 {
-                    lvlManager->ui->PrintC("#", HealthColor(eHealth));
+                    lvlManager->ui->PrintC(mazeWall, HealthColor(eHealth));
                 }
 
 // Player Health values
@@ -165,6 +165,54 @@ int BattleScene::HealthColor(int health, bool TBackFFront)
         else
             return 4;
     }
+}
+
+void BattleScene::UpdateHealth()
+{
+
+    HANDLE hStdOut = GetStdHandle( STD_OUTPUT_HANDLE );
+        CONSOLE_SCREEN_BUFFER_INFO cbsi;
+        GetConsoleScreenBufferInfo(hStdOut, &cbsi);
+        COORD originalPos = cbsi.dwCursorPosition;
+
+    // Health to draw - 20 is the maximum character for health
+    int pHealth = (int)round((playerHealth * 20) / playerMaxHealth);
+    int eHealth = (int)round((enemyHealth * 20) / enemyMaxHealth);
+
+    int x = 5;
+    int y = 5;
+    for (int i = 0; i <= eHealth; i++)
+    {
+        cursorPosition( hStdOut, x + i, y );
+        lvlManager->ui->PrintC(mazeWall, HealthColor(pHealth));
+    }
+
+    x = 5;
+    y = 7;
+
+    cursorPosition( hStdOut, x, y );
+    string pValue = to_string(playerHealth) + "/" + to_string(playerMaxHealth);
+    lvlManager->ui->PrintC(to_string(playerHealth), HealthColor(pHealth, false));
+    lvlManager->ui->PrintC("/" + to_string(playerMaxHealth));
+
+    x = 68;
+    y = 13;
+    for (int i = 0; i <= eHealth; i++)
+    {
+        cursorPosition( hStdOut, x + i, y );
+        lvlManager->ui->PrintC(mazeWall, HealthColor(eHealth));
+    }
+
+    x = 68;
+    y = 15;
+
+    cursorPosition( hStdOut, x, y );
+    string eValue = to_string(enemyHealth) + "/" + to_string(enemyMaxHealth);
+    lvlManager->ui->PrintC(to_string(enemyHealth), HealthColor(pHealth, false));
+    lvlManager->ui->PrintC("/" + to_string(enemyMaxHealth));
+
+
+    cursorPosition( hStdOut, originalPos.X, originalPos.Y );
 }
 
 void BattleScene::PlayAttack(int num, int color, int speed)
@@ -558,38 +606,51 @@ void BattleScene::PlayHeal(int num, int color, int speed)
 
                 for (int x = 4; x >= 0; x-=2)
                 {
-                    for (int y = 0; y < 6 - x; y++)
+                    for (int y = 0; y < 3; y++)
                     {
-                        cursorPosition(hStdOut, xPos + x - y, yPos - y - 1);
+                        cursorPosition(hStdOut, xPos + x, yPos - y - 1);
                         lvlManager->ui->PrintC(mazeWall, color);
-                        cursorPosition(hStdOut, xPos + 2 + x - y, yPos - y + 1);
+                        cursorPosition(hStdOut, xPos - 2 + x, yPos - y );
                         lvlManager->ui->PrintC(mazeWall, color);
-                        cursorPosition(hStdOut, xPos + 4 + x - y, yPos - y + 1);
+                        cursorPosition(hStdOut, xPos + 2 + x, yPos - y + 1);
                         lvlManager->ui->PrintC(mazeWall, color);
 
                         Sleep(speed);
 
-                        cursorPosition(hStdOut, xPos + x - y, yPos - y - 1);
+                        cursorPosition(hStdOut, xPos + x, yPos - y - 1);
                         lvlManager->ui->PrintC(mazePath);
-                        cursorPosition(hStdOut, xPos + 2 + x - y, yPos - y + 1);
+                        cursorPosition(hStdOut, xPos - 2 + x, yPos - y );
                         lvlManager->ui->PrintC(mazePath);
-                        cursorPosition(hStdOut, xPos + 4 + x - y, yPos - y + 1);
+                        cursorPosition(hStdOut, xPos + 2 + x, yPos - y + 1);
                         lvlManager->ui->PrintC(mazePath);
                     }
                 }
             }
             else
             {
-                int xPos = 60;
+                int xPos = 59;
                 int yPos = 7;
 
-                for (int i = 38; i >= 0; i--)
+                for (int x = 4; x >= 0; x-=2)
                 {
-                    /* HERE */
+                    for (int y = 0; y < 3; y++)
+                    {
+                        cursorPosition(hStdOut, xPos - x, yPos - y - 1);
+                        lvlManager->ui->PrintC(mazeWall, color);
+                        cursorPosition(hStdOut, xPos - 2 - x, yPos - y );
+                        lvlManager->ui->PrintC(mazeWall, color);
+                        cursorPosition(hStdOut, xPos + 2 - x, yPos - y + 1);
+                        lvlManager->ui->PrintC(mazeWall, color);
 
-                    xPos--;
-                    if (i % 7 == 0)
-                        yPos++;
+                        Sleep(speed);
+
+                        cursorPosition(hStdOut, xPos - x, yPos - y - 1);
+                        lvlManager->ui->PrintC(mazePath);
+                        cursorPosition(hStdOut, xPos - 2 - x, yPos - y );
+                        lvlManager->ui->PrintC(mazePath);
+                        cursorPosition(hStdOut, xPos + 2 - x, yPos - y + 1);
+                        lvlManager->ui->PrintC(mazePath);
+                    }
                 }
             }
             break;
@@ -605,26 +666,35 @@ void BattleScene::PlayHeal(int num, int color, int speed)
     #endif // __linux__
 }
 
+
 void BattleScene::PlayerAttack(int num, int color, int power, int speed)
 {
     PlayAttack(num, color, speed);
     if (!isEnemyDefending)
         enemyHealth -= power;
     TPlayerFEnemy = false;
+    UpdateHealth();
 }
 
 void BattleScene::PlayerDefend(int num, int color, int speed)
 {
     PlayDefend(num, color, speed);
+    isPlayerDefending = true;
     TPlayerFEnemy = false;
+    UpdateHealth();
 }
 
 void BattleScene::PlayerHeal(int num, int color, int power, int speed)
 {
     PlayHeal(num, color, speed);
-    playerHealth += power;
+    if (playerHealth + power <= playerMaxHealth)
+        playerHealth += power;
+    else
+        playerHealth = playerMaxHealth;
     TPlayerFEnemy = false;
+    UpdateHealth();
 }
+
 
 void BattleScene::EnemyAttack(int num, int color, int power, int speed)
 {
@@ -635,6 +705,7 @@ void BattleScene::EnemyAttack(int num, int color, int power, int speed)
         isPlayerDefending = false;
 
     TPlayerFEnemy = true;
+    UpdateHealth();
 }
 
 void BattleScene::EnemyDefend(int num, int color, int speed)
@@ -642,12 +713,17 @@ void BattleScene::EnemyDefend(int num, int color, int speed)
     PlayDefend(num, color, speed);
     isPlayerDefending = false;
     TPlayerFEnemy = true;
+    UpdateHealth();
 }
 
 void BattleScene::EnemyHeal(int num, int color, int power, int speed)
 {
     PlayAttack(num, color, speed);
-    enemyHealth += power;
+    if (enemyHealth + power <= enemyMaxHealth)
+        enemyHealth += power;
+    else
+        enemyHealth = enemyMaxHealth;
     isPlayerDefending = false;
     TPlayerFEnemy = true;
+    UpdateHealth();
 }

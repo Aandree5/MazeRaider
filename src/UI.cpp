@@ -213,11 +213,11 @@ void UI::PrintUOptions()
 
         // Player defends
         else if (userOption == (char)100)
-            btlScene->PlayerDefend(1, 3, 150);
+            btlScene->PlayerDefend(0, 3, 150);
 
         // Player heals
         else if (userOption == (char)104)
-            btlScene->PlayerHeal(1, 10, 2, 150);
+            btlScene->PlayerHeal(0, 2, 10, 150);
 
         // Player runs
         else if (userOption == (char)114)

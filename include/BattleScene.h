@@ -39,11 +39,15 @@ class BattleScene
 
         LevelManager* lvlManager;
 
+        //Check if player is defending
         bool isPlayerDefending;
+        //Check if enemy is defending
         bool isEnemyDefending;
 
         // Check health color
         int HealthColor(int health, bool TBackFFront = true);
+        // Updates player and enemy health before user input
+        void UpdateHealth();
 
         // Handles player attack type
         void PlayAttack(int num, int color, int speed);
