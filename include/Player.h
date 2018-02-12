@@ -4,6 +4,8 @@
 #include <array>
 #include <vector>
 #include <cstdlib> //random generation
+#include <iostream>
+
 using namespace std;
 
 class Player
@@ -20,12 +22,12 @@ class Player
 
         //variables
         Maze* maze;
-        int xPos;
-        int yPos;
+        int xPos, yPos, pPoints, pHealth, pArmor, pDamage, pKeys;
     protected:
 
     private:
         int life;
+        bool carryKeys;
 
 };
 
