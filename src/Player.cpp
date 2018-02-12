@@ -1,5 +1,6 @@
 #include "Player.h"
 
+
 // Sorry forgot about it, this one needs to me here, it is the main function of your class, the one that is called
 // when we instantiate an object of the class in main.cpp
 // usually where you would define the default values of the variables
@@ -97,12 +98,18 @@ void Player::chestEvent(void)
     - keys
     - scores
     */
-    int randomScore, addHealth, addArmor, addKeys;
+    int randomScore, addHealth, addArmor, addDamage, addKeys;
     randomScore = rand() % 100 + 1;
     addArmor = rand() % 10 + 1;
     addHealth = rand() % 10 + 1;
-    addKeys = rand() % 2 + 1;
+    addKeys = rand() % 2;
+    addDamage = rand() % 10 + 1;
 
+    pPoints += randomScore;
+    pArmor += addArmor;
+    pHealth += addHealth;
+    pKeys += addKeys;
+    pDamage += addDamage;
 }
 
 
