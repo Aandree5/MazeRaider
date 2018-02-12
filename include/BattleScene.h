@@ -38,15 +38,19 @@ class BattleScene
     private:
 
         LevelManager* lvlManager;
+
+        bool isPlayerDefending;
+        bool isEnemyDefending;
+
         // Check health color
         int HealthColor(int health, bool TBackFFront = true);
 
         // Handles player attack type
-        void PlayAttack(int attackNr, int attackColor, int animSpeed);
+        void PlayAttack(int num, int color, int speed);
         // Handles player attack type
-        void PlayDefend(int defendNr, int defendColor, int animSpeed);
+        void PlayDefend(int num, int color, int speed);
         // Handles player attack type
-        void PlayHeal(int healNr, int healColor, int animSpeed);
+        void PlayHeal(int num, int color, int speed);
 
         // Meshes
         vector<vector<string>> enemyMesh = {{"                                   ",
