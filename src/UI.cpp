@@ -4,7 +4,10 @@
 #include "ScoreTime.h"
 #include "LevelManager.h"
 #include "BattleScene.h"
+<<<<<<< HEAD
 #include <mysql.h>
+=======
+>>>>>>> origin/master
 
 UI::UI(LevelManager* lvlman)
 {

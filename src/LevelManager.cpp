@@ -3,6 +3,7 @@
 #include "Maze.h"
 #include "Player.h"
 #include "ScoreTime.h"
+#include "Enemy.h"
 
 LevelManager::LevelManager()
 {
@@ -13,6 +14,8 @@ LevelManager::LevelManager()
     player->maze = maze;
     player->xPos = maze->getMazeStart().first;
     player->yPos = maze->getMazeStart().second;
+
+    enemy = new Enemy(maze);
 
     ui = new UI(this);
     ui->ShowUI();
