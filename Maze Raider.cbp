@@ -35,7 +35,11 @@
 			<Add option="-Wall" />
 			<Add option="-std=c++14" />
 			<Add option="-fexceptions" />
+			<Add directory="libmysql-505/include" />
 		</Compiler>
+		<Linker>
+			<Add library="libmysql-505/lib/libmysql.a" />
+		</Linker>
 		<Unit filename="include/BattleScene.h" />
 		<Unit filename="include/Enemy.h" />
 		<Unit filename="include/LevelManager.h" />
