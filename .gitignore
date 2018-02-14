@@ -6,8 +6,14 @@
 *.depend
 
 # generated directories
-bin/
 obj/
+*.exe
+*.out
+*.app
+
+# mysql library dll - to KEEP
+!bin/Debug/libmysql.dll
+!libmysql-505/bin/libmysql.dll
 
 
 # End of https://www.gitignore.io/api/codeblocks
