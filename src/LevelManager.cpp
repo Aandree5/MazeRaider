@@ -15,7 +15,7 @@ LevelManager::LevelManager()
     player->xPos = maze->getMazeStart().first;
     player->yPos = maze->getMazeStart().second;
 
-    enemy = new Enemy(maze);
+    enemies.emplace_back(new Enemy(maze));
 
     ui = new UI(this);
     ui->ShowUI();

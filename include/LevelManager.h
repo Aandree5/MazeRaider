@@ -1,5 +1,8 @@
 #ifndef LEVELMANAGER_H
 #define LEVELMANAGER_H
+#include <vector>
+
+using namespace std;
 
 class UI;
 class Maze;
@@ -16,7 +19,7 @@ class LevelManager
         Maze* maze;
         Player* player;
         ScoreTime* scoretime;
-        Enemy* enemy;
+        vector<Enemy*> enemies;
 
     protected:
 

@@ -4,12 +4,13 @@
 #include "ScoreTime.h"
 #include "LevelManager.h"
 #include "BattleScene.h"
+#include "Enemy.h"
+
+using namespace std;
 
 UI::UI(LevelManager* lvlman)
 {
     lvlManager = lvlman;
-    playerOldPos = make_pair(make_pair(lvlman->player->xPos, lvlman->player->yPos),
-                              lvlman->maze->getMazeArray()[lvlman->player->xPos][lvlman->player->yPos]);
 
     inBattle = false;
     btlScene = nullptr;
@@ -139,15 +140,11 @@ void  UI::ShowUI()
 void  UI::PrintMaze()
 {
     // Get player position, 2 = Player
-    if (lvlManager->maze->getMazeArray()[lvlManager->player->xPos][lvlManager->player->yPos] != 2)
-    {
-        // Replace player old position and store the new "old" position to replace later
-        lvlManager->maze->getMazeArray()[playerOldPos.first.first][playerOldPos.first.second] = playerOldPos.second;
-        playerOldPos = make_pair(make_pair(lvlManager->player->xPos, lvlManager->player->yPos),
-                              lvlManager->maze->getMazeArray()[lvlManager->player->xPos][lvlManager->player->yPos]);
+    lvlManager->maze->getMazeArray()[lvlManager->player->xPos][lvlManager->player->yPos] = 2;
 
-        lvlManager->maze->getMazeArray()[lvlManager->player->xPos][lvlManager->player->yPos] = 2;
-    }
+    // Get enemy positions, 4 = Enemy
+    for(int i = 0 ; i < lvlManager->enemies.size(); i++)
+        lvlManager->maze->getMazeArray()[lvlManager->enemies[i]->xPosEnemy][lvlManager->enemies[i]->yPosEnemy] = 4;
 
     // Print maze with objects
     for(int h = 0; h < lvlManager->maze->getMazeSizeWH().second ; h++) {
@@ -162,11 +159,16 @@ void  UI::PrintMaze()
             case 1: // 1: Wall
                 PrintC( mazeWall, 7, true );
                 break;
-            case 2: // 1: Wall
+            case 2: // 2: Player
                 PrintC( mazeWall, 11, true  );
+                lvlManager->maze->getMazeArray()[w][h] = 0;
                 break;
             case 3: // 3: Chest
                 PrintC( mazeWall, 14, true );
+                break;
+            case 4: // 4: Enemy
+                PrintC( mazeWall, 2, true );
+                lvlManager->maze->getMazeArray()[w][h] = 0;
                 break;
             default:
                 PrintC( lvlManager->maze->getMazeArray()[w][h], 7, true );

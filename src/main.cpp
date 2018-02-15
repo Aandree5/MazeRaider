@@ -7,7 +7,7 @@ using namespace std;
 
 int main()
 {
-    LevelManager* levelManager = new LevelManager();
+    new LevelManager();
 
     return 0;
 }
