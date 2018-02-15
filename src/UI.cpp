@@ -104,7 +104,7 @@ void UI::PrintC(string character, int color, bool twoChar)
 void  UI::ShowUI()
 {
     int battleState = 0; // 0 = Battle Continues  |  1 = Player Lost (GameOver)  |  2 = Enemy Killed
-    while (true && battleState != 1)
+    while (battleState != 1)
     {
         clearScreen();
         battleState = 0;
@@ -115,12 +115,14 @@ void  UI::ShowUI()
         else
             battleState = btlScene->BuildScene();
 
+// 1 = Player Lost (GameOver)
         if (battleState == 1)
         {
             delete btlScene;
             btlScene = nullptr;
             break;
         }
+// 2 = Enemy Killed
         else if (battleState == 2)
         {
             delete btlScene;
@@ -128,7 +130,7 @@ void  UI::ShowUI()
             continue;
         }
 
-        if (btlScene == nullptr || btlScene->TPlayerFEnemy)
+        if (!inBattle || (!btlScene->enemyJustAttacked && btlScene != nullptr && btlScene->TPlayerFEnemy))
             PrintUOptions();
     }
 
@@ -194,39 +196,65 @@ void UI::PrintUOptions()
     if (!inBattle)
     {
         cout << endl << endl << "Choose option:    w - Up       a - Left        d - Right        s - Down" << endl;
-        cin >> userOption;
 
+        bool notvalid = true;
+        while(notvalid)
+        {
+            cin >> userOption;
 
-        if (userOption != (char)98)
-            lvlManager->player->movePlayer(userOption);
-        else
-            btlScene = new BattleScene(lvlManager);
+            if (userOption == 'b') // TEMP - TESTING
+            {
+                btlScene = new BattleScene(lvlManager, lvlManager->enemies[0]); // TEMP - TESTING
+                notvalid = false;
+            }
+            else if (userOption == 'A' || userOption == 'a' || userOption == 'D' || userOption == 'd' || userOption == 'S' || userOption == 's' || userOption == 'W' || userOption == 'w')
+            {
+                lvlManager->player->movePlayer(userOption);
+                notvalid = false;
+            }
+            else
+                cout << " - Not a valid option... Refer back to the option shown on screen please." << endl;
+        }
     }
     else
     {
         cout << endl;
         cout << "Attack:    a        Defend:    d" << endl;
         cout << "  Heal:    h           Run:    r" << endl;
-        cin >> userOption;
 
-        // Player attacks
-        if (userOption == (char)97)
-            btlScene->PlayerAttack(1, 10, 10, 5);
-
-        // Player defends
-        else if (userOption == (char)100)
-            btlScene->PlayerDefend(0, 3, 150);
-
-        // Player heals
-        else if (userOption == (char)104)
-            btlScene->PlayerHeal(0, 2, 10, 150);
-
-        // Player runs
-        else if (userOption == (char)114)
+        bool notvalid = true;
+        while(notvalid)
         {
-            inBattle = false;
-            delete btlScene;
-            btlScene = nullptr;
+            cin >> userOption;
+
+// Player attacks
+            if (userOption == 'A' || userOption == 'a')
+            {
+                btlScene->PlayerAttack(1, 10, 10, 5);
+                notvalid = false;
+            }
+// Player defends
+            else if (userOption == 'D' || userOption == 'd')
+            {
+                btlScene->PlayerDefend(0, 3, 150);
+                notvalid = false;
+            }
+// Player heals
+            else if (userOption == 'H' || userOption == 'h')
+            {
+                btlScene->PlayerHeal(0, 2, 10, 150);
+                notvalid = false;
+            }
+// Player runs
+            else if (userOption == 'R' || userOption == 'r')
+            {
+                inBattle = false;
+                delete btlScene;
+                btlScene = nullptr;
+                notvalid = false;
+            }
+            else
+                cout << " - Not a valid option... Refer back to the option shown on screen please." << endl;
         }
     }
 }
