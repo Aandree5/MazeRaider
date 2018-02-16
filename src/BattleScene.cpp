@@ -351,7 +351,7 @@ void BattleScene::PlayAttack(int num, int color, int speed)
             if (TPlayerFEnemy)
             {
                 int xPos = 22;
-                int yPos = 13;
+                int yPos = 12;
 
                 for (int i = 0; i <= 38; i++)
                 {
@@ -495,7 +495,7 @@ void BattleScene::PlayDefend(int num, int color, int speed)
             if (TPlayerFEnemy)
             {
                 int xPos = 23;
-                int yPos = 16;
+                int yPos = 15;
 
                 for (int x = 4; x >= 0; x-=2)
                 {
@@ -529,7 +529,7 @@ void BattleScene::PlayDefend(int num, int color, int speed)
             if (TPlayerFEnemy)
             {
                 int xPos = 22;
-                int yPos = 12;
+                int yPos = 11;
 
                 for (int x = 0; x <= 4; x+=2)
                 {
@@ -599,7 +599,7 @@ void BattleScene::PlayHeal(int num, int color, int speed)
             if (TPlayerFEnemy)
             {
                 int xPos = 23;
-                int yPos = 15;
+                int yPos = 14;
 
                 for (int x = 4; x >= 0; x-=2)
                 {

@@ -236,13 +236,13 @@ void UI::PrintUOptions()
 // Player defends
             else if (userOption == 'D' || userOption == 'd')
             {
-                btlScene->PlayerDefend(1, 3);
+                btlScene->PlayerDefend(0, 3);
                 notvalid = false;
             }
 // Player heals
             else if (userOption == 'H' || userOption == 'h')
             {
-                btlScene->PlayerHeal(1, 2, 10);
+                btlScene->PlayerHeal(0, 2, 10);
                 notvalid = false;
             }
 // Player runs
