@@ -102,7 +102,14 @@ void  UI::PrintMaze()
 // Print Timer, Scorn and Lives info
 void UI::PrintStateInfo()
 {
-    cout << "Timer: " << lvlManager->scoretime->getTime() << "           Score: " << lvlManager->scoretime->getHScore() << "            Lives: 3/3" << endl << endl;
+    cout << endl;
+    PrintC("    Time: ");
+    PrintC(to_string(lvlManager->scoretime->getTime()), 15);
+    PrintC("        Score: ");
+    PrintC(to_string(lvlManager->scoretime->getHScore()), 15);
+    PrintC("        Lives: ");
+    PrintC("3", 15);
+    cout << endl;
 }
 
 // Print User Possible Options
@@ -112,7 +119,52 @@ void UI::PrintUOptions()
 
     if (!inBattle)
     {
-        cout << endl << endl << "Choose option:    w - Up       a - Left        d - Right        s - Down" << endl;
+        // Draw maze bottom info
+        cout << endl;
+        PrintC("                   ");
+        PrintC((char)194);
+// Health
+        PrintC("                   ");
+        PrintC(" Health: ");
+        PrintC(to_string(lvlManager->player->pHealth), 15);
+        cout << endl;
+
+        PrintC("                   w", 15);
+// Armor
+        PrintC("                   ");
+        PrintC("  Armor: ");
+        PrintC(to_string(lvlManager->player->pArmor), 15);
+        cout << endl;
+
+        PrintC("               ");
+        PrintC((char)195 );
+        PrintC(" a ", 15);
+        PrintC((char)197);
+        PrintC(" d ", 15);
+        PrintC((char)180);
+// Damage
+        PrintC("               ");
+        PrintC(" Damage: ");
+        PrintC(to_string(lvlManager->player->pDamage), 15);
+        cout << endl;
+
+        PrintC("                   s", 15);
+// Keys
+        PrintC("                   ");
+        PrintC("   Keys: ");
+        PrintC("0", 15);
+        cout << endl;
+
+        PrintC("                   ");
+        PrintC((char)193);
+// Enemy count
+        PrintC("                   ");
+        PrintC("Enemies: ");
+        PrintC(to_string(lvlManager->enemies.size()), 15);
+
+        cout << endl << endl;
+
+        PrintC("Choose option: ");
 
         bool notvalid = true;
         while(notvalid)
@@ -130,14 +182,19 @@ void UI::PrintUOptions()
                 notvalid = false;
             }
             else
-                cout << " - Not a valid option... Please choose a valid option." << endl;
+            {
+                PrintC(" - Not a valid option... Please choose a valid option.");
+                cout << endl;
+            }
         }
     }
     else
     {
         cout << endl;
-        cout << "Attack:    a        Defend:    d" << endl;
-        cout << "  Heal:    h           Run:    r" << endl;
+        PrintC("Attack:    a        Defend:    d");
+        cout << endl;
+        PrintC("  Heal:    h           Run:    r");
+        cout << endl;
 
         bool notvalid = true;
         while(notvalid)
@@ -171,7 +228,10 @@ void UI::PrintUOptions()
                 notvalid = false;
             }
             else
-                cout << " - Not a valid option... Refer back to the option shown on screen please." << endl;
+            {
+                PrintC(" - Not a valid option... Refer back to the option shown on screen please.");
+                cout << endl;
+            }
         }
     }
 }
@@ -179,5 +239,5 @@ void UI::PrintUOptions()
 void UI::ShowGameOver()
 {
     clearScreen();
-    cout << "Game Over!";
+    PrintC("Game Over!");
 }
