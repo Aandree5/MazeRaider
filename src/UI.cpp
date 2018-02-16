@@ -213,7 +213,7 @@ void UI::PrintUOptions()
                 notvalid = false;
             }
             else
-                cout << " - Not a valid option... Refer back to the option shown on screen please." << endl;
+                cout << " - Not a valid option... Please choose a valid option." << endl;
         }
     }
     else
@@ -230,19 +230,19 @@ void UI::PrintUOptions()
 // Player attacks
             if (userOption == 'A' || userOption == 'a')
             {
-                btlScene->PlayerAttack(1, 10, 10, 5);
+                btlScene->PlayerAttack(1, 10, 10);
                 notvalid = false;
             }
 // Player defends
             else if (userOption == 'D' || userOption == 'd')
             {
-                btlScene->PlayerDefend(0, 3, 150);
+                btlScene->PlayerDefend(1, 3);
                 notvalid = false;
             }
 // Player heals
             else if (userOption == 'H' || userOption == 'h')
             {
-                btlScene->PlayerHeal(0, 2, 10, 150);
+                btlScene->PlayerHeal(1, 2, 10);
                 notvalid = false;
             }
 // Player runs

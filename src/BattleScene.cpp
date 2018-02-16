@@ -16,7 +16,7 @@ BattleScene::BattleScene(LevelManager* lvlman, Enemy* e)
     isEnemyDefending = false;
     enemyJustAttacked = false;
 
-    battleInfo[battleInfo.size() - 1] = make_pair("<player> encountered enemy <enemy>", 8);
+    battleInfo[battleInfo.size() - 1] = make_pair("Encountered an <enemy>", 8);
 }
 
 int BattleScene::BuildScene()
@@ -267,6 +267,7 @@ void BattleScene::PlayAttack(int num, int color, int speed)
     #endif // _WIN32
 
     #ifdef __linux__
+        int hStdOut;
         cout << "\033[s";
     #endif // __linux__
 
@@ -350,29 +351,39 @@ void BattleScene::PlayAttack(int num, int color, int speed)
             if (TPlayerFEnemy)
             {
                 int xPos = 22;
-                int yPos = 12;
+                int yPos = 13;
 
                 for (int i = 0; i <= 38; i++)
                 {
                     cursorPosition( hStdOut, xPos, yPos ); // Main Middle
                     lvlManager->ui->PrintC(mazeWall, color);
+                    cout << flush;
                     cursorPosition( hStdOut, xPos + 2, yPos - 1 ); // Front Middle
                     lvlManager->ui->PrintC(mazeWall, color);
+                    cout << flush;
                     cursorPosition( hStdOut, xPos - 2, yPos + 1 ); // Back Middle
                     lvlManager->ui->PrintC(mazeWall, color);
+                    cout << flush;
                     cursorPosition( hStdOut, xPos, yPos - 2 ); // Main Top
                     lvlManager->ui->PrintC(mazeWall, color);
+                    cout << flush;
                     cursorPosition( hStdOut, xPos + 2, yPos - 3 ); // Front Top
                     lvlManager->ui->PrintC(mazeWall, color);
+                    cout << flush;
                     cursorPosition( hStdOut, xPos - 2, yPos - 1 ); // Back Top
                     lvlManager->ui->PrintC(mazeWall, color);
+                    cout << flush;
                     cursorPosition( hStdOut, xPos, yPos + 2 ); // Main Bottom
                     lvlManager->ui->PrintC(mazeWall, color);
+                    cout << flush;
                     cursorPosition( hStdOut, xPos + 2, yPos + 1 ); // Front Bottom
                     lvlManager->ui->PrintC(mazeWall, color);
+                    cout << flush;
                     cursorPosition( hStdOut, xPos - 2, yPos + 3 ); // Back Bottom
                     lvlManager->ui->PrintC(mazeWall, color);
+                    cout << flush;
 
+                    cout << flush;
                     Sleep(speed);
 
                     cursorPosition( hStdOut, xPos, yPos ); // Main Middle
@@ -474,6 +485,7 @@ void BattleScene::PlayDefend(int num, int color, int speed)
     #endif // _WIN32
 
     #ifdef __linux__
+        int hStdOut;
         cout << "\033[s";
     #endif // __linux__
 
@@ -483,7 +495,7 @@ void BattleScene::PlayDefend(int num, int color, int speed)
             if (TPlayerFEnemy)
             {
                 int xPos = 23;
-                int yPos = 14;
+                int yPos = 16;
 
                 for (int x = 4; x >= 0; x-=2)
                 {
@@ -517,16 +529,16 @@ void BattleScene::PlayDefend(int num, int color, int speed)
             if (TPlayerFEnemy)
             {
                 int xPos = 22;
-                int yPos = 10;
+                int yPos = 12;
 
                 for (int x = 0; x <= 4; x+=2)
                 {
                     for (int y = 0; y < 1 + x; y++)
                     {
                         if (y % 2 == 0)
-                            cursorPosition( hStdOut, xPos + x, yPos + y );
+                            cursorPosition(hStdOut, xPos + x, yPos + y);
                         else
-                            cursorPosition( hStdOut, xPos + x, yPos - y );
+                            cursorPosition(hStdOut, xPos + x, yPos - y - 1);
 
                         lvlManager->ui->PrintC(mazeWall, color);
                         Sleep(speed / 2);
@@ -577,6 +589,7 @@ void BattleScene::PlayHeal(int num, int color, int speed)
     #endif // _WIN32
 
     #ifdef __linux__
+        int hStdOut;
         cout << "\033[s";
     #endif // __linux__
 
@@ -586,11 +599,11 @@ void BattleScene::PlayHeal(int num, int color, int speed)
             if (TPlayerFEnemy)
             {
                 int xPos = 23;
-                int yPos = 14;
+                int yPos = 15;
 
                 for (int x = 4; x >= 0; x-=2)
                 {
-                    for (int y = 0; y < 7 - x; y++)
+                    for (int y = 0; y < 6 - x; y++)
                     {
                         cursorPosition(hStdOut, xPos + x, yPos - y);
                         lvlManager->ui->PrintC(heal, color);
@@ -601,7 +614,7 @@ void BattleScene::PlayHeal(int num, int color, int speed)
 
                     Sleep(speed);
 
-                    for (int y = 0; y < 7 - x; y++)
+                    for (int y = 0; y < 6 - x; y++)
                     {
                         cursorPosition(hStdOut, xPos + x, yPos - y);
                         lvlManager->ui->PrintC(mazePath);
@@ -643,12 +656,12 @@ void BattleScene::PlayHeal(int num, int color, int speed)
         case 1:
             if (TPlayerFEnemy)
             {
-                int xPos = 22;
-                int yPos = 12;
+                int xPos = 23;
+                int yPos = 14;
 
                 for (int x = 4; x >= 0; x-=2)
                 {
-                    for (int y = 0; y < 3; y++)
+                    for (int y = 0; y < 5; y++)
                     {
                         cursorPosition(hStdOut, xPos + x, yPos - y - 1);
                         lvlManager->ui->PrintC(heal, color);
@@ -660,11 +673,11 @@ void BattleScene::PlayHeal(int num, int color, int speed)
                         Sleep(speed);
 
                         cursorPosition(hStdOut, xPos + x, yPos - y - 1);
-                        lvlManager->ui->PrintC(heal);
+                        lvlManager->ui->PrintC(mazePath);
                         cursorPosition(hStdOut, xPos - 2 + x, yPos - y );
-                        lvlManager->ui->PrintC(heal);
+                        lvlManager->ui->PrintC(mazePath);
                         cursorPosition(hStdOut, xPos + 2 + x, yPos - y + 1);
-                        lvlManager->ui->PrintC(heal);
+                        lvlManager->ui->PrintC(mazePath);
                     }
                 }
             }
@@ -711,7 +724,7 @@ void BattleScene::PlayHeal(int num, int color, int speed)
 
 void BattleScene::PlayerAttack(int num, int color, int power, int speed)
 {
-    UpdateBattleInfo(make_pair("<player> dealt " + to_string(power) + " damage to <enemy>", 0));
+    UpdateBattleInfo(make_pair("<player> dealt " + to_string(power) + " damage", 0));
 
     PlayAttack(num, color, speed);
 
@@ -750,7 +763,7 @@ void BattleScene::PlayerHeal(int num, int color, int power, int speed)
 
 void BattleScene::EnemyAttack(int num, int color, int power, int speed)
 {
-    UpdateBattleInfo(make_pair("<enemy> dealt " + to_string(power) + " damage to <player>", 0));
+    UpdateBattleInfo(make_pair("<enemy> dealt " + to_string(power) + " damage", 0));
 
     PlayAttack(num, color, speed);
 

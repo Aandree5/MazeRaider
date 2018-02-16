@@ -11,16 +11,27 @@
 #define bsBottomRightCorner (char)217
 #define bsTopBottomLines (char)196
 #define bsLeftRightLines (char)179
+#define attackBottom (char)223
+#define attackTop (char)220
+#define heal (char)207
+#define shield (char)245
 #endif // _WIN32
 
 #ifdef __linux__
-#define bsTopLeftCorner "\u231C"
-#define bsTopRightCorner "\u231D"
-#define bsBottomLeftCorner "\u231E"
-#define bsBottomRightCorner "\u231F"
-#define bsTopBottomLines "\2015"
-#define bsLeftRightLines "\2758"
+#define bsTopLeftCorner "\u250c"
+#define bsTopRightCorner "\u2510"
+#define bsBottomLeftCorner "\u2514"
+#define bsBottomRightCorner "\u2518"
+#define bsTopBottomLines "\u2500"
+#define bsLeftRightLines "\u2502"
+#define attackBottom "\u2580"
+#define attackTop "\u2584"
+#define heal "\u00a4"
+#define shield "\u00a7"
 #endif // __LINUX__
+
+#define attackAnimSpeed 10
+#define defencehealAnimSpeed 150
 
 using namespace std;
 
@@ -42,14 +53,14 @@ class BattleScene
         bool enemyJustAttacked;
 
         // Set of player actions
-        void PlayerAttack(int num, int color, int power, int speed);
-        void PlayerDefend(int num, int color, int speed);
-        void PlayerHeal(int num, int color, int power, int speed);
+        void PlayerAttack(int num, int color, int power, int speed = attackAnimSpeed);
+        void PlayerDefend(int num, int color, int speed = defencehealAnimSpeed);
+        void PlayerHeal(int num, int color, int power, int speed = defencehealAnimSpeed);
 
         // Set of enemy actions
-        void EnemyAttack(int num, int color, int power, int speed);
-        void EnemyDefend(int num, int color, int speed);
-        void EnemyHeal(int num, int color, int power, int speed);
+        void EnemyAttack(int num, int color, int power, int speed = attackAnimSpeed);
+        void EnemyDefend(int num, int color, int speed = defencehealAnimSpeed);
+        void EnemyHeal(int num, int color, int power, int speed = defencehealAnimSpeed);
 
         //TEMP
         int playerHealth = 100;

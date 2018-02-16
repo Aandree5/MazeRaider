@@ -8,8 +8,7 @@ Enemy::Enemy(Maze* m)
     int x,y;
     x = rand() % 29 + 1;
     y = rand() % 29 + 1;
-    cout << x << endl;
-    cout << y;
+
     for(int i = 0; i<10;i++)
     {
         if(maze->getMazeArray()[x][y]==0)
