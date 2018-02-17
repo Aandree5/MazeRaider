@@ -1,5 +1,5 @@
-#include "Maze.h"
 #include "LevelManager.h"
+<<<<<<< HEAD
 #include <iostream>
 #include <tuple>
 #include <string>
@@ -9,10 +9,13 @@
 
 
 using namespace std;
+=======
+>>>>>>> 2361444361904b3dbc79e43206ef3004fcb0058e
 
 
 int main()
 {
+<<<<<<< HEAD
     cout<<"                                   _                    _        _ _ _ _ _ _ _ _                                                                                 _    \n"
         <<"                                   _ _                _ _        _             _                                                                                 _    \n"
         <<"                                   _   _            _   _        _             _                                                                                 _    \n"
@@ -117,6 +120,9 @@ int main()
          cout << "Please try again\n\n";
 
         }
+=======
+    new LevelManager();
+>>>>>>> 2361444361904b3dbc79e43206ef3004fcb0058e
 
     }
 }

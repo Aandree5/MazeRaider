@@ -1,109 +1,27 @@
 #include "UI.h"
+#include "UIHelpers.h"
 #include "Maze.h"
 #include "Player.h"
 #include "ScoreTime.h"
 #include "LevelManager.h"
 #include "BattleScene.h"
+#include "Enemy.h"
+
+using namespace UIHelpers;
 
 UI::UI(LevelManager* lvlman)
 {
     lvlManager = lvlman;
-    playerOldPos = make_pair(make_pair(lvlman->player->xPos, lvlman->player->yPos),
-                              lvlman->maze->getMazeArray()[lvlman->player->xPos][lvlman->player->yPos]);
 
     inBattle = false;
     btlScene = nullptr;
-}
-
-bool UI::ChangeColor(int color)
-{
-    switch (color)
-    {
-    case 12:
-        red;
-        break;
-    case 9:
-        blue;
-        break;
-    case 10:
-        green;
-        break;
-    case 14:
-        yellow;
-        break;
-    case 11:
-        cyan;
-        break;
-    case 15:
-        white;
-        break;
-    case 13:
-        purple;
-        break;
-    case 4:
-        darkred;
-        break;
-    case 3:
-        darkblue;
-        break;
-    case 2:
-        darkgreen;
-        break;
-    case 5:
-        darkpurple;
-        break;
-    case 34:
-        healthGreen;
-        break;
-    case 238:
-        healthYellow;
-        break;
-    case 68:
-        healthRed;
-        break;
-    default:
-        grey;
-        return false;
-    }
-
-    return true;
-}
-
-// cout with color   CHAR Overload
-void UI::PrintC(char character, int color, bool twoChar)
-{
-    bool needsReset = ChangeColor(color);
-
-    if (twoChar)
-        cout << character << character;
-    else
-        cout << character;
-
-    // Return color to default
-    if (needsReset)
-        grey;
-}
-
-// cout with color   STRING Overload
-void UI::PrintC(string character, int color, bool twoChar)
-{
-    bool needsReset = ChangeColor(color);
-
-    if (twoChar)
-        cout << character << character;
-    else
-        cout << character;
-
-    // Return color to default
-    if (needsReset)
-        grey;
 }
 
 // Build UI
 void  UI::ShowUI()
 {
     int battleState = 0; // 0 = Battle Continues  |  1 = Player Lost (GameOver)  |  2 = Enemy Killed
-    while (true && battleState != 1)
+    while (battleState != 1)
     {
         clearScreen();
         battleState = 0;
@@ -114,12 +32,14 @@ void  UI::ShowUI()
         else
             battleState = btlScene->BuildScene();
 
+// 1 = Player Lost (GameOver)
         if (battleState == 1)
         {
             delete btlScene;
             btlScene = nullptr;
             break;
         }
+// 2 = Enemy Killed
         else if (battleState == 2)
         {
             delete btlScene;
@@ -127,7 +47,7 @@ void  UI::ShowUI()
             continue;
         }
 
-        if (btlScene == nullptr || btlScene->TPlayerFEnemy)
+        if (!inBattle || (!btlScene->enemyJustAttacked && btlScene != nullptr && btlScene->TPlayerFEnemy))
             PrintUOptions();
     }
 
@@ -139,15 +59,11 @@ void  UI::ShowUI()
 void  UI::PrintMaze()
 {
     // Get player position, 2 = Player
-    if (lvlManager->maze->getMazeArray()[lvlManager->player->xPos][lvlManager->player->yPos] != 2)
-    {
-        // Replace player old position and store the new "old" position to replace later
-        lvlManager->maze->getMazeArray()[playerOldPos.first.first][playerOldPos.first.second] = playerOldPos.second;
-        playerOldPos = make_pair(make_pair(lvlManager->player->xPos, lvlManager->player->yPos),
-                              lvlManager->maze->getMazeArray()[lvlManager->player->xPos][lvlManager->player->yPos]);
+    lvlManager->maze->getMazeArray()[lvlManager->player->xPos][lvlManager->player->yPos] = 2;
 
-        lvlManager->maze->getMazeArray()[lvlManager->player->xPos][lvlManager->player->yPos] = 2;
-    }
+    // Get enemy positions, 4 = Enemy
+    for(int i = 0 ; i < lvlManager->enemies.size(); i++)
+        lvlManager->maze->getMazeArray()[lvlManager->enemies[i]->xPosEnemy][lvlManager->enemies[i]->yPosEnemy] = 4;
 
     // Print maze with objects
     for(int h = 0; h < lvlManager->maze->getMazeSizeWH().second ; h++) {
@@ -162,11 +78,16 @@ void  UI::PrintMaze()
             case 1: // 1: Wall
                 PrintC( mazeWall, 7, true );
                 break;
-            case 2: // 1: Wall
+            case 2: // 2: Player
                 PrintC( mazeWall, 11, true  );
+                lvlManager->maze->getMazeArray()[w][h] = 0;
                 break;
             case 3: // 3: Chest
                 PrintC( mazeWall, 14, true );
+                break;
+            case 4: // 4: Enemy
+                PrintC( mazeWall, 2, true );
+                lvlManager->maze->getMazeArray()[w][h] = 0;
                 break;
             default:
                 PrintC( lvlManager->maze->getMazeArray()[w][h], 7, true );
@@ -181,7 +102,14 @@ void  UI::PrintMaze()
 // Print Timer, Scorn and Lives info
 void UI::PrintStateInfo()
 {
-    cout << "Timer: " << lvlManager->scoretime->getTime() << "           Score: " << lvlManager->scoretime->getHScore() << "            Lives: 3/3" << endl << endl;
+    cout << endl;
+    PrintC("    Time: ");
+    PrintC(to_string(lvlManager->scoretime->getTime()), 15);
+    PrintC("        Score: ");
+    PrintC(to_string(lvlManager->scoretime->getHScore()), 15);
+    PrintC("        Lives: ");
+    PrintC("3", 15);
+    cout << endl;
 }
 
 // Print User Possible Options
@@ -191,40 +119,119 @@ void UI::PrintUOptions()
 
     if (!inBattle)
     {
-        cout << endl << endl << "Choose option:    w - Up       a - Left        d - Right        s - Down" << endl;
-        cin >> userOption;
+        // Draw maze bottom info
+        cout << endl;
+        PrintC("                   ");
+        PrintC((char)194);
+// Health
+        PrintC("                   ");
+        PrintC(" Health: ");
+        PrintC(to_string(lvlManager->player->pHealth), 15);
+        cout << endl;
 
+        PrintC("                   w", 15);
+// Armor
+        PrintC("                   ");
+        PrintC("  Armor: ");
+        PrintC(to_string(lvlManager->player->pArmor), 15);
+        cout << endl;
 
-        if (userOption != (char)98)
-            lvlManager->player->movePlayer(userOption);
-        else
-            btlScene = new BattleScene(lvlManager);
+        PrintC("               ");
+        PrintC((char)195 );
+        PrintC(" a ", 15);
+        PrintC((char)197);
+        PrintC(" d ", 15);
+        PrintC((char)180);
+// Damage
+        PrintC("               ");
+        PrintC(" Damage: ");
+        PrintC(to_string(lvlManager->player->pDamage), 15);
+        cout << endl;
+
+        PrintC("                   s", 15);
+// Keys
+        PrintC("                   ");
+        PrintC("   Keys: ");
+        PrintC("0", 15);
+        cout << endl;
+
+        PrintC("                   ");
+        PrintC((char)193);
+// Enemy count
+        PrintC("                   ");
+        PrintC("Enemies: ");
+        PrintC(to_string(lvlManager->enemies.size()), 15);
+
+        cout << endl << endl;
+
+        PrintC("Choose option: ");
+
+        bool notvalid = true;
+        while(notvalid)
+        {
+            cin >> userOption;
+
+            if (userOption == 'b') // TEMP - TESTING
+            {
+                btlScene = new BattleScene(lvlManager, lvlManager->enemies[0]); // TEMP - TESTING
+                notvalid = false;
+            }
+            else if (userOption == 'A' || userOption == 'a' || userOption == 'D' || userOption == 'd' || userOption == 'S' || userOption == 's' || userOption == 'W' || userOption == 'w')
+            {
+                lvlManager->player->movePlayer(userOption);
+                notvalid = false;
+            }
+            else
+            {
+                PrintC(" - Not a valid option... Please choose a valid option.");
+                cout << endl;
+            }
+        }
     }
     else
     {
         cout << endl;
-        cout << "Attack:    a        Defend:    d" << endl;
-        cout << "  Heal:    h           Run:    r" << endl;
-        cin >> userOption;
+        PrintC("Attack:    a        Defend:    d");
+        cout << endl;
+        PrintC("  Heal:    h           Run:    r");
+        cout << endl;
 
-        // Player attacks
-        if (userOption == (char)97)
-            btlScene->PlayerAttack(1, 10, 10, 5);
-
-        // Player defends
-        else if (userOption == (char)100)
-            btlScene->PlayerDefend(0, 3, 150);
-
-        // Player heals
-        else if (userOption == (char)104)
-            btlScene->PlayerHeal(0, 2, 10, 150);
-
-        // Player runs
-        else if (userOption == (char)114)
+        bool notvalid = true;
+        while(notvalid)
         {
-            inBattle = false;
-            delete btlScene;
-            btlScene = nullptr;
+            cin >> userOption;
+
+// Player attacks
+            if (userOption == 'A' || userOption == 'a')
+            {
+                btlScene->PlayerAttack(1, 10, 10);
+                notvalid = false;
+            }
+// Player defends
+            else if (userOption == 'D' || userOption == 'd')
+            {
+                btlScene->PlayerDefend(0, 3);
+                notvalid = false;
+            }
+// Player heals
+            else if (userOption == 'H' || userOption == 'h')
+            {
+                btlScene->PlayerHeal(0, 2, 10);
+                notvalid = false;
+            }
+// Player runs
+            else if (userOption == 'R' || userOption == 'r')
+            {
+                inBattle = false;
+                delete btlScene;
+                btlScene = nullptr;
+                notvalid = false;
+            }
+            else
+            {
+                PrintC(" - Not a valid option... Refer back to the option shown on screen please.");
+                cout << endl;
+            }
         }
     }
 }
@@ -232,5 +239,5 @@ void UI::PrintUOptions()
 void UI::ShowGameOver()
 {
     clearScreen();
-    cout << "Game Over!";
+    PrintC("Game Over!");
 }
