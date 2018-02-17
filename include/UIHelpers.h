@@ -23,8 +23,8 @@
 #define leftVertical (char)180
 #define attackBottom (char)223
 #define attackTop (char)220
-#define heal (char)207
-#define shield (char)245
+#define healSymbol (char)207
+#define shieldSymbol (char)245
 #define cursorPosition(h, x, y) SetConsoleCursorPosition( h, { x, y } )
 #define red SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12)
 #define blue SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 9)
@@ -64,8 +64,8 @@
 #define leftVertical "\u253c"
 #define attackBottom "\u2580"
 #define attackTop "\u2584"
-#define heal "\u00a4"
-#define shield "\u00a7"
+#define healSymbol "\u00a4"
+#define shieldSymbol "\u00a7"
 #define cursorPosition(h, x, y) cout << "\033[" << y << ";" << x << "H"
 #define red cout << "\033[1;31m"
 #define blue cout << "\033[1;34m"

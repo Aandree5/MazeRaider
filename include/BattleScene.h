@@ -5,7 +5,7 @@
 #include <array>
 
 #define attackAnimSpeed 10
-#define defencehealAnimSpeed 150
+#define defenceHealAnimSpeed 150
 
 using namespace std;
 
@@ -27,20 +27,20 @@ class BattleScene
         bool enemyJustAttacked;
 
         // Set of player actions
-        void PlayerAttack(int num, int color, int power, int speed = attackAnimSpeed);
-        void PlayerDefend(int num, int color, int speed = defencehealAnimSpeed);
-        void PlayerHeal(int num, int color, int power, int speed = defencehealAnimSpeed);
+        void PlayerAttack(int num, int color, int power);
+        void PlayerDefend(int num, int color);
+        void PlayerHeal(int num, int color, int power);
 
         // Set of enemy actions
-        void EnemyAttack(int num, int color, int power, int speed = attackAnimSpeed);
-        void EnemyDefend(int num, int color, int speed = defencehealAnimSpeed);
-        void EnemyHeal(int num, int color, int power, int speed = defencehealAnimSpeed);
+        void EnemyAttack();
+        void EnemyDefend();
+        void EnemyHeal();
 
         //TEMP
         int playerHealth = 100;
         int playerMaxHealth = 100;
-        int enemyHealth = 100;
-        int enemyMaxHealth = 100;
+        int enemyHealth;
+        int enemyMaxHealth;
     protected:
 
     private:
@@ -62,11 +62,11 @@ class BattleScene
         void UpdateBattleInfo(pair<string, int> lineToAdd);
 
         // Play attack animation
-        void PlayAttack(int num, int color, int speed);
+        void PlayAttack(int num, int color);
         // Play defend animation
-        void PlayDefend(int num, int color, int speed);
+        void PlayDefend(int num, int color);
         // Play heal animation
-        void PlayHeal(int num, int color, int speed);
+        void PlayHeal(int num, int color);
 
         // Meshes
         vector<vector<string>> enemyMesh = {{"                                   ",

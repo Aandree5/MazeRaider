@@ -63,7 +63,7 @@ void  UI::PrintMaze()
 
     // Get enemy positions, 4 = Enemy
     for(int i = 0 ; i < lvlManager->enemies.size(); i++)
-        lvlManager->maze->getMazeArray()[lvlManager->enemies[i]->xPosEnemy][lvlManager->enemies[i]->yPosEnemy] = 4;
+        lvlManager->maze->getMazeArray()[lvlManager->enemies[i]->xPos][lvlManager->enemies[i]->yPos] = 4;
 
     // Print maze with objects
     for(int h = 0; h < lvlManager->maze->getMazeSizeWH().second ; h++) {
@@ -190,6 +190,10 @@ void UI::PrintUOptions()
             else if (userOption == 'A' || userOption == 'a' || userOption == 'D' || userOption == 'd' || userOption == 'S' || userOption == 's' || userOption == 'W' || userOption == 'w')
             {
                 lvlManager->player->movePlayer(userOption);
+                for(Enemy* e : lvlManager->enemies)
+                {
+                    e->randomMoveEnemy();
+                }
                 notvalid = false;
             }
             else
