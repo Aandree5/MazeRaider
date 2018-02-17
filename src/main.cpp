@@ -1,5 +1,4 @@
 #include "LevelManager.h"
-<<<<<<< HEAD
 #include <iostream>
 #include <tuple>
 #include <string>
@@ -9,13 +8,10 @@
 
 
 using namespace std;
-=======
->>>>>>> 2361444361904b3dbc79e43206ef3004fcb0058e
 
 
 int main()
 {
-<<<<<<< HEAD
     cout<<"                                   _                    _        _ _ _ _ _ _ _ _                                                                                 _    \n"
         <<"                                   _ _                _ _        _             _                                                                                 _    \n"
         <<"                                   _   _            _   _        _             _                                                                                 _    \n"
@@ -64,7 +60,7 @@ int main()
         if (mysql_num_rows(result) >= 1)
         {
             cout<<"Welcome to the game"<<endl;
-            LevelManager* levelManager = new LevelManager();
+            new LevelManager();
         }
         else{
             cout<<"Please try again"<<endl;
@@ -109,7 +105,6 @@ int main()
 
         }
         if (choice[0] == '3'){
-            system("CLS");
             exit(0);
 
         }
@@ -120,9 +115,5 @@ int main()
          cout << "Please try again\n\n";
 
         }
-=======
-    new LevelManager();
->>>>>>> 2361444361904b3dbc79e43206ef3004fcb0058e
-
     }
 }

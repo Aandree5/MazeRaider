@@ -10,6 +10,21 @@
 #define clearScreen() system("cls")
 #define mazeWall (char)219
 #define mazePath (char)32
+#define bsTopLeftCorner (char)218
+#define bsTopRightCorner (char)191
+#define bsBottomLeftCorner (char)192
+#define bsBottomRightCorner (char)217
+#define bsTopBottomLines (char)196
+#define bsLeftRightLines (char)179
+#define upHorizontal (char)193
+#define downHorizontal (char)194
+#define rightVertical (char)195
+#define HorizontalVertical (char)197
+#define leftVertical (char)180
+#define attackBottom (char)223
+#define attackTop (char)220
+#define heal (char)207
+#define shield (char)245
 #define cursorPosition(h, x, y) SetConsoleCursorPosition( h, { x, y } )
 #define red SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12)
 #define blue SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 9)
@@ -36,6 +51,21 @@
 #define clearScreen() cout << "\033[2J\033[1;1H"
 #define mazeWall "\u2588"
 #define mazePath "\u0020"
+#define bsTopLeftCorner "\u250c"
+#define bsTopRightCorner "\u2510"
+#define bsBottomLeftCorner "\u2514"
+#define bsBottomRightCorner "\u2518"
+#define bsTopBottomLines "\u2500"
+#define bsLeftRightLines "\u2502"
+#define upHorizontal "\u2534"
+#define downHorizontal "\u252c"
+#define rightVertical "\u251c"
+#define HorizontalVertical "\u2524"
+#define leftVertical "\u253c"
+#define attackBottom "\u2580"
+#define attackTop "\u2584"
+#define heal "\u00a4"
+#define shield "\u00a7"
 #define cursorPosition(h, x, y) cout << "\033[" << y << ";" << x << "H"
 #define red cout << "\033[1;31m"
 #define blue cout << "\033[1;34m"

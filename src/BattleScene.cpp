@@ -260,6 +260,7 @@ void BattleScene::UpdateBattleInfo(pair<string, int> lineToAdd)
     }
 }
 
+
 void BattleScene::PlayAttack(int num, int color, int speed)
 {
     #ifdef _WIN32

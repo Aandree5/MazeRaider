@@ -103,7 +103,7 @@ void  UI::PrintMaze()
 void UI::PrintStateInfo()
 {
     cout << endl;
-    PrintC("    Time: ");
+    PrintC("        Time: ");
     PrintC(to_string(lvlManager->scoretime->getTime()), 15);
     PrintC("        Score: ");
     PrintC(to_string(lvlManager->scoretime->getHScore()), 15);
@@ -121,54 +121,65 @@ void UI::PrintUOptions()
     {
         // Draw maze bottom info
         cout << endl;
-        PrintC("                   ");
-        PrintC((char)194);
+        PrintC("          ");
+        PrintC(downHorizontal);
 // Health
-        PrintC("                   ");
-        PrintC(" Health: ");
+        PrintC("                      ");
+        PrintC(bsLeftRightLines, 15);
+        PrintC("   Health: ");
         PrintC(to_string(lvlManager->player->pHealth), 15);
         cout << endl;
 
-        PrintC("                   w", 15);
+        PrintC("          W          ", 15);
+        PrintC(downHorizontal);
 // Armor
-        PrintC("                   ");
-        PrintC("  Armor: ");
+        PrintC("           ");
+        PrintC(bsLeftRightLines, 15);
+        PrintC("    Armor: ");
         PrintC(to_string(lvlManager->player->pArmor), 15);
         cout << endl;
 
-        PrintC("               ");
-        PrintC((char)195 );
-        PrintC(" a ", 15);
-        PrintC((char)197);
-        PrintC(" d ", 15);
-        PrintC((char)180);
+        PrintC("      ");
+        PrintC(rightVertical);
+        PrintC(" A ", 15);
+        PrintC(HorizontalVertical);
+        PrintC(" D ", 15);
+        PrintC(leftVertical);
+
+        PrintC("    ");
+        PrintC(rightVertical);
+        PrintC(" E ", 15);
+        PrintC(leftVertical);
 // Damage
-        PrintC("               ");
-        PrintC(" Damage: ");
+        PrintC("         ");
+        PrintC(bsLeftRightLines, 15);
+        PrintC("   Damage: ");
         PrintC(to_string(lvlManager->player->pDamage), 15);
         cout << endl;
 
-        PrintC("                   s", 15);
+        PrintC("          S          ", 15);
+        PrintC(upHorizontal);
 // Keys
-        PrintC("                   ");
-        PrintC("   Keys: ");
+        PrintC("           ");
+        PrintC(bsLeftRightLines, 15);
+        PrintC("     Keys: ");
         PrintC("0", 15);
         cout << endl;
 
-        PrintC("                   ");
-        PrintC((char)193);
+        PrintC("          ");
+        PrintC(upHorizontal);
 // Enemy count
-        PrintC("                   ");
-        PrintC("Enemies: ");
+        PrintC("                      ");
+        PrintC(bsLeftRightLines, 15);
+        PrintC("  Enemies: ");
         PrintC(to_string(lvlManager->enemies.size()), 15);
 
         cout << endl << endl;
 
-        PrintC("Choose option: ");
-
         bool notvalid = true;
         while(notvalid)
         {
+            PrintC("Choose option: ");
             cin >> userOption;
 
             if (userOption == 'b') // TEMP - TESTING
@@ -191,14 +202,27 @@ void UI::PrintUOptions()
     else
     {
         cout << endl;
-        PrintC("Attack:    a        Defend:    d");
+        PrintC("        Attack: ");
+        PrintC("A", 15);
+        PrintC("    ");
+        PrintC(bsLeftRightLines, 15);
+        PrintC("     Run: ");
+        PrintC("R", 15);
+        PrintC("    ");
         cout << endl;
-        PrintC("  Heal:    h           Run:    r");
-        cout << endl;
+        PrintC("        Defend: ");
+        PrintC("D", 15);
+        PrintC("    ");
+        PrintC(bsLeftRightLines, 15);
+        PrintC("    Heal: ");
+        PrintC("H", 15);
+        PrintC("    ");
+        cout << endl << endl;
 
         bool notvalid = true;
         while(notvalid)
         {
+            PrintC("Choose option: ");
             cin >> userOption;
 
 // Player attacks
@@ -229,7 +253,7 @@ void UI::PrintUOptions()
             }
             else
             {
-                PrintC(" - Not a valid option... Refer back to the option shown on screen please.");
+                PrintC(" - Not a valid option... Please choose a valid option.");
                 cout << endl;
             }
         }
