@@ -42,7 +42,7 @@ Enemy::Enemy(Maze* m)
 }
 
 // 0 = Up | 1 = Right | 1 = Down | 3 = Left
-void moveEnemy(int direction)
+void Enemy::moveEnemy(int direction)
 {
 
 }
@@ -68,6 +68,11 @@ void Enemy::randomMoveEnemy()
                     yPos+=i-1;
                     break;
                 }
+                else if(maze->getMazeArray()[xPos][yPos+i]==2) // checks player forward
+                {
+                    yPos+=i-1;
+                    break;
+                }
             }
         }
         else if(eDirection == 2)
@@ -81,6 +86,11 @@ void Enemy::randomMoveEnemy()
                 }else if((maze->getMazeArray()[xPos-i][yPos+1] == 0 || maze->getMazeArray()[xPos-i][yPos-1] == 0) && (ranDecision == 1 || ranDecision == 2)) //checks path from sides
                 {
                     xPos-=i-1;
+                    break;
+                }
+                else if(maze->getMazeArray()[xPos-i][yPos]==2) // checks player forward
+                {
+                    yPos+=i-1;
                     break;
                 }
             }
@@ -98,6 +108,11 @@ void Enemy::randomMoveEnemy()
                     xPos+=i-1;
                     break;
                 }
+                else if(maze->getMazeArray()[xPos+i][yPos]==2) // checks player forward
+                {
+                    yPos+=i-1;
+                    break;
+                }
             }
         }
         else if(eDirection == 4)
@@ -113,10 +128,24 @@ void Enemy::randomMoveEnemy()
                     yPos-=i-1;
                     break;
                 }
+                else if(maze->getMazeArray()[xPos][yPos-i]==2) // checks player forward
+                {
+                    yPos+=i-1;
+                    break;
+                }
             }
         }
     }
 }
+
+void Enemy::checkPlayer()
+//function runs when one of the enemies is next to a player
+/*if((maze->getMazeArray()[xPos][yPos+1]==2) || (maze->getMazeArray()[xPos][yPos-1]==2) || (maze->getMazeArray()[xPos+1][yPos]==2) || (maze->getMazeArray()[xPos-1][yPos]==2))
+{
+    //run battle scene -
+    //Andre, you can call the function that runs the battle scene here. Initiate battle scene or something
+
+}*/
 
 int Enemy::getHealth()
 {
