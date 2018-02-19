@@ -138,7 +138,7 @@ void Enemy::randomMoveEnemy()
     }
 }
 
-void Enemy::checkPlayer()
+void Enemy::checkPlayer(){};
 //function runs when one of the enemies is next to a player
 /*if((maze->getMazeArray()[xPos][yPos+1]==2) || (maze->getMazeArray()[xPos][yPos-1]==2) || (maze->getMazeArray()[xPos+1][yPos]==2) || (maze->getMazeArray()[xPos-1][yPos]==2))
 {
