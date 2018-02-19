@@ -1,3 +1,4 @@
+#include "UIHelpers.h"
 #include "LevelManager.h"
 #include <iostream>
 #include <tuple>
@@ -6,114 +7,110 @@
 #include <mysql.h>
 #include <cstdlib>
 
-
 using namespace std;
 
+/**
+ * Main.
+ *
+ * @author Jesse
+ * @author Vihan
+ */
 
-int main()
-{
-    cout<<"                                   _                    _        _ _ _ _ _ _ _ _                                                                                 _    \n"
-        <<"                                   _ _                _ _        _             _                                                                                 _    \n"
-        <<"                                   _   _            _   _        _             _                                                                                 _    \n"
-        <<"                                   _     _        _     _        _             _                                                                                 _    \n"
-        <<"                                   _       _    _       _        _             _                                                                                 _    \n"
-        <<"                                   _         __         _        _ _ _ _ _ _ _ _                                                                                 _    \n"
-        <<"                                   _                    _        _     _                                                                                         _    \n"
-        <<"                                   _                    _        _       _                                                                                       _    \n"
-        <<"                                   _                    _        _         _            __   ___   ___    __     ___   __    ___        __     __                _    \n"
-        <<"                                   _                    _        _           _         |__  |   | |  __  |__    |   | |__   |    |     ____   |__  |__|          _    \n"
-        <<"                                   _                    _        _             _       |__  |___| |___|| |__    |___| |     |___ |__  _______  __| |  |          _    \n"
-        <<"__________________________________________________________________________________________________________________________________________________________________\n\n\n";
+MYSQL* connection;
 
-    while (1){
-        char choice[2];
-
-        cout
-            <<" 1. Login \n\n"
-            <<" 2. Sign up \n\n"
-            <<" 3. Exit \n\n"
-            <<"\n\n"
-            <<"Option: \n";
-
-            cin >> choice;
-
-            if (choice[0] == '1'){
-
-            MYSQL* connection;
-
-            connection = mysql_init(0);
-
-            connection = mysql_real_connect(connection,"server1.jesseprescott.co.uk","jessepre","Mazeraider123?","jessepre_mazeraider",0,NULL,0);
-
-        if(connection){
-        cout<<"Connected\n"<<endl;
-
-        string username,password;
-        cout<<"enter username: \n"<<endl; cin>>username;
-        cout<<"enter password: \n"<<endl; cin>>password;
-
-        string query="select * from information where username='"+username+"' and password='"+password+"';";
-
-        int queryResult = mysql_query(connection, query.c_str());
-        MYSQL_RES* result = mysql_store_result(connection);
-
-        if (mysql_num_rows(result) >= 1)
-        {
-            cout<<"Welcome to the game"<<endl;
-            new LevelManager();
-        }
-        else{
-            cout<<"Please try again"<<endl;
-            cout<<"---------------------------------------------------------------------------------------------------------\n\n"<<endl;
-        }
-
-    }
-
+void printLogo() {
+    cout<<"  __  __                 _____       _     _                   \n"
+            <<" |  \\/  |               |  __ \\     (_)   | |            \n"
+            <<" | \\  / | __ _ _______  | |__) |__ _ _  __| | ___ _ __    \n"
+            <<" | |\\/| |/ _` |_  / _ \\ |  _  // _` | |/ _` |/ _ \\ '__| \n"
+            <<" | |  | | (_| |/ /  __/ | | \\ \\ (_| | | (_| |  __/ |     \n"
+            <<" |_|  |_|\\__,_/___\\___| |_|  \\_\\__,_|_|\\__,_|\\___|_| \n"
+            << endl;
 }
-        else if (choice[0] == '2'){
 
-        MYSQL* connection;
+void printMenu() {
+    cout << "    ------------------------------------------------" << endl;
+    cout << "    |  1. Login                                    |" << endl;
+    cout << "    |  2. Signup                                   |" << endl;
+    cout << "    |  3. Exit                                     |" << endl;
+    cout << "    ------------------------------------------------" << endl;
+    cout << endl << "    Option: ";
+}
 
-        int qstate;
+void connectToDatabase() {
+    cout << "Connecting to database..." << endl;
+    connection = mysql_init(0);
+    connection = mysql_real_connect(connection,"server1.jesseprescott.co.uk","jessepre","Mazeraider123?","jessepre_mazeraider",0,NULL,0);
+    if(connection){
+        cout << "Successfully connected to database." << endl;
+    } else {
+        cout << "Failed to connect to the database." << endl;
+        exit(0);
+    }
+}
 
-     connection = mysql_init(0);
+void loginUser() {
+    string username,password;
+    cout << "Username: "; cin >> username;
+    cout << "Password: "; cin>>password;
 
-     connection = mysql_real_connect(connection,"server1.jesseprescott.co.uk","jessepre","Mazeraider123?","jessepre_mazeraider",0,NULL,0);
+    // TODO: Fix SQL Injection.
+    string query="select * from information where username='"+username+"' and password='"+password+"';";
 
-     if(connection){
-        cout<<"Connected to the database\n\n"<<endl;
+    int queryResult = mysql_query(connection, query.c_str());
+    MYSQL_RES* result = mysql_store_result(connection);
 
-        string name,username,password;
-        cout<<"enter name: \n"<<endl; cin>>name;
-        cout<<"enter username: \n"<<endl; cin>>username;
-        cout<<"enter password: \n"<<endl; cin>>password;
+    if (mysql_num_rows(result) >= 1) {
+        new LevelManager();
+    } else {
+        cout << "Incorrect username or password." << endl;
+        system("pause");
+    }
+}
 
+void registerUser() {
+    string name,username,password;
+    cout<<"First Name: "; cin>>name;
+    cout<<"Username: "; cin>>username;
+    cout<<"Password: "; cin>>password;
 
-        string query="insert into information(name,username,password) values('"+name+"','"+username+"','"+password+"')";
+    string query="insert into information(name,username,password) values('"+name+"','"+username+"','"+password+"')";
+    const char* q = query.c_str();
+    int qstate = mysql_query(connection,q);
 
+    if(!qstate) {
+        cout<<"Registration successful" << endl;
+        system("pause");
+        cin;
+    } else {
+        cout<<"Failed to register, error: " << mysql_error(connection) << endl;
+        system("pause");
+    }
+}
 
-        const char* q = query.c_str();
+int main() {
 
-        qstate = mysql_query(connection,q);
+    connectToDatabase();
 
-        if(!qstate)
-            cout<<"Register successful\n\n"
-                <<"---------------------------------------------------------------------------------------------------------\n\n"<<endl;
-        else
-            cout<<"Sorry try it again \n\n"<<mysql_error(connection)<<endl;
-            }
+    while (1) {
+        clearScreen();
+        printLogo();
+        printMenu();
+        char choice[2];
+        cin >> choice;
 
-        }
-        if (choice[0] == '3'){
+        if (choice[0] == '1') {
+            clearScreen();
+            loginUser();
+        } else if (choice[0] == '2'){
+            clearScreen();
+            registerUser();
+        } else if (choice[0] == '3'){
             exit(0);
-
-        }
-
-        else if (choice [0] > '3' || choice[0] < '1'){
-
-         cout << "Invalid input\n\n";
-         cout << "Please try again\n\n";
-
+        } else {
+            clearScreen();
+            cout << "Invalid input." << endl;
+            system("pause");
         }
     }
 }
