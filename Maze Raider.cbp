@@ -42,6 +42,7 @@
 		</Linker>
 		<Unit filename="include/BattleScene.h" />
 		<Unit filename="include/Enemy.h" />
+		<Unit filename="include/Highscore.h" />
 		<Unit filename="include/LevelManager.h" />
 		<Unit filename="include/Maze.h" />
 		<Unit filename="include/Player.h" />

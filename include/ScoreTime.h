@@ -17,6 +17,11 @@ class ScoreTime
 
         int getTime();
 
+        int savehighscore();
+
+        void connectToDatabase();
+        void makeHighscoreTable();
+
     protected:
 
     private:

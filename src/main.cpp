@@ -40,7 +40,7 @@ void printMenu() {
 void connectToDatabase() {
     cout << "Connecting to database..." << endl;
     connection = mysql_init(0);
-    connection = mysql_real_connect(connection,"server1.jesseprescott.co.uk","jessepre","Mazeraider123?","jessepre_mazeraider",0,NULL,0);
+    mysql_real_connect(connection,"server1.jesseprescott.co.uk","jessepre","Mazeraider123?","jessepre_mazeraider",0,NULL,0);
     if(connection){
         cout << "Successfully connected to database." << endl;
     } else {
@@ -96,16 +96,16 @@ int main() {
         clearScreen();
         printLogo();
         printMenu();
-        char choice[2];
+        char choice;
         cin >> choice;
 
-        if (choice[0] == '1') {
+        if (choice == '1') {
             clearScreen();
             loginUser();
-        } else if (choice[0] == '2'){
+        } else if (choice == '2'){
             clearScreen();
             registerUser();
-        } else if (choice[0] == '3'){
+        } else if (choice == '3'){
             exit(0);
         } else {
             clearScreen();
