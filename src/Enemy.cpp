@@ -49,9 +49,10 @@ void moveEnemy(int direction)
 
 void Enemy::randomMoveEnemy()
 {
-    ranDecision = rand() % 5 + 1;
+    ranDecision = rand() % 2 + 1;
     if(ranDecision == 1) // random chance of moving
     {
+        ranDecision = rand() % 3 + 1;
         eDirection = rand() % 4 + 1; //random direction to move
         ranVal = rand() % 20 + 1; //random steps
         if(eDirection == 1)
