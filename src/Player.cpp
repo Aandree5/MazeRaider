@@ -29,7 +29,11 @@ void Player::movePlayer(char direction)
             {
                 Player::chestEvent();
                 break;
-            }
+            }/*
+            if(maze->getMazeArray()[xPos][yPos+steps]==4) //checks to see if enemy is there
+            {
+                break;
+            }*/
             steps+=1;
 
 
@@ -49,7 +53,11 @@ void Player::movePlayer(char direction)
             {
                 Player::chestEvent();
                 break;
-            }
+            }/*
+            if(maze->getMazeArray()[xPos-steps][yPos]==4) //checks to see if enemy is there
+            {
+                break;
+            }*/
             steps+=1;
 
         }
@@ -68,7 +76,11 @@ void Player::movePlayer(char direction)
             {
                 Player::chestEvent();
                 break;
-            }
+            }/*
+            if(maze->getMazeArray()[xPos+steps][yPos]==4) //checks to see if enemy is there
+            {
+                break;
+            }*/
             steps+=1;
 
         }
@@ -88,6 +100,10 @@ void Player::movePlayer(char direction)
                 Player::chestEvent();
                 break;
             }
+            /*if(maze->getMazeArray()[xPos][yPos-steps]==4) //checks to see if enemy is there
+            {
+                break;
+            }*/
             steps+=1;
 
         }

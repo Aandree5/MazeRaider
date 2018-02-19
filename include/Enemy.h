@@ -19,6 +19,8 @@ class Enemy
         // 0 = Up | 1 = Right | 1 = Down | 3 = Left
         void moveEnemy(int direction);
 
+        void checkPlayer();
+
         // Enemy stats
         int getHealth();
         int getArmor();
