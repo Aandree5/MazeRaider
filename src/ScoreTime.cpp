@@ -1,5 +1,13 @@
 #include <iostream>
 #include "ScoreTime.h"
+#include "UIHelpers.h"
+#include "LevelManager.h"
+#include <iostream>
+#include <tuple>
+#include <string>
+#include <windows.h>
+#include <mysql.h>
+#include <cstdlib>
 
 using namespace std;
 
@@ -51,5 +59,36 @@ int ScoreTime::getHScore()
 
     return hScore;
 }
+int ScoreTime::savehighscore(){
+
+    MYSQL* connection;
+
+    cout << "Connecting to database..." << endl;
+    connection = mysql_init(0);
+    mysql_real_connect(connection,"server1.jesseprescott.co.uk","jessepre","Mazeraider123?","jessepre_mazeraider",0,NULL,0);
+
+    string data="insert into highscore(highscore) values('"+to_string(hScore)+"')";
+    const char* q = data.c_str();
+    int qstate = mysql_query(connection,q);
+
+    if(!qstate) {
+        cout<<"Registration successful" << endl;
+        system("pause");
+    } else {
+        cout<<"Failed to register, error: " << mysql_error(connection) << endl;
+        system("pause");
+    }
+}
+
+int ScoreTime::makeHighscoreTable()
+{
+    //get the top 10 scores from the high score table and store the names and scores in to an array
+    string query="select MAX(highscore) from information where username='"+username+"' and password='"+password+"';";
+
+
+
+
+}
+
 
 
