@@ -221,3 +221,8 @@ std::pair<int,int> Maze::getMazeStart()
 {
     return m_start;
 }
+
+void Maze::updateChest(int x, int y)
+{
+    m_maze[x][y] = 0;
+}

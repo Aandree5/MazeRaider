@@ -80,7 +80,7 @@ int ScoreTime::savehighscore(){
     }
 }
 
-int ScoreTime::makeHighscoreTable()
+/*int ScoreTime::makeHighscoreTable()
 {
     //get the top 10 scores from the high score table and store the names and scores in to an array
     string query="select MAX(highscore) from information where username='"+username+"' and password='"+password+"';";
@@ -88,7 +88,7 @@ int ScoreTime::makeHighscoreTable()
 
 
 
-}
+}*/
 
 
 

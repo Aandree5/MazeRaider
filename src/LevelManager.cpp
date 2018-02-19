@@ -8,7 +8,7 @@
 LevelManager::LevelManager()
 {
     maze = new Maze(31, 31);
-    player = new Player();
+    player = new Player(this);
     scoretime = new ScoreTime();
 
     player->maze = maze;

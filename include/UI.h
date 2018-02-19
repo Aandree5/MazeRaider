@@ -21,14 +21,14 @@ class  UI
         // Check if it's in battle
         bool inBattle;
 
+        BattleScene* btlScene;
+
     protected:
 
     private:
 
         // Pointer to level manager
         LevelManager* lvlManager;
-
-        BattleScene* btlScene;
 
         // Print Maze
         void PrintMaze();
