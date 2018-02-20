@@ -41,6 +41,8 @@
 #define healthGreen SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 34)
 #define healthYellow SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 238)
 #define healthRed SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 68)
+#define debugBlackGreen SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 164)
+#define debugBlackRed SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 192)
 #endif // _WIN32
 
 #ifdef __linux__

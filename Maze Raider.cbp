@@ -42,6 +42,7 @@
 		</Linker>
 		<Unit filename="include/BattleScene.h" />
 		<Unit filename="include/Enemy.h" />
+		<Unit filename="include/EnemyAI.h" />
 		<Unit filename="include/Highscore.h" />
 		<Unit filename="include/LevelManager.h" />
 		<Unit filename="include/Maze.h" />
@@ -52,6 +53,7 @@
 		<Unit filename="include/Utils.h" />
 		<Unit filename="src/BattleScene.cpp" />
 		<Unit filename="src/Enemy.cpp" />
+		<Unit filename="src/EnemyAI.cpp" />
 		<Unit filename="src/LevelManager.cpp" />
 		<Unit filename="src/Maze.cpp" />
 		<Unit filename="src/Player.cpp" />
