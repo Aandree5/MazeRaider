@@ -162,9 +162,3 @@ void Player::checkEnemy(int x, int y)
     }
 }
 
-
-void Player::spawnPlayer(int x, int y)
-{
-    xPos = x;
-    yPos = y;
-}

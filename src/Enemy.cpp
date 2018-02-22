@@ -1,23 +1,14 @@
 #include "Enemy.h"
 #include "Maze.h"
-
+#include <windows.h>
+#include <mysql.h>
+#include <sstream>
 Enemy::Enemy(Maze* m)
 {
     maze = m;
 
-    // Enemy stats
-    health = 100;
-    armor = 2;
-    power = 10;
-    healPower = 10;
-
-    // Animation types
-    attackColour = 10;
-    attackType = 0;
-    defenceColour = 10;
-    defenceType = 0;
-    healColour = 10;
-    healType = 0;
+    statsFromDatabase();
+    //system("pause");
 
     //spawn enemy
     int x,y;
@@ -39,12 +30,6 @@ Enemy::Enemy(Maze* m)
 
     xPos = x;
     yPos = y;
-}
-
-// 0 = Up | 1 = Right | 1 = Down | 3 = Left
-void Enemy::moveEnemy(int direction)
-{
-
 }
 
 void Enemy::randomMoveEnemy()
@@ -138,7 +123,7 @@ void Enemy::randomMoveEnemy()
     }
 }
 
-void Enemy::checkPlayer(){};
+void Enemy::checkPlayer(){}
 //function runs when one of the enemies is next to a player
 /*if((maze->getMazeArray()[xPos][yPos+1]==2) || (maze->getMazeArray()[xPos][yPos-1]==2) || (maze->getMazeArray()[xPos+1][yPos]==2) || (maze->getMazeArray()[xPos-1][yPos]==2))
 {
@@ -147,19 +132,74 @@ void Enemy::checkPlayer(){};
 
 }*/
 
+void Enemy::statsFromDatabase()
+{
+    MYSQL* connection;
+    connection = mysql_init(0);
+
+    mysql_real_connect(connection, "server1.jesseprescott.co.uk", "jessepre", "Mazeraider123?", "jessepre_mazeraider", 0, NULL, 0);
+    if(!connection)
+    {
+        cout << "Failed to connect to the database." << endl;
+        exit(0);
+    }
+
+    string query = "SELECT e.name, e.mesh, e.health, e.armour, e.attack_power, w.weapon_name, w.weapon_power, e.heal_power, w.attack_type,"
+    " w.attack_colour, e.defence_type, e.defence_colour, e.heal_type, e.heal_colour "
+    "FROM Enemy e, Weapon w WHERE e.weapon_id = w.weapon_id "
+    "ORDER BY RAND() LIMIT 1;";
+
+    int query_state = mysql_query(connection, query.c_str());
+    if (query_state !=0)
+        cout << mysql_error(connection) << endl;
+
+    MYSQL_RES* result = mysql_store_result(connection);
+    MYSQL_ROW row = mysql_fetch_row(result);
+
+    name = row[0];
+    mesh = atoi(row[1]);
+    health = atoi(row[2]);
+    armour = atoi(row[3]);
+    attackPower = atoi(row[4]);
+    weapon.first = row[5];
+    weapon.second = atoi(row[6]);
+    healPower = atoi(row[7]);
+    attackType = atoi(row[8]);
+    attackColour = atoi(row[9]);
+    defenceType = atoi(row[10]);
+    defenceColour = atoi(row[1]);
+    healType = atoi(row[12]);
+    healColour = atoi(row[13]);
+}
+
+string Enemy::getName()
+{
+    return name;
+}
+
+int Enemy::getMesh()
+{
+    return mesh;
+}
+
 int Enemy::getHealth()
 {
     return health;
 }
 
-int Enemy::getArmor()
+int Enemy::getArmour()
 {
-    return armor;
+    return armour;
 }
 
-int Enemy::getPower()
+int Enemy::getAttackPower()
 {
-    return power;
+    return attackPower;
+}
+
+pair<string, int> Enemy::getWeapon()
+{
+    return weapon;
 }
 
 int Enemy::getHealPower()

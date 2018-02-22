@@ -14,8 +14,9 @@ class EnemyAI
     public:
         EnemyAI(LevelManager* lvman);
 
-        // 0 = Up | 1 = Right | 1 = Down | 3 = Left
         void getNextPosition(Enemy* enemy);
+
+        int followPlayerLimit = 5;
     protected:
 
     private:
@@ -78,6 +79,7 @@ class EnemyAI
             }
         };
 
+
         // Find shortest path to player
         vector<pos> findPath(pos p);
         // Check surrounding nodes
@@ -89,7 +91,6 @@ class EnemyAI
         void debugPrintNodes(vector<node> showValueOpenL, vector<node> showValueClosedL);
         void debugPrintNodes(vector<node> showParentList);
         void debugPrintNodes(vector<pos> showParentList);
-        void debugNextLocation(pos p);
 };
 
 #endif // ENEMYAI_H

@@ -5,8 +5,29 @@ bool UIHelpers::ChangeColor(int color)
 {
     switch (color)
     {
-    case 12:
-        red;
+    case 1:
+        darkblue;
+        break;
+    case 2:
+        darkgreen;
+        break;
+    case 3:
+        darkcyan;
+        break;
+    case 4:
+        darkred;
+        break;
+    case 5:
+        darkpurple;
+        break;
+    case 6:
+        armygreen;
+        break;
+    case 7:
+        grey;
+        break;
+    case 8:
+        darkgrey;
         break;
     case 9:
         blue;
@@ -14,35 +35,23 @@ bool UIHelpers::ChangeColor(int color)
     case 10:
         green;
         break;
-    case 14:
-        yellow;
-        break;
     case 11:
         cyan;
         break;
-    case 15:
-        white;
+    case 12:
+        red;
         break;
     case 13:
         purple;
         break;
-    case 4:
-        darkred;
+    case 14:
+        yellow;
         break;
-    case 3:
-        darkblue;
-        break;
-    case 2:
-        darkgreen;
-        break;
-    case 5:
-        darkpurple;
+    case 15:
+        white;
         break;
     case 34:
         healthGreen;
-        break;
-    case 238:
-        healthYellow;
         break;
     case 68:
         healthRed;
@@ -52,6 +61,9 @@ bool UIHelpers::ChangeColor(int color)
         break;
     case 192:
         debugBlackRed;
+        break;
+    case 238:
+        healthYellow;
         break;
     default:
         grey;
