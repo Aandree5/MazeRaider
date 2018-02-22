@@ -16,15 +16,16 @@ class Enemy
 
         //functions
         void randomMoveEnemy();
-        // 0 = Up | 1 = Right | 1 = Down | 3 = Left
-        void moveEnemy(int direction);
 
         void checkPlayer();
 
         // Enemy stats
+        string getName();
+        int getMesh();
         int getHealth();
-        int getArmor();
-        int getPower();
+        int getArmour();
+        int getAttackPower();
+        pair<string, int> getWeapon();
         int getHealPower();
 
         // Animation types
@@ -44,11 +45,15 @@ class Enemy
     protected:
 
     private:
+        void statsFromDatabase();
+
         // Moving variables
         int eDirection, ranVal, ranDecision;
 
         // Enemy stats
-        int health, armor, power, healPower;
+        string name;
+        pair<string, int> weapon;
+        int mesh, health, armour, attackPower, healPower;
 
         // Animation types
         int attackColour, attackType, defenceColour, defenceType, healColour, healType;

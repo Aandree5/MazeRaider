@@ -25,7 +25,7 @@ BattleScene::BattleScene(LevelManager* lvlman, Enemy* e)
     isEnemyDefending = false;
     enemyJustAttacked = false;
 
-    battleInfo[battleInfo.size() - 1] = make_pair("Encountered an <enemy>", 8);
+    battleInfo[battleInfo.size() - 1] = make_pair(enemy->getName() + " encountered.", 0);
 }
 
 int BattleScene::BuildScene()
@@ -115,12 +115,15 @@ int BattleScene::BuildScene()
                             switch (battleInfo[h - 1].second)
                             {
                             case 0:
-                                PrintC(battleInfo[h - 1].first, 12);
+                                PrintC(battleInfo[h - 1].first, 15);
                                 break;
                             case 1:
-                                PrintC(battleInfo[h - 1].first, 11);
+                                PrintC(battleInfo[h - 1].first, 12);
                                 break;
                             case 2:
+                                PrintC(battleInfo[h - 1].first, 11);
+                                break;
+                            case 3:
                                 PrintC(battleInfo[h - 1].first, 10);
                                 break;
                             default:
@@ -136,12 +139,15 @@ int BattleScene::BuildScene()
                             switch (battleInfo[h - 1].second)
                             {
                             case 0:
-                                PrintC(battleInfo[h - 1].first, 4);
+                                PrintC(battleInfo[h - 1].first, 8);
                                 break;
                             case 1:
-                                PrintC(battleInfo[h - 1].first, 3);
+                                PrintC(battleInfo[h - 1].first, 4);
                                 break;
                             case 2:
+                                PrintC(battleInfo[h - 1].first, 3);
+                                break;
+                            case 3:
                                 PrintC(battleInfo[h - 1].first, 2);
                                 break;
                             default:
@@ -150,6 +156,24 @@ int BattleScene::BuildScene()
                             }
                         }
                     }
+                }
+
+// Player name
+                else if (w == 5 && h == 1)
+                {
+                    string name = "<player>";
+                    PrintC(name, 3);
+
+                    w += name.size() - 1;
+                }
+
+// Enemy name
+                else if (w == 68 && h == 9)
+                {
+                    string name = enemy->getName();
+                    PrintC(name, enemy->getAttackColour());
+
+                    w += name.size() - 1;
                 }
 
 // Player Health bar
@@ -194,7 +218,7 @@ int BattleScene::BuildScene()
                     PrintC(shieldSymbol, 11);
                 }
 
-// Place to draw player
+// Draw player
                 else if (h >= (sceneHeight / 2) - 1 && h < sceneHeight && w > 5 && w <= (playerWidth + 5))
                 {
                     if (h - ((sceneHeight / 2) - 1) < playerMesh[1].size())
@@ -205,12 +229,12 @@ int BattleScene::BuildScene()
                     }
                 }
 
-// Place to draw enemy
+// Draw enemy
                 else if (h > 0 && h <= sceneHeight / 2 && w >= sceneWidth - (enemyWidth + 5) && w < sceneWidth - 5)
                 {
-                    if (h - 1 < enemyMesh[0].size())
+                    if (h - 1 < enemyMesh[enemy->getMesh()].size())
                     {
-                        cout << enemyMesh[0][h - 1];
+                        cout << enemyMesh[enemy->getMesh()][h - 1];
                         enemyCounter++;
                         w += enemyWidth - 1;
                     }
@@ -225,23 +249,7 @@ int BattleScene::BuildScene()
     }
 
     if (!TPlayerFEnemy)
-    {
-        int action = rand() % 3;
-
-        switch(action)
-        {
-        case 0:
-            EnemyAttack();
-            break;
-        case 1:
-            EnemyDefend();
-            break;
-        case 2:
-            EnemyHeal();
-            break;
-
-        }
-    }
+        EnemyAction();
 
     return 0;
 }
@@ -269,7 +277,7 @@ int BattleScene::HealthColor(int health, bool TBackFFront)
 }
 
 // Add line to battleInfo - Text to show and type action | 0 = attack   1 = defend    2 = heal
-void BattleScene::UpdateBattleInfo(pair<string, int> lineToAdd)
+void BattleScene::UpdateBattleInfo(string text, int type)
 {
     bool needReplace = true;
 
@@ -278,7 +286,7 @@ void BattleScene::UpdateBattleInfo(pair<string, int> lineToAdd)
         if( i + 1 < battleInfo.size())
             battleInfo[i] = battleInfo[i + 1];
         else
-            battleInfo[i] = lineToAdd;
+            battleInfo[i] = make_pair(text, type);
     }
 }
 
@@ -740,17 +748,17 @@ void BattleScene::PlayHeal(int htype, int colour)
 
 void BattleScene::PlayerAttack()
 {
+    int tempHealth = enemyHealth;
+
     PlayAttack(lvlManager->player->pAttackType, lvlManager->player->pAttackColour);
 
     if (!isEnemyDefending)
     {
         int damageToDeal = 0;
 
-        if(lvlManager->player->pDamage > enemy->getArmor())
-            damageToDeal = lvlManager->player->pDamage - enemy->getArmor();
+        if((lvlManager->player->pDamage + lvlManager->player->pWeapon.second) > enemy->getArmour())
+            damageToDeal = (lvlManager->player->pDamage + lvlManager->player->pWeapon.second) - enemy->getArmour();
 
-
-        UpdateBattleInfo(make_pair("<player> dealt " + to_string(damageToDeal) + " damage", 0));
 
         if(enemyHealth - damageToDeal >= 0)
             enemyHealth -= damageToDeal;
@@ -758,15 +766,18 @@ void BattleScene::PlayerAttack()
             enemyHealth = 0;
     }
 
+    tempHealth = tempHealth - enemyHealth;
+    UpdateBattleInfo("<player> dealt " + to_string(tempHealth) + " damage", 1);
+
     isEnemyDefending = false;
     TPlayerFEnemy = false;
 }
 
 void BattleScene::PlayerDefend()
 {
-    UpdateBattleInfo(make_pair("<player> is defending", 1));
-
     PlayDefend(lvlManager->player->pDefendType, lvlManager->player->pDefendColour);
+
+    UpdateBattleInfo("<player> is defending", 2);
 
     isPlayerDefending = true;
     isEnemyDefending = false;
@@ -775,7 +786,7 @@ void BattleScene::PlayerDefend()
 
 void BattleScene::PlayerHeal()
 {
-    UpdateBattleInfo(make_pair("<player> healed by " + to_string(lvlManager->player->pHealPower), 2));
+    int tempHealth = playerHealth;
 
     PlayHeal(lvlManager->player->pHealType, lvlManager->player->pHealColour);
 
@@ -784,13 +795,53 @@ void BattleScene::PlayerHeal()
     else
         playerHealth = playerMaxHealth;
 
+    tempHealth = playerHealth - tempHealth;
+    UpdateBattleInfo("<player> healed by " + to_string(tempHealth), 3);
+
     isEnemyDefending = false;
     TPlayerFEnemy = false;
+}
+
+bool BattleScene::canPlayerRun()
+{
+    // Change of letting the player run
+    int changeLimit = 15; // 15%
+    int chance = rand() % 101; // From 0 - 100 (0% - 100%)
+
+    if(enemy->getAttackPower() > lvlManager->player->pDamage)
+    {
+        chance = rand() % 101 - (enemy->getAttackPower() - lvlManager->player->pDamage);
+    }
+
+    if (chance <= changeLimit)
+    {
+        UpdateBattleInfo("<player> ran from battle.", 0);
+
+        // Delete enemy from vector
+        auto it = find(lvlManager->enemies.begin(), lvlManager->enemies.end(), enemy);
+        if (it != lvlManager->enemies.end())
+            lvlManager->enemies.erase(it);
+
+        // Delete enemy from memory
+        delete enemy;
+        enemy = nullptr;
+
+        lvlManager->enemies.emplace_back(new Enemy(lvlManager->maze));
+        return true;
+    }
+    else
+    {
+        UpdateBattleInfo(enemy->getName() + " stopped <player> from running.", 0);
+        isEnemyDefending = false;
+        TPlayerFEnemy = false;
+        return false;
+    }
 }
 
 
 void BattleScene::EnemyAttack()
 {
+    int tempHealth = playerHealth;
 
     PlayAttack(enemy->getAttackType(), enemy->getAttackColour());
 
@@ -798,16 +849,17 @@ void BattleScene::EnemyAttack()
     {
         int damageToDeal = 0;
 
-        if(enemy->getPower() > lvlManager->player->pArmor)
-            damageToDeal = enemy->getPower() - lvlManager->player->pArmor;
-
-        UpdateBattleInfo(make_pair("<enemy> dealt " + to_string(damageToDeal) + " damage", 0));
+        if(enemy->getAttackPower() > lvlManager->player->pArmor)
+            damageToDeal = (enemy->getAttackPower() + enemy->getWeapon().second) - lvlManager->player->pArmor;
 
         if(enemyHealth - damageToDeal >= 0)
             playerHealth -= damageToDeal;
         else
             playerHealth = 0;
     }
+
+        tempHealth = tempHealth - playerHealth;
+        UpdateBattleInfo(enemy->getName() + " dealt " + to_string(tempHealth) + " damage", 1);
 
     isPlayerDefending = false;
     TPlayerFEnemy = true;
@@ -816,9 +868,9 @@ void BattleScene::EnemyAttack()
 
 void BattleScene::EnemyDefend()
 {
-    UpdateBattleInfo(make_pair("<enemy> is defending", 1));
-
     PlayDefend(enemy->getDefenceType(), enemy->getDefenceColour());
+
+    UpdateBattleInfo(enemy->getName() + " is defending", 2);
 
     isEnemyDefending = true;
     isPlayerDefending = false;
@@ -828,7 +880,7 @@ void BattleScene::EnemyDefend()
 
 void BattleScene::EnemyHeal()
 {
-    UpdateBattleInfo(make_pair("<enemy> healed by " + to_string(enemy->getHealPower()), 2));
+    int tempHealth = enemyHealth;
 
     PlayHeal(enemy->getHealType(), enemy->getHealColour());
 
@@ -837,7 +889,26 @@ void BattleScene::EnemyHeal()
     else
         enemyHealth = enemyMaxHealth;
 
+    tempHealth = enemyHealth - tempHealth;
+    UpdateBattleInfo(enemy->getName() + " healed by " + to_string(tempHealth), 3);
+
     isPlayerDefending = false;
     TPlayerFEnemy = true;
     enemyJustAttacked = true;
+}
+
+void BattleScene::EnemyAction()
+{
+    // Change of enemy action
+    int attackChance = 60; // 0 - 60 (0% - 60%)    -> 60%
+    int defenceChance = 80; // 61 - 80 (60% - 80%) -> 20%
+    int healChance = 100; // 81 - 100 (80% - 100%)  -> 20%
+    int chance = rand() % 101; // From 0 - 100 (0% - 100%)
+
+    if (chance <= attackChance)
+        EnemyAttack();
+    else if (chance <= defenceChance)
+        EnemyDefend();
+    else if (chance <= healChance)
+        EnemyHeal();
 }

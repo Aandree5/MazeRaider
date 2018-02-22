@@ -34,7 +34,8 @@
 #define white SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15)
 #define purple SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 13)
 #define darkred SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4)
-#define darkblue SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 3)
+#define darkcyan SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 3)
+#define darkblue SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 1)
 #define darkgreen SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2)
 #define darkpurple SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 5)
 #define grey SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7)
@@ -43,6 +44,9 @@
 #define healthRed SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 68)
 #define debugBlackGreen SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 164)
 #define debugBlackRed SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 192)
+#define darkgrey SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8)
+#define armygreen SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 6)
+
 #endif // _WIN32
 
 #ifdef __linux__

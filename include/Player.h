@@ -16,7 +16,6 @@ class Player
     public:
         Player(LevelManager* lvlma);
         //functions
-        void spawnPlayer(int x, int y);
         void movePlayer(char direction);
         void chestEvent(void);
         void checkChest();
@@ -27,6 +26,7 @@ class Player
         int pHealth = 100;
         int pDamage = 10;
         int pArmor = 2;
+        pair<string, int> pWeapon = make_pair("Sword", 10);
         int pKeys = 0;
         int pHealPower = 10;
 

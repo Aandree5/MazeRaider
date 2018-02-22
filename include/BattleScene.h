@@ -30,22 +30,25 @@ class BattleScene
         void PlayerAttack();
         void PlayerDefend();
         void PlayerHeal();
+        bool canPlayerRun();
 
         // Set of enemy actions
         void EnemyAttack();
         void EnemyDefend();
         void EnemyHeal();
+        void EnemyAction();
 
-        //TEMP
+        // Player Enemy info
         int playerHealth;
         int playerMaxHealth;
         int enemyHealth;
         int enemyMaxHealth;
+
+        Enemy* enemy;
     protected:
 
     private:
         LevelManager* lvlManager;
-        Enemy* enemy;
 
         // Text to show and type action | 0 = attack   1 = defend    2 = heal
         array<pair<string, int>, 13> battleInfo;
@@ -58,8 +61,8 @@ class BattleScene
         // Check health color
         int HealthColor(int health, bool TBackFFront = true);
 
-        // Add line to battleInfo - Text to show and type action | 0 = attack   1 = defend    2 = heal
-        void UpdateBattleInfo(pair<string, int> lineToAdd);
+        // Add line to battleInfo - Text to show and type action | 0 = info  1 = attack   2 = defend    3 = heal
+        void UpdateBattleInfo(string text, int type);
 
         // Play attack animation
         void PlayAttack(int atype, int colour);
@@ -76,7 +79,31 @@ class BattleScene
                                              "   {{ { { { { { { { { { { ( '_')   ",
                                              "    >>>>>>>>>>>>>>>>>>>>>>>`--'>   ",
                                              "                                   ",
-                                             "                                   "}};
+                                             "                                   "},
+                                            {"                                   ",
+                                           R"(              _.---._    /\\       )",
+                                           R"(           ./'       "--`\//       )",
+                                           R"(         ./              o \       )",
+                                           R"(        /./\  )______   \__ \      )",
+                                           R"(       ./  / /\ \   | \ \  \ \     )",
+                                           R"(          / /  \ \  | |\ \  \7     )",
+                                             "                                   "},
+                                            {"                                   ",
+                                           R"(            (o)--(o)               )",
+                                           R"(           /.______.\              )",
+                                           R"(           \________/              )",
+                                           R"(          ./        \.             )",
+                                           R"(         ( .        , )            )",
+                                           R"(          \ \_\\//_/ /             )",
+                                           R"(           ~~  ~~  ~~              )"},
+                                            {"                                   ",
+                                           R"(                    .-._           )",
+                                           R"(                   {_}^ )o         )",
+                                           R"(          {\________//~`           )",
+                                           R"(           (         )             )",
+                                           R"(           /||~~~~~||\             )",
+                                           R"(          |_\\_    \\_\            )",
+                                           R"(          "' ""'    ""'"'          )"}};
 
 
         vector<vector<string>> playerMesh = {{"       _O_      ",

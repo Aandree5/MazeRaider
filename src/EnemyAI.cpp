@@ -13,19 +13,35 @@ EnemyAI::EnemyAI(LevelManager* lvlman)
 
 void EnemyAI::getNextPosition(Enemy* enemy)
 {
-    vector<pos> path = findPath({enemy->xPos, enemy->yPos});
-    // (1, 0) = Parent at right | (-1, 0) = Parent at Left | (0, 1) = Parent at Top | (0, -1) = Parent at Bottom
-    pos dir = path[1] - path[0];
+    if (abs(lvlManager->player->xPos - enemy->xPos) < followPlayerLimit ||
+        abs(lvlManager->player->yPos - enemy->yPos) < followPlayerLimit )
+    {
+        vector<pos> path = findPath({enemy->xPos, enemy->yPos});
 
-    for(pos p : path)
-        if((p.X != path[0].X && dir.X == 0) || (p.Y != path[0].Y && dir.Y == 0))
-            break;
-        else
+        //DEBUG
+        //debugPrintNodes(path);
+        //system("pause");
+
+        // (1, 0) = Parent at right | (-1, 0) = Parent at Left | (0, 1) = Parent at Top | (0, -1) = Parent at Bottom
+
+        pos dir = path[1] - path[0];
+        pos nextPos;
+
+        for(pos p : path)
         {
-            enemy->xPos = p.X;
-            enemy->yPos = p.Y;
+            if((p.X != path[0].X && dir.X == 0) || (p.Y != path[0].Y && dir.Y == 0))
+                break;
+            else
+            {
+                enemy->xPos = p.X;
+                enemy->yPos = p.Y;
+            }
         }
-
+    }
+    else
+    {
+        enemy->randomMoveEnemy();
+    }
 }
 
 // Find shortest path to player
@@ -76,6 +92,13 @@ vector<EnemyAI::pos> EnemyAI::findPath(pos p)
 
         currNode = sameFValue[0];
     }
+
+    //DEBUG
+    //debugPrintNodes(openList, closeList);
+    //system("pause");
+
+    //debugPrintNodes(closeList);
+    //system("pause");
 
     vector<pos> path;
     path.emplace_back(currNode.position);
@@ -276,32 +299,6 @@ void EnemyAI::debugPrintNodes(vector<pos> showParentList)
         debugPrintNodeParent(showParentList[i], dir);
     }
 
-
-    #ifdef _WIN32
-        SetConsoleCursorPosition( hStdOut, originalPos );
-    #endif // _WIN32
-
-    #ifdef __linux__
-        cout << "\033[u";
-    #endif // __linux__
-}
-
-void EnemyAI::debugNextLocation(pos p)
-{
-    #ifdef _WIN32
-        HANDLE hStdOut = GetStdHandle( STD_OUTPUT_HANDLE );
-        CONSOLE_SCREEN_BUFFER_INFO cbsi;
-        GetConsoleScreenBufferInfo(hStdOut, &cbsi);
-        COORD originalPos = cbsi.dwCursorPosition;
-    #endif // _WIN32
-
-    #ifdef __linux__
-        int hStdOut;
-        cout << "\033[s";
-    #endif // __linux__
-
-    cursorPosition(hStdOut, p.X * 2, p.Y + 3);
-    PrintC(healSymbol, 4, true);
 
     #ifdef _WIN32
         SetConsoleCursorPosition( hStdOut, originalPos );

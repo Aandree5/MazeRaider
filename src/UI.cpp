@@ -135,10 +135,10 @@ void UI::PrintUOptions()
         cout << endl;
 
         PrintC("          W          ", 15);
-// Armor
+// Armour
         PrintC("            ");
         PrintC(bsLeftRightLines, 15);
-        PrintC("    Armor: ");
+        PrintC("    Armour: ");
         PrintC(to_string(lvlManager->player->pArmor), 15);
         cout << endl;
 
@@ -152,21 +152,31 @@ void UI::PrintUOptions()
         PrintC("                  ");
         PrintC(bsLeftRightLines, 15);
         PrintC("   Damage: ");
+        PrintC(to_string(lvlManager->player->pDamage + lvlManager->player->pWeapon.second), 2);
+        PrintC("/ ");
         PrintC(to_string(lvlManager->player->pDamage), 15);
         cout << endl;
 
         PrintC("          S          ", 15);
-// Keys
+// Weapon
         PrintC("            ");
+        PrintC(bsLeftRightLines, 15);
+        PrintC("   Weapon: ");
+        PrintC(lvlManager->player->pWeapon.first, 15);
+        cout << endl;
+
+        PrintC("          ");
+        PrintC(upHorizontal);
+
+// Keys
+        PrintC("                      ");
         PrintC(bsLeftRightLines, 15);
         PrintC("     Keys: ");
         PrintC("0", 15);
         cout << endl;
 
-        PrintC("          ");
-        PrintC(upHorizontal);
 // Enemy count
-        PrintC("                      ");
+        PrintC("                                 ");
         PrintC(bsLeftRightLines, 15);
         PrintC("  Enemies: ");
         PrintC(to_string(lvlManager->enemies.size()), 15);
@@ -188,11 +198,7 @@ void UI::PrintUOptions()
             {
                 lvlManager->player->movePlayer(userOption);
                 for(Enemy* e : lvlManager->enemies)
-                {
-
                     lvlManager->enemyai->getNextPosition(e);
-                    //e->randomMoveEnemy();
-                }
 
                 notvalid = false;
             }
@@ -206,13 +212,56 @@ void UI::PrintUOptions()
     else
     {
         cout << endl;
+
+// Player, Enemy - Name
+        PrintC("                                                 ");
+        PrintC(bsLeftRightLines, 15);
+        PrintC("   ");
+        string n = "<player>";
+        PrintC(n, 8);
+        for(int i = 0; i < 28 - n.size(); i++)
+            PrintC(" ");
+        PrintC(bsLeftRightLines, 15);
+        PrintC("   ");
+        PrintC(btlScene->enemy->getName(), 8);
+        cout << endl;
+
+// Player, Enemy - Health
+        PrintC("                                                 ");
+        PrintC(bsLeftRightLines, 15);
+        PrintC("   ");
+        PrintC("Health: ");
+        string h = to_string(lvlManager->player->pHealth);
+        PrintC(to_string(lvlManager->player->pHealth), 15);
+        for(int i = 0; i < 20 - h.size(); i++)
+            PrintC(" ");
+        PrintC(bsLeftRightLines, 15);
+        PrintC("   ");
+        PrintC("Health: ");
+        PrintC(to_string(btlScene->enemy->getHealth()), 15);
+        cout << endl;
+
         PrintC("        Attack: ");
         PrintC("A", 15);
         PrintC("    ");
         PrintC(bsLeftRightLines, 15);
         PrintC("     Run: ");
         PrintC("R", 15);
-        PrintC("    ");
+
+// Player, Enemy - Armour
+        PrintC("                ");
+        PrintC(bsLeftRightLines, 15);
+        PrintC("   ");
+        PrintC("Armour: ");
+        string a = to_string(lvlManager->player->pArmor);
+        PrintC(to_string(lvlManager->player->pArmor), 15);
+        for(int i = 0; i < 20 - a.size(); i++)
+            PrintC(" ");
+        PrintC(bsLeftRightLines, 15);
+        PrintC("   ");
+        PrintC("Armour: ");
+        PrintC(to_string(btlScene->enemy->getArmour()), 15);
+
         cout << endl;
         PrintC("        Defend: ");
         PrintC("D", 15);
@@ -220,7 +269,39 @@ void UI::PrintUOptions()
         PrintC(bsLeftRightLines, 15);
         PrintC("    Heal: ");
         PrintC("H", 15);
-        PrintC("    ");
+
+// Player, Enemy - Damage
+        PrintC("                ");
+        PrintC(bsLeftRightLines, 15);
+        PrintC("   ");
+        PrintC("Damage: ");
+        string d = to_string(lvlManager->player->pDamage + lvlManager->player->pWeapon.second) + "/ " + to_string(lvlManager->player->pDamage);
+        PrintC(to_string(lvlManager->player->pDamage + lvlManager->player->pWeapon.second), 2);
+        PrintC("/ ");
+        PrintC(to_string(lvlManager->player->pDamage), 15);
+        for(int i = 0; i < 20 - d.size(); i++)
+            PrintC(" ");
+        PrintC(bsLeftRightLines, 15);
+        PrintC("   ");
+        PrintC("Damage: ");
+        PrintC(to_string(btlScene->enemy->getAttackPower() + btlScene->enemy->getWeapon().second), 2);
+        PrintC("/ ");
+        PrintC(to_string(btlScene->enemy->getAttackPower()), 15);
+        cout << endl;
+
+// Player, Enemy - Weapon
+        PrintC("                                                 ");
+        PrintC(bsLeftRightLines, 15);
+        PrintC("   ");
+        PrintC("Weapon: ");
+        string w = lvlManager->player->pWeapon.first;
+        PrintC(lvlManager->player->pWeapon.first, 15);
+        for(int i = 0; i < 20 - w.size(); i++)
+            PrintC(" ");
+        PrintC(bsLeftRightLines, 15);
+        PrintC("   ");
+        PrintC("Weapon: ");
+        PrintC(btlScene->enemy->getWeapon().first, 15);
         cout << endl << endl;
 
         bool notvalid = true;
@@ -250,9 +331,13 @@ void UI::PrintUOptions()
 // Player runs
             else if (userOption == 'R' || userOption == 'r')
             {
-                inBattle = false;
-                delete btlScene;
-                btlScene = nullptr;
+                bool canRun = btlScene->canPlayerRun();
+                if(canRun)
+                {
+                    inBattle = false;
+                    delete btlScene;
+                    btlScene = nullptr;
+                }
                 notvalid = false;
             }
             else
