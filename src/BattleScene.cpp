@@ -161,8 +161,8 @@ int BattleScene::BuildScene()
 // Player name
                 else if (w == 5 && h == 1)
                 {
-                    string name = "<player>";
-                    PrintC(name, 3);
+                    string name = lvlManager->player->pName;
+                    PrintC(name, lvlManager->player->pAttackColour);
 
                     w += name.size() - 1;
                 }
@@ -221,9 +221,9 @@ int BattleScene::BuildScene()
 // Draw player
                 else if (h >= (sceneHeight / 2) - 1 && h < sceneHeight && w > 5 && w <= (playerWidth + 5))
                 {
-                    if (h - ((sceneHeight / 2) - 1) < playerMesh[1].size())
+                    if (h - ((sceneHeight / 2) - 1) < lvlManager->ui->playerMesh[lvlManager->player->pMesh].size())
                     {
-                        cout << playerMesh[1][h - ((sceneHeight / 2) - 1)];
+                        cout << lvlManager->ui->playerMesh[lvlManager->player->pMesh][h - ((sceneHeight / 2) - 1)];
                         playerCounter++;
                         w += playerWidth - 1;
                     }
@@ -232,9 +232,9 @@ int BattleScene::BuildScene()
 // Draw enemy
                 else if (h > 0 && h <= sceneHeight / 2 && w >= sceneWidth - (enemyWidth + 5) && w < sceneWidth - 5)
                 {
-                    if (h - 1 < enemyMesh[enemy->getMesh()].size())
+                    if (h - 1 < lvlManager->ui->enemyMesh[enemy->getMesh()].size())
                     {
-                        cout << enemyMesh[enemy->getMesh()][h - 1];
+                        cout << lvlManager->ui->enemyMesh[enemy->getMesh()][h - 1];
                         enemyCounter++;
                         w += enemyWidth - 1;
                     }
@@ -767,7 +767,7 @@ void BattleScene::PlayerAttack()
     }
 
     tempHealth = tempHealth - enemyHealth;
-    UpdateBattleInfo("<player> dealt " + to_string(tempHealth) + " damage", 1);
+    UpdateBattleInfo(lvlManager->player->pName + " dealt " + to_string(tempHealth) + " damage", 1);
 
     isEnemyDefending = false;
     TPlayerFEnemy = false;
@@ -775,9 +775,9 @@ void BattleScene::PlayerAttack()
 
 void BattleScene::PlayerDefend()
 {
-    PlayDefend(lvlManager->player->pDefendType, lvlManager->player->pDefendColour);
+    PlayDefend(lvlManager->player->pDefenceType, lvlManager->player->pDefenceColour);
 
-    UpdateBattleInfo("<player> is defending", 2);
+    UpdateBattleInfo(lvlManager->player->pName + " is defending", 2);
 
     isPlayerDefending = true;
     isEnemyDefending = false;
@@ -796,7 +796,7 @@ void BattleScene::PlayerHeal()
         playerHealth = playerMaxHealth;
 
     tempHealth = playerHealth - tempHealth;
-    UpdateBattleInfo("<player> healed by " + to_string(tempHealth), 3);
+    UpdateBattleInfo(lvlManager->player->pName + " healed by " + to_string(tempHealth), 3);
 
     isEnemyDefending = false;
     TPlayerFEnemy = false;
@@ -815,7 +815,7 @@ bool BattleScene::canPlayerRun()
 
     if (chance <= changeLimit)
     {
-        UpdateBattleInfo("<player> ran from battle.", 0);
+        UpdateBattleInfo(lvlManager->player->pName + " ran from battle.", 0);
 
         // Delete enemy from vector
         auto it = find(lvlManager->enemies.begin(), lvlManager->enemies.end(), enemy);
@@ -831,7 +831,7 @@ bool BattleScene::canPlayerRun()
     }
     else
     {
-        UpdateBattleInfo(enemy->getName() + " stopped <player> from running.", 0);
+        UpdateBattleInfo(enemy->getName() + " stopped " + lvlManager->player->pName + " from running.", 0);
         isEnemyDefending = false;
         TPlayerFEnemy = false;
         return false;
@@ -849,8 +849,8 @@ void BattleScene::EnemyAttack()
     {
         int damageToDeal = 0;
 
-        if(enemy->getAttackPower() > lvlManager->player->pArmor)
-            damageToDeal = (enemy->getAttackPower() + enemy->getWeapon().second) - lvlManager->player->pArmor;
+        if(enemy->getAttackPower() > lvlManager->player->pArmour)
+            damageToDeal = (enemy->getAttackPower() + enemy->getWeapon().second) - lvlManager->player->pArmour;
 
         if(enemyHealth - damageToDeal >= 0)
             playerHealth -= damageToDeal;

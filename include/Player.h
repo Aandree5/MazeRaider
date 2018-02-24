@@ -23,9 +23,12 @@ class Player
 
 
         int playerPoints = 0;
+        int pCharID = 0;
+        string pName = "<player>";
+        int pMesh = 0;
         int pHealth = 100;
         int pDamage = 10;
-        int pArmor = 2;
+        int pArmour = 2;
         pair<string, int> pWeapon = make_pair("Sword", 10);
         int pKeys = 0;
         int pHealPower = 10;
@@ -33,9 +36,9 @@ class Player
         // Type is 0 or 1
         // Colour sheet on maizeraider folder
         int pAttackType = 0;
-        int pAttackColour = 10;
-        int pDefendType = 0;
-        int pDefendColour = 3;
+        int pAttackColour = 3;
+        int pDefenceType = 0;
+        int pDefenceColour = 3;
         int pHealType = 0;
         int pHealColour = 2;
 

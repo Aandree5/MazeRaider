@@ -1,6 +1,5 @@
 #include "UIHelpers.h"
 
-
 bool UIHelpers::ChangeColor(int color)
 {
     switch (color)
@@ -108,4 +107,25 @@ void UIHelpers::PrintC(string character, int color, bool twoChar)
     if (needsReset)
         grey;
 }
+
+string UIHelpers::toLower(string str)
+{
+    string strLower;
+
+    for( char c : str )
+        strLower += tolower(c) ;
+
+    return strLower;
+}
+
+void UIHelpers::setFullScreen()
+{
+    /*keybd_event(VK_MENU,0x38,0,0);
+    keybd_event(VK_RETURN,0x1c,0,0);
+    keybd_event(VK_RETURN,0x1c,KEYEVENTF_KEYUP,0);
+    keybd_event(VK_MENU,0x38,KEYEVENTF_KEYUP,0);*/
+
+    ShowWindow(GetConsoleWindow(), SW_MAXIMIZE);
+}
+
 

@@ -149,8 +149,7 @@ void Enemy::statsFromDatabase()
     "FROM Enemy e, Weapon w WHERE e.weapon_id = w.weapon_id "
     "ORDER BY RAND() LIMIT 1;";
 
-    int query_state = mysql_query(connection, query.c_str());
-    if (query_state !=0)
+    if (mysql_query(connection, query.c_str()))
         cout << mysql_error(connection) << endl;
 
     MYSQL_RES* result = mysql_store_result(connection);
