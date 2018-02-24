@@ -7,6 +7,10 @@
 Player::Player(LevelManager* lvlman)
 {
     lvlmanager = lvlman;
+    maze = lvlman->maze;
+    xPos = lvlman->maze->getMazeStart().first;
+    yPos = lvlman->maze->getMazeStart().second;
+
 }
 /*
 check to see if player has key to open exit
@@ -119,15 +123,15 @@ void Player::chestEvent(void)
     - keys
     - scores
     */
-    int randomScore, addHealth, addArmor, addDamage, addKeys;
+    int randomScore, addHealth, addArmour, addDamage, addKeys;
     randomScore = rand() % 100 + 1;
-    addArmor = rand() % 10 + 1;
+    addArmour = rand() % 10 + 1;
     addHealth = rand() % 10 + 1;
     addKeys = rand() % 1;
     addDamage = rand() % 10 + 1;
 
     playerPoints += randomScore;
-    pArmor += addArmor;
+    pArmour += addArmour;
     pHealth += addHealth;
     pKeys += addKeys;
     pDamage += addDamage;

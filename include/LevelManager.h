@@ -14,7 +14,7 @@ class EnemyAI;
 class LevelManager
 {
     public:
-        LevelManager();
+        LevelManager(int pID);
 
         UI* ui;
         Maze* maze;
@@ -23,9 +23,12 @@ class LevelManager
         EnemyAI* enemyai;
         vector<Enemy*> enemies;
 
+        int getPlayerID();
+
     protected:
 
     private:
+        int playerID;
 };
 
 #endif // LEVELMANAGER_H

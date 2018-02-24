@@ -6,8 +6,10 @@
 #include <windows.h>
 #include <mysql.h>
 #include <cstdlib>
+#include <windows.h>
 
 using namespace std;
+using namespace UIHelpers;
 
 /**
  * Main.
@@ -51,17 +53,19 @@ void connectToDatabase() {
 
 void loginUser() {
     string username,password;
-    cout << "Username: "; cin >> username;
-    cout << "Password: "; cin>>password;
+    cout << endl << "   ------------------------------------------------------------------" << endl;
+    cout << "   Username: "; cin >> username;
+    cout << "   Password: "; cin>>password;
 
     // TODO: Fix SQL Injection.
-    string query="select * from information where username='"+username+"' and password='"+password+"';";
+    string query="select customer_id from information where username='"+username+"' and password='"+password+"';";
 
     int queryResult = mysql_query(connection, query.c_str());
     MYSQL_RES* result = mysql_store_result(connection);
 
     if (mysql_num_rows(result) >= 1) {
-        new LevelManager();
+        MYSQL_ROW row = mysql_fetch_row(result);
+        new LevelManager(atoi(row[0]));
     } else {
         cout << "Incorrect username or password." << endl;
         system("pause");
@@ -89,6 +93,8 @@ void registerUser() {
 }
 
 int main() {
+    setFullScreen();
+
 
     connectToDatabase();
 
@@ -100,7 +106,6 @@ int main() {
         cin >> choice;
 
         if (choice == '1') {
-            clearScreen();
             loginUser();
         } else if (choice == '2'){
             clearScreen();

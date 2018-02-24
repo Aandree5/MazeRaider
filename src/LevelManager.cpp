@@ -6,14 +6,12 @@
 #include "Enemy.h"
 #include "EnemyAI.h"
 
-LevelManager::LevelManager()
+LevelManager::LevelManager(int pID)
 {
+    playerID = pID;
+
     maze = new Maze(31, 31);
     player = new Player(this);
-    player->maze = maze;
-    player->xPos = maze->getMazeStart().first;
-    player->yPos = maze->getMazeStart().second;
-
     scoretime = new ScoreTime();
     enemyai = new EnemyAI(this);
 
@@ -28,5 +26,11 @@ LevelManager::LevelManager()
     enemies.emplace_back(new Enemy(maze));
 
     ui = new UI(this);
+    ui->ShowSelectionScreen();
     ui->ShowUI();
+}
+
+int LevelManager::getPlayerID()
+{
+    return playerID;
 }

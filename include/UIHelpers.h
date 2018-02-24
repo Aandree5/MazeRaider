@@ -3,8 +3,12 @@
 
 #include <string>
 #include <iostream>
+#include <vector>
+#include <array>
+#include <cctype>
 
 #ifdef _WIN32
+#define _WIN32_WINNT 0x0500
 #include <windows.h>
 #include <stdlib.h>
 #define clearScreen() system("cls")
@@ -51,6 +55,7 @@
 
 #ifdef __linux__
 #include <sstream>
+#include <iostream>
 #include <chrono>
 #include <thread>
 #define Sleep(x) cout << flush; this_thread::sleep_for(chrono::milliseconds(x));
@@ -100,6 +105,12 @@ namespace UIHelpers
     void PrintC(string character, int color = 7, bool twoChar = false);
     // change the text colour
     bool ChangeColor(int color);
+
+    string toLower(string str);
+
+    void setFullScreen();
+
+
 };
 
 #endif // UIHELPERS_H
