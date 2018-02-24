@@ -65,7 +65,7 @@ Maze::Maze(unsigned width, unsigned height, unsigned seed) : m_width(width), m_h
         randomY--; // Make it odd.
     }
 
-    m_maze[m_width - 1][randomY] = 0;
+    m_maze[m_width - 1][randomY] = 5;
 
     // Begin recursive maze generation.
     generateMaze();
@@ -80,6 +80,8 @@ void Maze::generateMaze() {
     std::pair<int, int> currentNode = m_stack.top();
 
     if(currentNode == m_start && !m_firstIteration) { // Algorithm complete (recursive base-case).
+
+        m_maze[m_start.first - 1][m_start.second] = 1;
 
         // Generate chests.
         generateChests();

@@ -47,6 +47,12 @@ bool UIHelpers::ChangeColor(int color)
     case 68:
         healthRed;
         break;
+    case 164:
+        debugBlackGreen;
+        break;
+    case 192:
+        debugBlackRed;
+        break;
     default:
         grey;
         return false;

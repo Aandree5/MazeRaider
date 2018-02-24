@@ -9,6 +9,7 @@ class Maze;
 class Player;
 class Enemy;
 class ScoreTime;
+class EnemyAI;
 
 class LevelManager
 {
@@ -19,6 +20,7 @@ class LevelManager
         Maze* maze;
         Player* player;
         ScoreTime* scoretime;
+        EnemyAI* enemyai;
         vector<Enemy*> enemies;
 
     protected:

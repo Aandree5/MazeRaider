@@ -27,9 +27,9 @@ class BattleScene
         bool enemyJustAttacked;
 
         // Set of player actions
-        void PlayerAttack(int num, int color, int power);
-        void PlayerDefend(int num, int color);
-        void PlayerHeal(int num, int color, int power);
+        void PlayerAttack();
+        void PlayerDefend();
+        void PlayerHeal();
 
         // Set of enemy actions
         void EnemyAttack();
@@ -37,8 +37,8 @@ class BattleScene
         void EnemyHeal();
 
         //TEMP
-        int playerHealth = 100;
-        int playerMaxHealth = 100;
+        int playerHealth;
+        int playerMaxHealth;
         int enemyHealth;
         int enemyMaxHealth;
     protected:
@@ -62,11 +62,11 @@ class BattleScene
         void UpdateBattleInfo(pair<string, int> lineToAdd);
 
         // Play attack animation
-        void PlayAttack(int num, int color);
+        void PlayAttack(int atype, int colour);
         // Play defend animation
-        void PlayDefend(int num, int color);
+        void PlayDefend(int dtype, int colour);
         // Play heal animation
-        void PlayHeal(int num, int color);
+        void PlayHeal(int htype, int colour);
 
         // Meshes
         vector<vector<string>> enemyMesh = {{"                                   ",

@@ -7,7 +7,7 @@ Enemy::Enemy(Maze* m)
 
     // Enemy stats
     health = 100;
-    armor = 10;
+    armor = 2;
     power = 10;
     healPower = 10;
 

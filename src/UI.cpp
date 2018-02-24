@@ -6,6 +6,7 @@
 #include "LevelManager.h"
 #include "BattleScene.h"
 #include "Enemy.h"
+#include "EnemyAI.h"
 
 using namespace UIHelpers;
 
@@ -89,6 +90,9 @@ void  UI::PrintMaze()
                 PrintC( mazeWall, 2, true );
                 lvlManager->maze->getMazeArray()[w][h] = 0;
                 break;
+            case 5: // 5: Exit
+                PrintC( mazeWall, 15, true );
+                break;
             default:
                 PrintC( lvlManager->maze->getMazeArray()[w][h], 7, true );
                 break;
@@ -131,9 +135,8 @@ void UI::PrintUOptions()
         cout << endl;
 
         PrintC("          W          ", 15);
-        PrintC(downHorizontal);
 // Armor
-        PrintC("           ");
+        PrintC("            ");
         PrintC(bsLeftRightLines, 15);
         PrintC("    Armor: ");
         PrintC(to_string(lvlManager->player->pArmor), 15);
@@ -145,22 +148,16 @@ void UI::PrintUOptions()
         PrintC(HorizontalVertical);
         PrintC(" D ", 15);
         PrintC(leftVertical);
-
-        PrintC("    ");
-        PrintC(rightVertical);
-        PrintC(" E ", 15);
-        PrintC(leftVertical);
 // Damage
-        PrintC("         ");
+        PrintC("                  ");
         PrintC(bsLeftRightLines, 15);
         PrintC("   Damage: ");
         PrintC(to_string(lvlManager->player->pDamage), 15);
         cout << endl;
 
         PrintC("          S          ", 15);
-        PrintC(upHorizontal);
 // Keys
-        PrintC("           ");
+        PrintC("            ");
         PrintC(bsLeftRightLines, 15);
         PrintC("     Keys: ");
         PrintC("0", 15);
@@ -192,8 +189,11 @@ void UI::PrintUOptions()
                 lvlManager->player->movePlayer(userOption);
                 for(Enemy* e : lvlManager->enemies)
                 {
-                    e->randomMoveEnemy();
+
+                    lvlManager->enemyai->getNextPosition(e);
+                    //e->randomMoveEnemy();
                 }
+
                 notvalid = false;
             }
             else
@@ -232,19 +232,19 @@ void UI::PrintUOptions()
 // Player attacks
             if (userOption == 'A' || userOption == 'a')
             {
-                btlScene->PlayerAttack(1, 10, 10);
+                btlScene->PlayerAttack();
                 notvalid = false;
             }
 // Player defends
             else if (userOption == 'D' || userOption == 'd')
             {
-                btlScene->PlayerDefend(0, 3);
+                btlScene->PlayerDefend();
                 notvalid = false;
             }
 // Player heals
             else if (userOption == 'H' || userOption == 'h')
             {
-                btlScene->PlayerHeal(0, 2, 10);
+                btlScene->PlayerHeal();
                 notvalid = false;
             }
 // Player runs
