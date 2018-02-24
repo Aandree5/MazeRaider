@@ -1,29 +1,53 @@
 #include "Enemy.h"
+#include "Maze.h"
 
 Enemy::Enemy(Maze* m)
 {
     maze = m;
 
+    // Enemy stats
+    health = 100;
+    armor = 10;
+    power = 10;
+    healPower = 10;
+
+    // Animation types
+    attackColour = 10;
+    attackType = 0;
+    defenceColour = 10;
+    defenceType = 0;
+    healColour = 10;
+    healType = 0;
+
     //spawn enemy
     int x,y;
-    x = rand() % 29 + 1;
-    y = rand() % 29 + 1;
 
-    for(int i = 0; i<10;i++)
+    while(true)
     {
-        if(maze->getMazeArray()[x][y]==0)
+        x = rand() % (maze->getMazeSizeWH().first - 6) + 5;
+        y = rand() % (maze->getMazeSizeWH().second - 2) + 1;
+
+        // Only spawn in places where player can stop
+        if(maze->getMazeArray()[x][y]==0 && !(maze->getMazeArray()[x + 1][y] == 1 && maze->getMazeArray()[x - 1][y] == 1 &&
+                                             maze->getMazeArray()[x][y + 1] == 0 && maze->getMazeArray()[x][y - 1] == 0) &&
+                                            !(maze->getMazeArray()[x + 1][y] == 0 && maze->getMazeArray()[x - 1][y] == 0 &&
+                                             maze->getMazeArray()[x][y + 1] == 1 && maze->getMazeArray()[x][y - 1] == 1))
         {
             break;
         }
-        x = rand() % 29 + 1;
-        y = rand() % 29 + 1;
     }
-    xPosEnemy = x;
-    yPosEnemy = y;
+
+    xPos = x;
+    yPos = y;
+}
+
+// 0 = Up | 1 = Right | 1 = Down | 3 = Left
+void moveEnemy(int direction)
+{
 
 }
 
-void Enemy::moveEnemy(void)
+void Enemy::randomMoveEnemy()
 {
     ranDecision = rand() % 5 + 1;
     if(ranDecision == 1) // random chance of moving
@@ -34,13 +58,13 @@ void Enemy::moveEnemy(void)
         {
             for(int i = 1;i < ranVal; i++)
             {
-                if(maze->getMazeArray()[xPosEnemy][yPosEnemy+i]==1) // checks wall forward
+                if(maze->getMazeArray()[xPos][yPos+i]==1) // checks wall forward
                 {
-                    yPosEnemy+=i-1;
+                    yPos+=i-1;
                     break;
-                }else if((maze->getMazeArray()[xPosEnemy-1][yPosEnemy+i] == 0 || maze->getMazeArray()[xPosEnemy+1][yPosEnemy+i] == 0) && (ranDecision == 1 || ranDecision == 2)) //checks path from sides
+                }else if((maze->getMazeArray()[xPos-1][yPos+i] == 0 || maze->getMazeArray()[xPos+1][yPos+i] == 0) && (ranDecision == 1 || ranDecision == 2)) //checks path from sides
                 {
-                    yPosEnemy+=i-1;
+                    yPos+=i-1;
                     break;
                 }
             }
@@ -49,13 +73,13 @@ void Enemy::moveEnemy(void)
         {
             for(int i = 1;i < ranVal; i++)
             {
-                if(maze->getMazeArray()[xPosEnemy-i][yPosEnemy]==1) // checks wall forwards
+                if(maze->getMazeArray()[xPos-i][yPos]==1) // checks wall forwards
                 {
-                    xPosEnemy-=i-1;
+                    xPos-=i-1;
                     break;
-                }else if((maze->getMazeArray()[xPosEnemy-i][yPosEnemy+1] == 0 || maze->getMazeArray()[xPosEnemy-i][yPosEnemy-1] == 0) && (ranDecision == 1 || ranDecision == 2)) //checks path from sides
+                }else if((maze->getMazeArray()[xPos-i][yPos+1] == 0 || maze->getMazeArray()[xPos-i][yPos-1] == 0) && (ranDecision == 1 || ranDecision == 2)) //checks path from sides
                 {
-                    xPosEnemy-=i-1;
+                    xPos-=i-1;
                     break;
                 }
             }
@@ -64,13 +88,13 @@ void Enemy::moveEnemy(void)
         {
             for(int i = 1;i < ranVal; i++)
             {
-                if(maze->getMazeArray()[xPosEnemy+i][yPosEnemy]==1) // checks wall forwards
+                if(maze->getMazeArray()[xPos+i][yPos]==1) // checks wall forwards
                 {
-                    xPosEnemy+=i-1;
+                    xPos+=i-1;
                     break;
-                }else if((maze->getMazeArray()[xPosEnemy+i][yPosEnemy+1] == 0 || maze->getMazeArray()[xPosEnemy+i][yPosEnemy-1] == 0) && (ranDecision == 1 || ranDecision == 2)) //checks path from sides
+                }else if((maze->getMazeArray()[xPos+i][yPos+1] == 0 || maze->getMazeArray()[xPos+i][yPos-1] == 0) && (ranDecision == 1 || ranDecision == 2)) //checks path from sides
                 {
-                    xPosEnemy+=i-1;
+                    xPos+=i-1;
                     break;
                 }
             }
@@ -79,16 +103,66 @@ void Enemy::moveEnemy(void)
         {
             for(int i = 1;i < ranVal; i++)
             {
-                if(maze->getMazeArray()[xPosEnemy][yPosEnemy-i]==1) // checks wall forward
+                if(maze->getMazeArray()[xPos][yPos-i]==1) // checks wall forward
                 {
-                    yPosEnemy-=i-1;
+                    yPos-=i-1;
                     break;
-                }else if((maze->getMazeArray()[xPosEnemy-1][yPosEnemy-i] == 0 || maze->getMazeArray()[xPosEnemy+1][yPosEnemy-i] == 0) && (ranDecision == 1 || ranDecision == 2)) //checks path from sides
+                }else if((maze->getMazeArray()[xPos-1][yPos-i] == 0 || maze->getMazeArray()[xPos+1][yPos-i] == 0) && (ranDecision == 1 || ranDecision == 2)) //checks path from sides
                 {
-                    yPosEnemy-=i-1;
+                    yPos-=i-1;
                     break;
                 }
             }
         }
     }
+}
+
+int Enemy::getHealth()
+{
+    return health;
+}
+
+int Enemy::getArmor()
+{
+    return armor;
+}
+
+int Enemy::getPower()
+{
+    return power;
+}
+
+int Enemy::getHealPower()
+{
+    return healPower;
+}
+// Animation types
+int Enemy::getAttackColour()
+{
+    return attackColour;
+}
+
+int Enemy::getAttackType()
+{
+    return attackType;
+}
+
+int Enemy::getDefenceColour()
+{
+    return defenceColour;
+}
+
+int Enemy::getDefenceType()
+{
+    return defenceType;
+}
+
+int Enemy::getHealColour()
+{
+    return healColour;
+}
+
+int Enemy::getHealType()
+{
+    return healType;
 }

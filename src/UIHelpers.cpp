@@ -65,6 +65,9 @@ void UIHelpers::PrintC(char character, int color, bool twoChar)
     else
         cout << character;
 
+
+    cout << flush;
+
     // Return color to default
     if (needsReset)
         grey;
@@ -79,6 +82,9 @@ void UIHelpers::PrintC(string character, int color, bool twoChar)
         cout << character << character;
     else
         cout << character;
+
+
+    cout << flush;
 
     // Return color to default
     if (needsReset)
