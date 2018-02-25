@@ -452,7 +452,7 @@ void UI::PrintStateInfo()
 {
     cout << endl;
     PrintC("        Time: ");
-    PrintC(to_string(lvlManager->scoretime->getTime()), 15);
+    PrintC((lvlManager->scoretime->getTime()), 15);
     PrintC("        Score: ");
     PrintC(to_string(lvlManager->scoretime->getHScore()), 15);
     PrintC("        Lives: ");
@@ -545,6 +545,13 @@ void UI::PrintUOptions()
         {
             PrintC("Choose option: ");
             cin >> userOption;
+
+            //quit the game
+            if (userOption == 'e'){
+                lvlManager->scoretime->savehighscore();
+                lvlManager->scoretime->makeHighscoreTable();
+                exit(1);
+            }
 
             if (userOption == 'b') // TEMP - TESTING
             {
@@ -667,6 +674,8 @@ void UI::PrintUOptions()
             PrintC("Choose option: ");
             cin >> userOption;
 
+
+
 // Player attacks
             if (tolower(userOption) == 'a')
             {
@@ -679,6 +688,7 @@ void UI::PrintUOptions()
                 btlScene->PlayerDefend();
                 notvalid = false;
             }
+
 // Player heals
             else if (tolower(userOption) == 'h')
             {

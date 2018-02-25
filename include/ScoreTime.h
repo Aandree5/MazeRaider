@@ -8,23 +8,31 @@
 
 using namespace std;
 
+class LevelManager;
+
 class ScoreTime
 {
     public:
-        ScoreTime();
+        ScoreTime(LevelManager* lvlman);
 
         int getHScore();
 
-        int getTime();
+        string getTime();
+
+        int getTimeSeconds();
 
         int savehighscore();
 
+        int querystate, querystates();
+
         void connectToDatabase();
-        void makeHighscoreTable();
+        int makeHighscoreTable();
 
     protected:
 
     private:
+        LevelManager* lvlManager;
+
         #ifdef _WIN32
             SYSTEMTIME startTime;
         #endif // _WIN32
