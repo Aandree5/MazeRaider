@@ -84,8 +84,9 @@ int ScoreTime::savehighscore(){
     int qstate = mysql_query(connection,q);
 
     if(!qstate) {
-        cout<<"Saved..." << endl;
-        system("pause");
+        cout<<"Saved...\n\n" << endl;
+        cout<<"ID      High Score"<<endl;
+
     } else {
         cout<<"Failed to save " << mysql_error(connection) << endl;
         system("pause");
@@ -109,7 +110,8 @@ int ScoreTime::makeHighscoreTable(){
         res = mysql_store_result(connection);
         while(row = mysql_fetch_row(res))
         {
-            cout<<row[1]<<  "||"<<row[2]<<"||"<<endl;
+            cout<<row[2]<<  "   ||   "<<row[1]<<" ||"<<endl;
+            cout<<endl;
 
         }
     }
@@ -119,15 +121,6 @@ int ScoreTime::makeHighscoreTable(){
 
 }
 
-/*int ScoreTime::makeHighscoreTable()
-{
-    //get the top 10 scores from the high score table and store the names and scores in to an array
-    string query="select MAX(highscore) from information where username='"+username+"' and password='"+password+"';";
-
-
-
-
-}*/
 
 
 
