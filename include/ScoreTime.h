@@ -23,7 +23,7 @@ class ScoreTime
 
         int savehighscore();
 
-        int querystate, querystates();
+        int query();
 
         void connectToDatabase();
         int makeHighscoreTable();

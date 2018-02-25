@@ -81,34 +81,34 @@ int ScoreTime::savehighscore(){
 
     string data="insert into highscore(customer_id, highscore) values('" + to_string(lvlManager->getPlayerID()) + "', '"+to_string(hScore)+"')";
     const char* q = data.c_str();
-    int qstate = mysql_query(connection,q);
+    int querystate = mysql_query(connection,q);
 
-    if(!qstate) {
+    if(!querystate) {
         cout<<"Saved...\n\n" << endl;
         cout<<"ID      High Score"<<endl;
 
     } else {
-        cout<<"Failed to save " << mysql_error(connection) << endl;
+        cout<<"Failed to save " <<endl;
         system("pause");
     }
 }
 
 int ScoreTime::makeHighscoreTable(){
 
-    int querystate, querystates;
+    int query;
 
     MYSQL* connection;
     MYSQL_ROW row;
-    MYSQL_RES *res;
+    MYSQL_RES *results;
 
 
     connection = mysql_init(0);
     mysql_real_connect(connection,"server1.jesseprescott.co.uk","jessepre","Mazeraider123?","jessepre_mazeraider",0,NULL,0);
 
-    querystate = mysql_query(connection, "SELECT * FROM highscore");
-    if(!querystate){
-        res = mysql_store_result(connection);
-        while(row = mysql_fetch_row(res))
+    query = mysql_query(connection, "SELECT * FROM highscore");
+    if(!query){
+        results = mysql_store_result(connection);
+        while(row = mysql_fetch_row(results))
         {
             cout<<row[2]<<  "   ||   "<<row[1]<<" ||"<<endl;
             cout<<endl;

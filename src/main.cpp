@@ -78,11 +78,11 @@ void registerUser() {
     cout<<"Username: "; cin>>username;
     cout<<"Password: "; cin>>password;
 
-    string query="insert into information(name,username,password) values('"+name+"','"+username+"','"+password+"')";
-    const char* q = query.c_str();
-    int qstate = mysql_query(connection,q);
+    string register_users="insert into information(name,username,password) values('"+name+"','"+username+"','"+password+"')";
+    const char* q = register_users.c_str();
+    int querystate = mysql_query(connection,q);
 
-    if(!qstate) {
+    if(!querystate) {
         cout<<"Registration successful" << endl;
         system("pause");
         cin;
