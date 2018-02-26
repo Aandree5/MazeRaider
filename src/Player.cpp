@@ -91,8 +91,9 @@ void Player::movePlayer(char direction)
             }
             else if(maze->getMazeArray()[xPos+steps][yPos] == 5)
             {
-                reachExit = true;
                 steps+=1;
+                //call the function to produce the next map
+
                 break;
             }
             steps+=1;
@@ -173,16 +174,18 @@ void Player::chestEvent(void)
     //make random values for player stats and add them
     int randomScore, addHealth, addArmour, addDamage, addKeys;
     randomScore = rand() % 100 + 1;
-    addArmour = rand() % 10 + 1;
-    addHealth = rand() % 10 + 1;
+    addArmour = rand() % 100 + 10;
+    addHealth = rand() % 100 + 10;
     addKeys = rand() % 1;
-    addDamage = rand() % 10 + 1;
+    addDamage = rand() % 100 + 50;
 
     playerPoints += randomScore;
+    lvlmanager->scoretime->addScores(playerPoints);
     pArmour += addArmour;
     pHealth += addHealth;
     pKeys += addKeys;
     pDamage += addDamage;
+
 
 }
 

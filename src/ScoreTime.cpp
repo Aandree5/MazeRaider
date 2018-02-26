@@ -174,7 +174,10 @@ int ScoreTime::makeHighscoreTable(){
 
 }
 
-
+void ScoreTime::addScores(int score)
+{
+    hScore += score;
+}
 
 
 
