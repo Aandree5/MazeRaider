@@ -10,7 +10,7 @@ LevelManager::LevelManager(int pID)
 {
     playerID = pID;
 
-    maze = new Maze(61, 31);
+    maze = new Maze(111,13);
     mazeSeed = maze->getSeed();
 
     player = new Player(this);

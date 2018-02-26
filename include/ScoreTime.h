@@ -28,6 +28,10 @@ class ScoreTime
         void connectToDatabase();
         int makeHighscoreTable();
 
+        int hScore;
+
+        void addScores(int score);
+
     protected:
 
     private:
@@ -42,8 +46,6 @@ class ScoreTime
         #endif // __linux__
 
         int oldTime;
-
-        int hScore;
 
         bool shouldDecrease;
 };

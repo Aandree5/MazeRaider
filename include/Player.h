@@ -2,10 +2,12 @@
 #define PLAYER_H
 #include "Maze.h"
 #include "Enemy.h"
+#include "ScoreTime.h"
 #include <array>
 #include <vector>
 #include <cstdlib> //random generation
 #include <iostream>
+
 
 using namespace std;
 
@@ -20,7 +22,6 @@ class Player
         void chestEvent(void);
         void checkChest();
         void checkEnemy(int x, int y);
-        void exitReached(void);
 
         int playerPoints = 0;
         int pCharID = 0;
@@ -45,7 +46,6 @@ class Player
         //variables
         Maze* maze;
         int xPos, yPos;
-        bool reachExit = false;
     protected:
 
     private:

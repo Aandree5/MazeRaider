@@ -91,9 +91,9 @@ void Player::movePlayer(char direction)
             }
             else if(maze->getMazeArray()[xPos+steps][yPos] == 5)
             {
-                reachExit = true;
                 steps+=1;
-                exitReached();
+                //call the function to produce the next map
+
                 break;
             }
             steps+=1;
@@ -180,10 +180,12 @@ void Player::chestEvent(void)
     addDamage = rand() % 100 + 50;
 
     playerPoints += randomScore;
+    lvlmanager->scoretime->addScores(playerPoints);
     pArmour += addArmour;
     pHealth += addHealth;
     pKeys += addKeys;
     pDamage += addDamage;
+
 
 }
 
@@ -215,7 +217,3 @@ void Player::checkEnemy(int x, int y)
     }
 }
 
-void Player::exitReached(void)
-{
-    //call the function for making a new map
-}
