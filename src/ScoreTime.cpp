@@ -9,6 +9,7 @@
 #include <mysql.h>
 #include <cstdlib>
 #include "LevelManager.h"
+#include "Player.h"
 
 using namespace std;
 
@@ -88,7 +89,7 @@ int ScoreTime::savehighscore(){
     mysql_real_connect(connection,"server1.jesseprescott.co.uk","jessepre","Mazeraider123?","jessepre_mazeraider",0,NULL,0);
     //we are inserting the values in the highscore so I used insert. so it will store customer id and highscore inside the highscore table.
     //We are using values to tell what we need to store in the database. basically I needed to store playerID and the hScore from the game. So I put that in.
-    string data="insert into highscore(customer_id, highscore) values('" + to_string(lvlManager->getPlayerID()) + "', '"+to_string(hScore)+"')";
+    string data="insert into highscore(char_id, highscore) values('" + to_string(lvlManager->player->pCharID) + "', '"+to_string(hScore)+"')";
     const char* q = data.c_str();
     int querystate = mysql_query(connection,q);
     //Once it successful it will say saved successfull.
@@ -117,17 +118,19 @@ int ScoreTime::makeHighscoreTable(){
     //This will allow you to connect to the database.
     mysql_real_connect(connection,"server1.jesseprescott.co.uk","jessepre","Mazeraider123?","jessepre_mazeraider",0,NULL,0);
     //This will select whole highscore table because of the '*'
-    query = mysql_query(connection, "SELECT * FROM highscore");
+    query = mysql_query(connection, "SELECT h.highscore, pc.name FROM highscore h, PlayerChar pc WHERE h.char_id=pc.char_id ORDER BY h.highscore DESC LIMIT 10");
     if(!query){
         //this will allow you to show up the results
         results = mysql_store_result(connection);
+
+        int i=0;
         //rows represent the actual able rows and we will cout them to show up in the actual game.
         while(row = mysql_fetch_row(results))
         {
             //This is the layout of the highscore system.
-            cout<<row[2]<<  "   ||   "<<row[1]<<" ||"<<endl;
+            cout<<i<<  ".   ||   "<<row[0]<<  "   ||   "<<row[1]<<" ||"<<endl;
             cout<<endl;
-
+            i++;
         }
     }
     else{

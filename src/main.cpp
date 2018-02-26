@@ -29,7 +29,7 @@ void printLogo() {
             <<" |_|  |_|\\__,_/___\\___| |_|  \\_\\__,_|_|\\__,_|\\___|_| \n"
             << endl;
 }
-
+//this will show up on the screen
 void printMenu() {
     cout << "    ------------------------------------------------" << endl;
     cout << "    |  1. Login                                    |" << endl;
@@ -112,15 +112,18 @@ int main() {
         printMenu();
         char choice;
         cin >> choice;
-
+        //when user press one it will call login function
         if (choice == '1') {
             loginUser();
+            //when user press 2 it will clear the screen and call the register user function
         } else if (choice == '2'){
             clearScreen();
             registerUser();
         } else if (choice == '3'){
+            //if user press 3 it will exit from the game
             exit(0);
         } else {
+            //if user put a invalid input it will show up an message and wait for user input
             clearScreen();
             cout << "Invalid input." << endl;
             system("pause");
