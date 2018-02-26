@@ -22,6 +22,7 @@ class  UI
         void ShowUI();
         //Show player character selection screen
         void ShowSelectionScreen();
+        void ShowNextLevel();
 
         // Check if it's in battle
         bool inBattle;
