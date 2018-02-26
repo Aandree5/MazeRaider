@@ -2,6 +2,7 @@
 #include "ScoreTime.h"
 #include "UIHelpers.h"
 #include "LevelManager.h"
+#include "Maze.h"
 #include <iostream>
 #include <tuple>
 #include <string>
@@ -78,8 +79,9 @@ int ScoreTime::savehighscore(){
     cout << "Saving in the database..." << endl;
     connection = mysql_init(0);
     mysql_real_connect(connection,"server1.jesseprescott.co.uk","jessepre","Mazeraider123?","jessepre_mazeraider",0,NULL,0);
+    int seed = lvlManager->maze->getSeed();
 
-    string data="insert into highscore(customer_id, highscore) values('" + to_string(lvlManager->getPlayerID()) + "', '"+to_string(hScore)+"')";
+    string data="insert into highscore(customer_id, highscore, mazeid) values('" + to_string(lvlManager->getPlayerID()) + "', '" +to_string(hScore)+", " + to_string(seed)+ ")";
     const char* q = data.c_str();
     int querystate = mysql_query(connection,q);
 
