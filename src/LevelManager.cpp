@@ -10,16 +10,20 @@ LevelManager::LevelManager(int pID)
 {
     playerID = pID;
 
-    maze = new Maze(111,13);
+    int xWidth, yLength;
+    xWidth = rand() % 100 + 10;
+    yLength = rand() % 30 + 10;
+
+    maze = new Maze(xWidth, yLength);
     mazeSeed = maze->getSeed();
 
     player = new Player(this);
     scoretime = new ScoreTime(this);
     enemyai = new EnemyAI(this);
 
-
+/*
     enemies.emplace_back(new Enemy(maze));
-/*    enemies.emplace_back(new Enemy(maze));
+    enemies.emplace_back(new Enemy(maze));
     enemies.emplace_back(new Enemy(maze));
     enemies.emplace_back(new Enemy(maze));
     enemies.emplace_back(new Enemy(maze));

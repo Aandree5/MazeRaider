@@ -32,6 +32,13 @@ Enemy::Enemy(Maze* m)
     yPos = y;
 }
 
+Enemy::~Enemy()
+{
+    //gain points from defeating an enemy
+    int scoreAdded;
+    scoreAdded = rand() % 100 + 1;
+}
+
 void Enemy::randomMoveEnemy()
 {
     ranDecision = rand() % 2 + 1;
