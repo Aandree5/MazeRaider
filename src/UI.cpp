@@ -561,8 +561,9 @@ void UI::PrintUOptions()
             else if(tolower(userOption) == 'a' || tolower(userOption) == 'd' || tolower(userOption) == 's' || tolower(userOption) == 'w')
             {
                 lvlManager->player->movePlayer(userOption);
-                for(Enemy* e : lvlManager->enemies)
-                    lvlManager->enemyai->getNextPosition(e);
+                if(lvlManager->enemies.size())
+                    for(Enemy* e : lvlManager->enemies)
+                        lvlManager->enemyai->getNextPosition(e);
 
                 notvalid = false;
             }
@@ -722,3 +723,67 @@ void UI::ShowGameOver()
     PrintC("Game Over!");
 
 }
+
+
+void UI::ShowNextLevel()
+{
+   clearScreen();
+   PrintC("You've finished your level. Choose the difficulty for the next level OR computer can choose for you");
+      cout << endl;
+        PrintC("        Low: ");
+        PrintC("L", 15);
+        PrintC("    ");
+        PrintC(bsLeftRightLines, 15);
+        PrintC("    Medium: ");
+        PrintC("M", 15);
+        PrintC("    ");
+        PrintC(bsLeftRightLines, 15);
+        PrintC("    Hard: ");
+        PrintC("H", 15);
+        PrintC("    ");
+        PrintC(bsLeftRightLines, 15);
+        PrintC("    Computer : ");
+        PrintC("C", 15);
+        PrintC("    ");
+        char userOption;
+        cout << endl;
+        bool notvalid = true;
+        while(notvalid)
+        {
+            PrintC("Choose option: ");
+            cin >> userOption;
+
+// Player choose low difficulty .
+            if (tolower(userOption) == 'l' )
+            {
+
+                lvlManager->lowLevel();
+                notvalid = false;
+            }
+// Player choose medium difficulty .
+            else if (tolower(userOption) == 'm')
+            {
+                lvlManager->mediumLevel();
+                notvalid = false;
+            }
+// Player choose high difficulty .
+            else if (tolower(userOption) == 'h')
+            {
+                lvlManager->highLevel();
+                notvalid = false;
+            }
+// Player lets the computer to choose the difficulty
+               else if (tolower(userOption) == 'c')
+            {
+                lvlManager->nextLevel();
+                notvalid = false;
+            }
+            else
+            {
+                PrintC(" - Not a valid option... Please choose a valid option.");
+                cout << endl;
+            }
+        }
+}
+
+
