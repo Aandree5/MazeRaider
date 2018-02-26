@@ -11,7 +11,7 @@ LevelManager::LevelManager(int pID)
     playerID = pID;
 
     mazeSize = make_pair (25,25);
-    nrEnemies = 1;
+    nrEnemies = 5;
 
     loadLevel();
 
