@@ -26,11 +26,20 @@ class LevelManager
         int getPlayerID();
         int getMazeSeed();
 
+        void nextLevel();
+        void lowLevel();
+        void mediumLevel();
+        void highLevel();
+        void loadLevel();
+        void saveS();
+
     protected:
 
     private:
         int playerID;
         int mazeSeed;
+        pair<int, int> mazeSize;
+        int nrEnemies;
 };
 
 #endif // LEVELMANAGER_H
