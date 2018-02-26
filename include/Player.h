@@ -20,6 +20,7 @@ class Player
         void chestEvent(void);
         void checkChest();
         void checkEnemy(int x, int y);
+        void exitReached(void);
 
         int playerPoints = 0;
         int pCharID = 0;
