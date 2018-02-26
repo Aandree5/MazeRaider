@@ -24,11 +24,13 @@ class LevelManager
         vector<Enemy*> enemies;
 
         int getPlayerID();
+        int getMazeSeed();
 
     protected:
 
     private:
         int playerID;
+        int mazeSeed;
 };
 
 #endif // LEVELMANAGER_H

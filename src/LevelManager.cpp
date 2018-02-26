@@ -11,19 +11,22 @@ LevelManager::LevelManager(int pID)
     playerID = pID;
 
     maze = new Maze(61, 31);
+    mazeSeed = maze->getSeed();
+
     player = new Player(this);
     scoretime = new ScoreTime(this);
     enemyai = new EnemyAI(this);
 
 
     enemies.emplace_back(new Enemy(maze));
+/*    enemies.emplace_back(new Enemy(maze));
     enemies.emplace_back(new Enemy(maze));
     enemies.emplace_back(new Enemy(maze));
     enemies.emplace_back(new Enemy(maze));
     enemies.emplace_back(new Enemy(maze));
     enemies.emplace_back(new Enemy(maze));
     enemies.emplace_back(new Enemy(maze));
-    enemies.emplace_back(new Enemy(maze));
+*/
 
     ui = new UI(this);
     ui->ShowSelectionScreen();
@@ -33,4 +36,9 @@ LevelManager::LevelManager(int pID)
 int LevelManager::getPlayerID()
 {
     return playerID;
+}
+
+int LevelManager::getMazeSeed()
+{
+    return mazeSeed;
 }

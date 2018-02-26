@@ -41,6 +41,11 @@ void Player::movePlayer(char direction)
                 Player::chestEvent();
                 break;
             }
+            else if(maze->getMazeArray()[xPos+1][yPos+steps] == 5)
+            {
+                steps+=1;
+                break;
+            }
             steps+=1;
 
 
@@ -84,6 +89,12 @@ void Player::movePlayer(char direction)
                 Player::chestEvent();
                 break;
             }
+            else if(maze->getMazeArray()[xPos+steps][yPos] == 5)
+            {
+                reachExit = true;
+                steps+=1;
+                break;
+            }
             steps+=1;
 
         }
@@ -103,6 +114,11 @@ void Player::movePlayer(char direction)
             else if(maze->getMazeArray()[xPos][yPos-steps] == 3)
             {
                 Player::chestEvent();
+                break;
+            }
+            else if(maze->getMazeArray()[xPos+1][yPos-steps] == 5)
+            {
+                steps+=1;
                 break;
             }
             steps+=1;
@@ -143,17 +159,15 @@ void Player::chestEvent(void)
 
     //storing and reading the result from getting the weapon from the database
     MYSQL_RES* result = mysql_store_result(connection);
-        MYSQL_ROW row = mysql_fetch_row(result);
-        pWeapon = make_pair(row[0],atoi(row[1]));
-        cout << row[0] << row[1] << endl;
+    MYSQL_ROW row = mysql_fetch_row(result);
+    pWeapon = make_pair(row[0],atoi(row[1]));
+    cout << row[0] << row[1] << endl;
 
     //query for changing the value on the player's weapon
     string saveWeapon = "UPDATE PlayerChar SET weapon_id=" + to_string(atoi(row[2])) + " WHERE char_id=" + to_string(pCharID);
 
     if (!mysql_query(connection, saveWeapon.c_str()))
         cout << mysql_error(connection) << endl;
-
-
 
 
     //make random values for player stats and add them

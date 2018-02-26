@@ -21,7 +21,6 @@ class Player
         void checkChest();
         void checkEnemy(int x, int y);
 
-
         int playerPoints = 0;
         int pCharID = 0;
         string pName = "<player>";
@@ -45,6 +44,7 @@ class Player
         //variables
         Maze* maze;
         int xPos, yPos;
+        bool reachExit = false;
     protected:
 
     private:

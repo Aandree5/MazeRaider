@@ -44,6 +44,8 @@ class ScoreTime
         int oldTime;
 
         int hScore;
+
+        bool shouldDecrease;
 };
 
 #endif // SCORETIME_H

@@ -2,6 +2,7 @@
 #include "ScoreTime.h"
 #include "UIHelpers.h"
 #include "LevelManager.h"
+#include "Maze.h"
 #include <iostream>
 #include <tuple>
 #include <string>
@@ -10,6 +11,7 @@
 #include <cstdlib>
 #include "LevelManager.h"
 #include "Player.h"
+#include "UI.h"
 
 using namespace std;
 
@@ -22,6 +24,8 @@ ScoreTime::ScoreTime(LevelManager* lvlman)
     hScore = 200000;
     //time starting by 0
     oldTime = 0;
+
+    shouldDecrease = true;
 
     #ifdef _WIN32
     GetLocalTime(&startTime);
@@ -37,9 +41,19 @@ string ScoreTime::getTime(){
     //this allow you to get the system time
     SYSTEMTIME tm;
     GetLocalTime(&tm);
+
+    int startSec = (startTime.wHour * 3600) + (startTime.wMinute * 60) + startTime.wSecond;
+    int tmSec = (tm.wHour * 3600) + (tm.wMinute * 60) + tm.wSecond;
+
+    int difSec = tmSec - startSec;
+
+    int passedHours = difSec / 3600;
+    int passedMinutes = (difSec % 3600) / 60;
+    int passedSeconds = ((difSec % 3600) % 60);
+
     //This will allow you to see the timer and also they are starting by zero and increasing by when player input something to the system.
     if(tm.wHour > 0)
-        return to_string(tm.wHour - startTime.wHour) + ":" + to_string(tm.wMinute - startTime.wMinute)+ ":" + to_string(abs(tm.wSecond - startTime.wSecond));
+        return to_string(passedHours) + ":" + to_string(passedMinutes)+ ":" + to_string(passedSeconds);
 
 }
 
@@ -51,7 +65,7 @@ int ScoreTime::getTimeSeconds(){
     SYSTEMTIME tm;
     GetLocalTime(&tm);
 
-    int hourSecond = (tm.wHour - startTime.wHour) * 60 * 60;
+    int hourSecond = (tm.wHour - startTime.wHour) * 3600;
     //this will allow the system to calculate the system time. for example a minute has 60 seconds. So this will decrease system time and start time and the value will be times by 60.
     int minSecond = (tm.wMinute - startTime.wMinute) * 60;
 
@@ -73,8 +87,17 @@ int ScoreTime::getHScore()
 {
     //this will decrease the highscore. it will get the time in seconds function and it will decrease by old time then it will multiply by 100
     //basically what it does it will decrease the value of the highscore every second by 100 you spend in the game.
-    hScore -= (getTimeSeconds() - oldTime) * 100;
+    if(shouldDecrease)
+        hScore -= (getTimeSeconds() - oldTime) * 100;
+
+    if(lvlManager->ui->inBattle)
+        shouldDecrease = false;
+    else
+        shouldDecrease = true;
+
+
     oldTime = getTimeSeconds();
+
     //then this will return to the highscore
     return hScore;
 }
@@ -87,11 +110,15 @@ int ScoreTime::savehighscore(){
     connection = mysql_init(0);
     //this will allow you to connect to the database
     mysql_real_connect(connection,"server1.jesseprescott.co.uk","jessepre","Mazeraider123?","jessepre_mazeraider",0,NULL,0);
+
     //we are inserting the values in the highscore so I used insert. so it will store customer id and highscore inside the highscore table.
     //We are using values to tell what we need to store in the database. basically I needed to store playerID and the hScore from the game. So I put that in.
-    string data="insert into highscore(char_id, highscore) values('" + to_string(lvlManager->player->pCharID) + "', '"+to_string(hScore)+"')";
-    const char* q = data.c_str();
-    int querystate = mysql_query(connection,q);
+
+    string data="insert into highscore(char_id, highscore, mazeid) values(" +
+    to_string(lvlManager->player->pCharID) + "', '"+to_string(hScore)+"', '" + to_string(lvlManager->getMazeSeed()) + "')";
+
+
+    int querystate = mysql_query(connection, data.c_str());
     //Once it successful it will say saved successfull.
     if(!querystate) {
         cout<<"Saved...\n\n" << endl;
@@ -100,6 +127,7 @@ int ScoreTime::savehighscore(){
     } else {
         //if not it will say failed to save and system will pause. It will wait user to put an input
         cout<<"Failed to save " <<endl;
+        cout << mysql_error(connection) << endl;
         system("pause");
     }
 }
@@ -117,8 +145,12 @@ int ScoreTime::makeHighscoreTable(){
     connection = mysql_init(0);
     //This will allow you to connect to the database.
     mysql_real_connect(connection,"server1.jesseprescott.co.uk","jessepre","Mazeraider123?","jessepre_mazeraider",0,NULL,0);
+
+    string getData = "SELECT h.highscore, pc.name FROM highscore h, PlayerChar pc "
+    "WHERE h.char_id=pc.char_id AND h.mazeid=" + to_string(lvlManager->getMazeSeed()) + " ORDER BY h.highscore DESC LIMIT 10";
+
     //This will select whole highscore table because of the '*'
-    query = mysql_query(connection, "SELECT h.highscore, pc.name FROM highscore h, PlayerChar pc WHERE h.char_id=pc.char_id ORDER BY h.highscore DESC LIMIT 10");
+    query = mysql_query(connection, getData.c_str());
     if(!query){
         //this will allow you to show up the results
         results = mysql_store_result(connection);
