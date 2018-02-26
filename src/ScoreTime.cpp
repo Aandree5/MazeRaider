@@ -89,7 +89,8 @@ int ScoreTime::getHScore()
     //basically what it does it will decrease the value of the highscore every second by 100 you spend in the game.
     if(shouldDecrease)
         hScore -= (getTimeSeconds() - oldTime) * 100;
-
+    //this will check if the player in the battle or not
+    //If player in the battle it will not decrease if the player in the gameplay it will decrease
     if(lvlManager->ui->inBattle)
         shouldDecrease = false;
     else
@@ -113,7 +114,6 @@ int ScoreTime::savehighscore(){
 
     //we are inserting the values in the highscore so I used insert. so it will store customer id and highscore inside the highscore table.
     //We are using values to tell what we need to store in the database. basically I needed to store playerID and the hScore from the game. So I put that in.
-
     string data="insert into highscore(char_id, highscore, mazeid) values(" +
     to_string(lvlManager->player->pCharID) + "', '"+to_string(hScore)+"', '" + to_string(lvlManager->getMazeSeed()) + "')";
 
@@ -122,12 +122,13 @@ int ScoreTime::savehighscore(){
     //Once it successful it will say saved successfull.
     if(!querystate) {
         cout<<"Saved...\n\n" << endl;
-        cout<<"ID      High Score"<<endl;
+        cout<<"Rank   ID      High Score"<<endl;
 
     } else {
         //if not it will say failed to save and system will pause. It will wait user to put an input
         cout<<"Failed to save " <<endl;
         cout << mysql_error(connection) << endl;
+        exit(1);
         system("pause");
     }
 }
@@ -145,16 +146,15 @@ int ScoreTime::makeHighscoreTable(){
     connection = mysql_init(0);
     //This will allow you to connect to the database.
     mysql_real_connect(connection,"server1.jesseprescott.co.uk","jessepre","Mazeraider123?","jessepre_mazeraider",0,NULL,0);
-
+    //Now we are linking tables in the database.
     string getData = "SELECT h.highscore, pc.name FROM highscore h, PlayerChar pc "
     "WHERE h.char_id=pc.char_id AND h.mazeid=" + to_string(lvlManager->getMazeSeed()) + " ORDER BY h.highscore DESC LIMIT 10";
-
-    //This will select whole highscore table because of the '*'
+    //this will allow get the data as a sting
     query = mysql_query(connection, getData.c_str());
     if(!query){
         //this will allow you to show up the results
         results = mysql_store_result(connection);
-
+        //this will allow to show the number of their rank.
         int i=0;
         //rows represent the actual able rows and we will cout them to show up in the actual game.
         while(row = mysql_fetch_row(results))
@@ -168,6 +168,7 @@ int ScoreTime::makeHighscoreTable(){
     else{
         //If it get unsuccessful it will say this message.
         cout<<"Sorry Rank table maintaining stage at this moment try again later"<<endl;
+        //if it showed the error it will exit from the game.
         exit(0);
     }
 
