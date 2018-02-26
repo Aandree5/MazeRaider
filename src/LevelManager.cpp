@@ -10,7 +10,7 @@ LevelManager::LevelManager(int pID)
 {
     playerID = pID;
 
-    maze = new Maze(31, 31);
+    maze = new Maze(61, 31);
     player = new Player(this);
     scoretime = new ScoreTime(this);
     enemyai = new EnemyAI(this);
