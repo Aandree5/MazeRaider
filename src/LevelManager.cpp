@@ -15,7 +15,7 @@ LevelManager::LevelManager(int pID)
     scoretime = new ScoreTime(this);
     enemyai = new EnemyAI(this);
 
-
+/*
     enemies.emplace_back(new Enemy(maze));
     enemies.emplace_back(new Enemy(maze));
     enemies.emplace_back(new Enemy(maze));
@@ -24,6 +24,7 @@ LevelManager::LevelManager(int pID)
     enemies.emplace_back(new Enemy(maze));
     enemies.emplace_back(new Enemy(maze));
     enemies.emplace_back(new Enemy(maze));
+*/
 
     ui = new UI(this);
     ui->ShowSelectionScreen();

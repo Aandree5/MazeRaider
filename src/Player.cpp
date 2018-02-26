@@ -41,6 +41,11 @@ void Player::movePlayer(char direction)
                 Player::chestEvent();
                 break;
             }
+            else if(maze->getMazeArray()[xPos+1][yPos+steps] == 5)
+            {
+                steps+=1;
+                break;
+            }
             steps+=1;
 
 
@@ -84,6 +89,12 @@ void Player::movePlayer(char direction)
                 Player::chestEvent();
                 break;
             }
+            else if(maze->getMazeArray()[xPos+steps][yPos] == 5)
+            {
+                reachExit = true;
+                steps+=1;
+                break;
+            }
             steps+=1;
 
         }
@@ -103,6 +114,11 @@ void Player::movePlayer(char direction)
             else if(maze->getMazeArray()[xPos][yPos-steps] == 3)
             {
                 Player::chestEvent();
+                break;
+            }
+            else if(maze->getMazeArray()[xPos+1][yPos-steps] == 5)
+            {
+                steps+=1;
                 break;
             }
             steps+=1;
