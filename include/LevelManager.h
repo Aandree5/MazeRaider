@@ -18,10 +18,6 @@ class LevelManager
 
         UI* ui;
         Maze* maze;
-        Player* player;
-        ScoreTime* scoretime;
-        EnemyAI* enemyai;
-        vector<Enemy*> enemies;
 
         int getPlayerID();
 <<<<<<< HEAD
@@ -35,6 +31,9 @@ class LevelManager
         void loadLevel();
         void saveS();
 >>>>>>> 979a7bdd2014764ad282952f69348112ddc1675e
+
+        bool isPaused;
+        bool exitToMenu;
 
     protected:
 

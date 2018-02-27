@@ -110,6 +110,10 @@ int ScoreTime::savehighscore(){
     connection = mysql_init(0);
     mysql_real_connect(connection,"server1.jesseprescott.co.uk","jessepre","Mazeraider123?","jessepre_mazeraider",0,NULL,0);
 
+<<<<<<< HEAD
+    string data="insert into highscore(customer_id, highscore) values('" + to_string(lvlManager->getPlayerID()) + "', '"+to_string(hScore)+"')";
+    int querystate = mysql_query(connection, data.c_str());
+=======
     string data="insert into highscore(highscore) values('"+to_string(hScore)+"')";
     const char* q = data.c_str();
     int qstate = mysql_query(connection,q);
@@ -128,6 +132,7 @@ int ScoreTime::savehighscore(){
     //get the top 10 scores from the high score table and store the names and scores in to an array
     string query="select MAX(highscore) from information where username='"+username+"' and password='"+password+"';";
 
+>>>>>>> 433b44c149c74648a5fca706b610212f7f9a9f46
 
 
 
@@ -161,6 +166,10 @@ int ScoreTime::savehighscore(){
         exit(1);
         system("pause");
     }
+
+
+    delete connection;
+    connection = nullptr;
 }
 //Showing up the Highscore in the actual game
 int ScoreTime::makeHighscoreTable(){
@@ -201,6 +210,11 @@ int ScoreTime::makeHighscoreTable(){
         //if it showed the error it will exit from the game.
         exit(0);
     }
+
+    delete connection;
+    connection = nullptr;
+    delete results;
+    results = nullptr;
 
 }
 

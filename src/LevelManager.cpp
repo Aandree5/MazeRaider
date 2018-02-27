@@ -9,6 +9,8 @@
 LevelManager::LevelManager(int pID)
 {
     playerID = pID;
+    isPaused = false;
+    exitToMenu = false;
 
 <<<<<<< HEAD
     maze = new Maze(31, 31);

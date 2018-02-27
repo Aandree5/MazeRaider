@@ -1,9 +1,13 @@
 #include "UIHelpers.h"
 
-bool UIHelpers::ChangeColor(int color)
+// change the text colour
+bool UIHelpers::ChangeColour(int colour)
 {
-    switch (color)
+    switch (colour)
     {
+    case 0:
+        blackonblack;
+        break;
     case 1:
         darkblue;
         break;
@@ -24,7 +28,7 @@ bool UIHelpers::ChangeColor(int color)
         break;
     case 7:
         grey;
-        break;
+        return false;
     case 8:
         darkgrey;
         break;
@@ -64,6 +68,9 @@ bool UIHelpers::ChangeColor(int color)
     case 238:
         healthYellow;
         break;
+    case 240:
+        blackonwhite;
+        break;
     default:
         grey;
         return false;
@@ -73,9 +80,9 @@ bool UIHelpers::ChangeColor(int color)
 }
 
 // cout with color - CHAR Overload
-void UIHelpers::PrintC(char character, int color, bool twoChar)
+void UIHelpers::PrintC(char character, int colour, bool twoChar)
 {
-    bool needsReset = ChangeColor(color);
+    bool needsReset = ChangeColour(colour);
 
     if (twoChar)
         cout << character << character;
@@ -91,9 +98,9 @@ void UIHelpers::PrintC(char character, int color, bool twoChar)
 }
 
 // cout with color - STRING Overload
-void UIHelpers::PrintC(string character, int color, bool twoChar)
+void UIHelpers::PrintC(string character, int colour, bool twoChar)
 {
-    bool needsReset = ChangeColor(color);
+    bool needsReset = ChangeColour(colour);
 
     if (twoChar)
         cout << character << character;
@@ -128,4 +135,100 @@ void UIHelpers::setFullScreen()
     ShowWindow(GetConsoleWindow(), SW_MAXIMIZE);
 }
 
+// Show pause screen
+void UIHelpers::buildPause(shared_ptr<LevelManager> lvlManager, int x, int y, bool allowSave)
+{
+    #ifdef _WIN32
+        HANDLE hStdOut = GetStdHandle( STD_OUTPUT_HANDLE );
+        CONSOLE_SCREEN_BUFFER_INFO cbsi;
+        GetConsoleScreenBufferInfo(hStdOut, &cbsi);
+    #endif // _WIN32
 
+    #ifdef __linux__
+        int hStdOut;
+    #endif // __linux__
+
+    int input;
+    array<string, 14> menuContent = {R"( __             _                 )",
+                                     R"(/__ _ __  _    |_) _     _  _  _| )",
+                                     R"(\_|(_||||(/_   |  (_||_|_> (/_(_| )",
+                                       "----------------------------------",
+                                       "  ",
+                                       "(P) Resume to game    ",
+                                       "(S) Save game         ",
+                                       "  ",
+                                       "(E) Exit to main menu ",
+                                       "  ",
+                                       "----------------------------------",
+                                       "  ",
+                                       "  ",
+                                       "  "};
+
+    int width = 40;
+    int height = menuContent.size();
+
+    if((x = x - (width / 2)) < 0)
+        x = 0;
+
+    if((y = y - (height / 2)) < 0)
+        y = 0;
+
+// Top of window
+    cursorPosition(hStdOut, x, y);
+    y++;
+
+    PrintC(bsTopLeftCorner, 15);
+
+    for(int w = 0; w < width; w++)
+        PrintC(bsTopBottomLines, 15);
+
+    PrintC(bsTopRightCorner, 15);
+
+    cursorPosition(hStdOut, x, y);
+    y++;
+
+
+// Content of window
+    for(int h = 0; h < height; h++)
+    {
+        int wSpace = (width - menuContent[h].size()) / 2;
+
+        PrintC(bsLeftRightLines, 15);
+
+        for(int w = 0; w < wSpace; w++)
+            PrintC(" ");
+
+        PrintC(menuContent[h]);
+
+        for(int w = 0; w < wSpace; w++)
+            PrintC(" ");
+
+        PrintC(bsLeftRightLines, 15);
+
+        cursorPosition(hStdOut, x, y);
+        y++;
+    }
+
+
+// Bottom of window
+    PrintC(bsBottomLeftCorner, 15);
+
+    for(int w = 0; w < width; w++)
+        PrintC(bsTopBottomLines, 15);
+
+    PrintC(bsBottomRightCorner, 15);
+
+
+    if((x = (x + (width / 2)) - 9) < 0)
+        x = 0;
+
+    y -= 3;
+    cursorPosition(hStdOut, x, y);
+
+
+
+    input = requestFromUser<char>(lvlManager);
+
+    if(tolower(input) == 'e')
+        lvlManager->exitToMenu = true;
+}

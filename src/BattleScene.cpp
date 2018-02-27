@@ -582,7 +582,7 @@ void BattleScene::PlayDefend(int dtype, int colour)
                         if (y % 2 == 0)
                             cursorPosition( hStdOut, xPos - x, yPos - y );
                         else
-                            cursorPosition( hStdOut, xPos - x, yPos + y );
+                            cursorPosition( hStdOut, xPos - x, yPos + y + 1 );
 
                         PrintC(mazeWall, colour);
                         Sleep(defenceHealAnimSpeed / 2);

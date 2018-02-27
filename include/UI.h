@@ -112,6 +112,10 @@ class  UI
         // Pointer to level manager
         LevelManager* lvlManager;
 
+        // Overload for UIHelpers PrintC function for pausing game
+        void PrintC(char character, int colour = 7, bool twoChar = false, bool hideWhenPaused = false);
+        void PrintC(string character, int colour = 7, bool twoChar = false, bool hideWhenPaused = false);
+
         // Print Maze
         void PrintMaze();
         // Print Timer, Scorn and Lives info
@@ -125,9 +129,9 @@ class  UI
         // White space between char info
         void selCharWhiteSpaceDivider(array<string, 12> &mOptions, int c);
         // Screen to create character
-        void selCharCreateNew(MYSQL* connection);
+        void selCharCreateNew(MYSQL *connection);
         // Delete character
-        void selCharDelete(MYSQL* connection, int charID, string name);
+        void selCharDelete(MYSQL *connection, int charID, string name);
 
 };
 

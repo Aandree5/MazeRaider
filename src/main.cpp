@@ -83,7 +83,16 @@ void loginUser() {
 
     if (mysql_num_rows(result) >= 1) {
         MYSQL_ROW row = mysql_fetch_row(result);
-        new LevelManager(atoi(row[0]));
+
+        delete result;
+        result = nullptr;
+        delete connection;
+        connection = nullptr;
+
+        LevelManager *lvlManager = new LevelManager(atoi(row[0]));
+
+        delete lvlManager;
+        lvlManager = nullptr;
     } else {
         cout << "Incorrect username or password." << endl;
         system("pause");
@@ -159,9 +168,14 @@ void registerUser() {
     //then we will link the database using insert into the database. I use insert because it will store data in the database.
     //Then it will check the values of the database then once user put values in database will automatically store the information.
     string register_users="insert into information(name,username,password) values('"+name+"','"+username+"','"+password+"')";
+<<<<<<< HEAD
+    int querystate = mysql_query(connection, register_users.c_str());
+
+=======
     const char* q = register_users.c_str();
     int querystate = mysql_query(connection,q);
     //If it allow you to register it will say register successful
+>>>>>>> 433b44c149c74648a5fca706b610212f7f9a9f46
     if(!querystate) {
         cout<<"Registration successful" << endl;
         system("pause");
