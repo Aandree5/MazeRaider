@@ -8,8 +8,6 @@
 #include <time.h>
 #include <algorithm>
 
-
-
 /**
  * Constructor.
  *
@@ -26,9 +24,11 @@ Maze::Maze(unsigned width, unsigned height, unsigned seed) : m_width(width), m_h
 
     // Initialise random number generator.
     if(seed == 0) { // Set random seed.
-        srand(time(NULL));
+        m_seed = time(NULL);
+        srand(m_seed);
     } else {        // Use given seed.
-        srand(seed);
+        m_seed = seed;
+        srand(m_seed);
     }
 
     // Create a new 2D array of width and height and fill with 1's.
@@ -224,6 +224,13 @@ std::pair<int,int> Maze::getMazeStart()
     return m_start;
 }
 
+<<<<<<< HEAD
+=======
+int Maze::getSeed() {
+    return m_seed;
+}
+
+>>>>>>> 979a7bdd2014764ad282952f69348112ddc1675e
 void Maze::updateChest(int x, int y)
 {
     m_maze[x][y] = 0;

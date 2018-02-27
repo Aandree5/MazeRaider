@@ -14,20 +14,32 @@ class ScoreTime
 {
     public:
         ScoreTime(LevelManager* lvlman);
-
+        //This will get the highscore
         int getHScore();
+<<<<<<< HEAD
 
-        string getTime();
-
-        int getTimeSeconds();
+        int getTime();
 
         int savehighscore();
 
-        int query();
-
         void connectToDatabase();
-        int makeHighscoreTable();
+        void makeHighscoreTable();
 
+=======
+        //this will get the timer
+        string getTime();
+        //this will allow get time in seconds
+        int getTimeSeconds();
+        //this function allow to save the game
+        int savehighscore();
+        //this will allow the user to get the data as a string and show up on the screen
+        int query();
+        //connect to the database
+        void connectToDatabase();
+        //this will allow user to make the highscore
+        int makeHighscoreTable();
+        void addScores(int score);
+>>>>>>> 979a7bdd2014764ad282952f69348112ddc1675e
     protected:
 
     private:
@@ -40,10 +52,12 @@ class ScoreTime
         #ifdef __linux__
         struct  tm startTime;
         #endif // __linux__
-
+        //I am using this to use oldtime
         int oldTime;
-
+        //this will allow to get the score
         int hScore;
+        //this will allow to decrease the score by time
+        bool shouldDecrease;
 };
 
 #endif // SCORETIME_H

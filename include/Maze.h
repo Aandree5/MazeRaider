@@ -12,12 +12,17 @@ class Maze {
         int** getMazeArray();
         std::pair<unsigned, unsigned> getMazeSizeWH();
         std::pair<int,int> getMazeStart();
+<<<<<<< HEAD
+=======
+        int getSeed();
+>>>>>>> 979a7bdd2014764ad282952f69348112ddc1675e
         void updateChest(int x, int y);
 
     protected:
 
     private:
         int** m_maze;
+        int m_seed;
         unsigned m_width;
         unsigned m_height;
         std::stack< std::pair<unsigned, unsigned> > m_stack;
