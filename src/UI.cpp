@@ -452,7 +452,7 @@ void UI::PrintStateInfo()
 {
     cout << endl;
     PrintC("        Time: ");
-    PrintC(to_string(lvlManager->scoretime->getTime()), 15);
+    PrintC((lvlManager->scoretime->getTime()), 15);
     PrintC("        Score: ");
     PrintC(to_string(lvlManager->scoretime->getHScore()), 15);
     PrintC("        Lives: ");
@@ -546,6 +546,13 @@ void UI::PrintUOptions()
             PrintC("Choose option: ");
             cin >> userOption;
 
+            //quit the game
+            if (userOption == 'e'){
+                lvlManager->scoretime->savehighscore();
+                lvlManager->scoretime->makeHighscoreTable();
+                exit(1);
+            }
+
             if (userOption == 'b') // TEMP - TESTING
             {
                 btlScene = new BattleScene(lvlManager, lvlManager->enemies[0]); // TEMP - TESTING
@@ -553,9 +560,16 @@ void UI::PrintUOptions()
             }
             else if(tolower(userOption) == 'a' || tolower(userOption) == 'd' || tolower(userOption) == 's' || tolower(userOption) == 'w')
             {
+<<<<<<< HEAD
                 lvlManager->player->movePlayer(userOption);
                 for(Enemy* e : lvlManager->enemies)
                     lvlManager->enemyai->getNextPosition(e);
+=======
+                lvlManager->player->movePlayer(userOption);
+                if(lvlManager->enemies.size())
+                    for(Enemy* e : lvlManager->enemies)
+                        lvlManager->enemyai->getNextPosition(e);
+>>>>>>> 979a7bdd2014764ad282952f69348112ddc1675e
 
                 notvalid = false;
             }
@@ -667,6 +681,8 @@ void UI::PrintUOptions()
             PrintC("Choose option: ");
             cin >> userOption;
 
+
+
 // Player attacks
             if (tolower(userOption) == 'a')
             {
@@ -679,6 +695,7 @@ void UI::PrintUOptions()
                 btlScene->PlayerDefend();
                 notvalid = false;
             }
+
 // Player heals
             else if (tolower(userOption) == 'h')
             {
@@ -712,3 +729,67 @@ void UI::ShowGameOver()
     PrintC("Game Over!");
 
 }
+
+
+void UI::ShowNextLevel()
+{
+   clearScreen();
+   PrintC("You've finished your level. Choose the difficulty for the next level OR computer can choose for you");
+      cout << endl;
+        PrintC("        Low: ");
+        PrintC("L", 15);
+        PrintC("    ");
+        PrintC(bsLeftRightLines, 15);
+        PrintC("    Medium: ");
+        PrintC("M", 15);
+        PrintC("    ");
+        PrintC(bsLeftRightLines, 15);
+        PrintC("    Hard: ");
+        PrintC("H", 15);
+        PrintC("    ");
+        PrintC(bsLeftRightLines, 15);
+        PrintC("    Computer : ");
+        PrintC("C", 15);
+        PrintC("    ");
+        char userOption;
+        cout << endl;
+        bool notvalid = true;
+        while(notvalid)
+        {
+            PrintC("Choose option: ");
+            cin >> userOption;
+
+// Player choose low difficulty .
+            if (tolower(userOption) == 'l' )
+            {
+
+                lvlManager->lowLevel();
+                notvalid = false;
+            }
+// Player choose medium difficulty .
+            else if (tolower(userOption) == 'm')
+            {
+                lvlManager->mediumLevel();
+                notvalid = false;
+            }
+// Player choose high difficulty .
+            else if (tolower(userOption) == 'h')
+            {
+                lvlManager->highLevel();
+                notvalid = false;
+            }
+// Player lets the computer to choose the difficulty
+               else if (tolower(userOption) == 'c')
+            {
+                lvlManager->nextLevel();
+                notvalid = false;
+            }
+            else
+            {
+                PrintC(" - Not a valid option... Please choose a valid option.");
+                cout << endl;
+            }
+        }
+}
+
+

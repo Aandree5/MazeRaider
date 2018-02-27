@@ -24,6 +24,7 @@ check to see if player meets enemy
 
 void Player::movePlayer(char direction)
 {
+    Player::checkEnemy(xPos,yPos);
     int steps = 1;
     if(direction == 's')
     {
@@ -38,6 +39,11 @@ void Player::movePlayer(char direction)
             else if(maze->getMazeArray()[xPos][yPos+steps] == 3)
             {
                 Player::chestEvent();
+                break;
+            }
+            else if(maze->getMazeArray()[xPos][yPos+steps] == 5)
+            {
+                 lvlmanager->ui->ShowNextLevel();
                 break;
             }
             steps+=1;
@@ -62,6 +68,11 @@ void Player::movePlayer(char direction)
                 Player::chestEvent();
                 break;
             }
+            else if(maze->getMazeArray()[xPos-steps][yPos] == 5)
+            {
+                lvlmanager->ui->ShowNextLevel();
+                break;
+            }
             steps+=1;
 
         }
@@ -81,6 +92,12 @@ void Player::movePlayer(char direction)
             else if(maze->getMazeArray()[xPos+steps][yPos] == 3)
             {
                 Player::chestEvent();
+                break;
+            }
+            else if(maze->getMazeArray()[xPos+steps][yPos] == 5)
+            {
+                lvlmanager->ui->ShowNextLevel();
+
                 break;
             }
             steps+=1;
@@ -104,6 +121,12 @@ void Player::movePlayer(char direction)
                 Player::chestEvent();
                 break;
             }
+            else if(maze->getMazeArray()[xPos+1][yPos-steps] == 5)
+            {
+                lvlmanager->ui->ShowNextLevel();
+                break;
+            }
+
             steps+=1;
 
         }
@@ -123,6 +146,7 @@ void Player::chestEvent(void)
     - keys
     - scores
     */
+<<<<<<< HEAD
     int randomScore, addHealth, addArmour, addDamage, addKeys;
     randomScore = rand() % 100 + 1;
     addArmour = rand() % 10 + 1;
@@ -131,11 +155,57 @@ void Player::chestEvent(void)
     addDamage = rand() % 10 + 1;
 
     playerPoints += randomScore;
+=======
+
+
+    //connecting to database
+    MYSQL* connection;
+
+    connection = mysql_init(0);
+    mysql_real_connect(connection,"server1.jesseprescott.co.uk","jessepre","Mazeraider123?","jessepre_mazeraider",0,NULL,0);
+    if(!connection){
+        cout << "Failed to connect to the database." << endl;
+    }
+
+    //query for getting the weapon
+    string getWeapon = "SELECT weapon_name, weapon_power, weapon_id FROM Weapon ORDER BY RAND() LIMIT 1;";
+
+    if (!mysql_query(connection, getWeapon.c_str()))
+        cout << mysql_error(connection) << endl;
+
+    //storing and reading the result from getting the weapon from the database
+    MYSQL_RES* result = mysql_store_result(connection);
+    MYSQL_ROW row = mysql_fetch_row(result);
+    pWeapon = make_pair(row[0],atoi(row[1]));
+    cout << row[0] << row[1] << endl;
+
+    //query for changing the value on the player's weapon
+    string saveWeapon = "UPDATE PlayerChar SET weapon_id=" + to_string(atoi(row[2])) + " WHERE char_id=" + to_string(pCharID);
+
+    if (!mysql_query(connection, saveWeapon.c_str()))
+        cout << mysql_error(connection) << endl;
+
+
+    //make random values for player stats and add them
+    int randomScore, addHealth, addArmour, addDamage, addKeys;
+    randomScore = rand() % 100 + 1;
+    addArmour = rand() % 100 + 10;
+    addHealth = rand() % 100 + 10;
+    addKeys = rand() % 1;
+    addDamage = rand() % 100 + 50;
+
+    playerPoints += randomScore;
+    lvlmanager->scoretime->addScores(playerPoints);
+>>>>>>> 979a7bdd2014764ad282952f69348112ddc1675e
     pArmour += addArmour;
     pHealth += addHealth;
     pKeys += addKeys;
     pDamage += addDamage;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 979a7bdd2014764ad282952f69348112ddc1675e
 }
 
 void Player::checkChest()

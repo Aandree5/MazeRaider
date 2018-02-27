@@ -2,10 +2,12 @@
 #define PLAYER_H
 #include "Maze.h"
 #include "Enemy.h"
+#include "ScoreTime.h"
 #include <array>
 #include <vector>
 #include <cstdlib> //random generation
 #include <iostream>
+
 
 using namespace std;
 
@@ -21,7 +23,10 @@ class Player
         void checkChest();
         void checkEnemy(int x, int y);
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 979a7bdd2014764ad282952f69348112ddc1675e
         int playerPoints = 0;
         int pCharID = 0;
         string pName = "<player>";

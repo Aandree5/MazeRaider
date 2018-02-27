@@ -24,11 +24,28 @@ class LevelManager
         vector<Enemy*> enemies;
 
         int getPlayerID();
+<<<<<<< HEAD
+=======
+        int getMazeSeed();
+
+        void nextLevel();
+        void lowLevel();
+        void mediumLevel();
+        void highLevel();
+        void loadLevel();
+        void saveS();
+>>>>>>> 979a7bdd2014764ad282952f69348112ddc1675e
 
     protected:
 
     private:
         int playerID;
+<<<<<<< HEAD
+=======
+        int mazeSeed;
+        pair<int, int> mazeSize;
+        int nrEnemies;
+>>>>>>> 979a7bdd2014764ad282952f69348112ddc1675e
 };
 
 #endif // LEVELMANAGER_H

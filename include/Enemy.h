@@ -1,5 +1,9 @@
 #ifndef ENEMY_H
 #define ENEMY_H
+<<<<<<< HEAD
+=======
+#include "ScoreTime.h"
+>>>>>>> 979a7bdd2014764ad282952f69348112ddc1675e
 #include <array>
 #include <vector>
 #include <cstdlib> //random generation
@@ -8,11 +12,13 @@
 using namespace std;
 
 class Maze;
+class LevelManager;
 
 class Enemy
 {
     public:
         Enemy(Maze* m);
+        ~Enemy();
 
         //functions
         void randomMoveEnemy();
