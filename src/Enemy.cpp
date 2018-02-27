@@ -31,11 +31,6 @@ Enemy::Enemy(Maze* m)
     xPos = x;
     yPos = y;
 }
-
-<<<<<<< HEAD
-void Enemy::randomMoveEnemy()
-{
-=======
 Enemy::~Enemy()
 {
     //gain points from defeating an enemy
@@ -45,43 +40,35 @@ Enemy::~Enemy()
 
 void Enemy::randomMoveEnemy()
 {
->>>>>>> 979a7bdd2014764ad282952f69348112ddc1675e
     ranDecision = rand() % 2 + 1;
     if(ranDecision == 1) // random chance of moving
     {
         ranDecision = rand() % 3 + 1;
         eDirection = rand() % 4 + 1; //random direction to move
         ranVal = rand() % 20 + 1; //random steps
+        /*Direction
+        1 = down
+        2 = left
+        3 = up
+        4 = right
+        */
         if(eDirection == 1)
         {
             for(int i = 1;i < ranVal; i++)
             {
                 if(maze->getMazeArray()[xPos][yPos+i]==1) // checks wall forward
-<<<<<<< HEAD
                 {
                     yPos+=i-1;
                     break;
-                }else if((maze->getMazeArray()[xPos-1][yPos+i] == 0 || maze->getMazeArray()[xPos+1][yPos+i] == 0) && (ranDecision == 1 || ranDecision == 2)) //checks path from sides
+                }
+                else if((maze->getMazeArray()[xPos-1][yPos+i] == 0 || maze->getMazeArray()[xPos+1][yPos+i] == 0) && (ranDecision == 1 || ranDecision == 2)) //checks path from sides
                 {
-                    yPos+=i-1;
+                    yPos+=i;
                     break;
                 }
                 else if(maze->getMazeArray()[xPos][yPos+i]==2) // checks player forward
                 {
                     yPos+=i-1;
-=======
-                {
-                    yPos+=i-1;
-                    break;
-                }else if((maze->getMazeArray()[xPos-1][yPos+i] == 0 || maze->getMazeArray()[xPos+1][yPos+i] == 0) && (ranDecision == 1 || ranDecision == 2)) //checks path from sides
-                {
-                    yPos+=i-1;
-                    break;
-                }
-                else if(maze->getMazeArray()[xPos][yPos+i]==2) // checks player forward
-                {
-                    yPos+=i-1;
->>>>>>> 979a7bdd2014764ad282952f69348112ddc1675e
                     break;
                 }
             }
@@ -91,29 +78,17 @@ void Enemy::randomMoveEnemy()
             for(int i = 1;i < ranVal; i++)
             {
                 if(maze->getMazeArray()[xPos-i][yPos]==1) // checks wall forwards
-<<<<<<< HEAD
-                {
-                    xPos-=i-1;
-                    break;
-                }else if((maze->getMazeArray()[xPos-i][yPos+1] == 0 || maze->getMazeArray()[xPos-i][yPos-1] == 0) && (ranDecision == 1 || ranDecision == 2)) //checks path from sides
                 {
                     xPos-=i-1;
                     break;
                 }
-                else if(maze->getMazeArray()[xPos-i][yPos]==2) // checks player forward
+                else if((maze->getMazeArray()[xPos-i][yPos+1] == 0 || maze->getMazeArray()[xPos-i][yPos-1] == 0) && (ranDecision == 1 || ranDecision == 2)) //checks path from sides
                 {
-=======
-                {
-                    xPos-=i-1;
-                    break;
-                }else if((maze->getMazeArray()[xPos-i][yPos+1] == 0 || maze->getMazeArray()[xPos-i][yPos-1] == 0) && (ranDecision == 1 || ranDecision == 2)) //checks path from sides
-                {
-                    xPos-=i-1;
+                    xPos-=i;
                     break;
                 }
                 else if(maze->getMazeArray()[xPos-i][yPos]==2) // checks player forward
                 {
->>>>>>> 979a7bdd2014764ad282952f69348112ddc1675e
                     yPos+=i-1;
                     break;
                 }
@@ -161,6 +136,8 @@ void Enemy::randomMoveEnemy()
         }
     }
 }
+
+
 
 void Enemy::checkPlayer(){}
 //function runs when one of the enemies is next to a player

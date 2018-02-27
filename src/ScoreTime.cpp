@@ -2,22 +2,16 @@
 #include "ScoreTime.h"
 #include "UIHelpers.h"
 #include "LevelManager.h"
-<<<<<<< HEAD
-=======
 #include "Maze.h"
->>>>>>> 979a7bdd2014764ad282952f69348112ddc1675e
 #include <iostream>
 #include <tuple>
 #include <string>
 #include <windows.h>
 #include <mysql.h>
 #include <cstdlib>
-<<<<<<< HEAD
-=======
 #include "LevelManager.h"
 #include "Player.h"
 #include "UI.h"
->>>>>>> 979a7bdd2014764ad282952f69348112ddc1675e
 
 using namespace std;
 
@@ -108,7 +102,6 @@ int ScoreTime::getHScore()
     //then this will return to the highscore
     return hScore;
 }
-<<<<<<< HEAD
 int ScoreTime::savehighscore(){
 
     MYSQL* connection;
@@ -139,7 +132,6 @@ int ScoreTime::savehighscore(){
 
 
 }*/
-=======
 //Saving the Highscore
 int ScoreTime::savehighscore(){
     //you need this to connect to the database
@@ -219,7 +211,6 @@ void ScoreTime::addScores(int score)
 
 
 
->>>>>>> 979a7bdd2014764ad282952f69348112ddc1675e
 
 
 
