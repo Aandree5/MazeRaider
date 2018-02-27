@@ -17,6 +17,16 @@ class ScoreTime
         //This will get the highscore
         int getHScore();
 
+<<<<<<< HEAD
+=======
+        int getTime();
+
+        int savehighscore();
+
+        void connectToDatabase();
+        void makeHighscoreTable();
+
+>>>>>>> 99b9d34841a44512dcbf7e5ef63697f31620d484
         //this will get the timer
         string getTime();
         //this will allow get time in seconds
@@ -30,7 +40,10 @@ class ScoreTime
         //this will allow user to make the highscore
         int makeHighscoreTable();
         void addScores(int score);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 99b9d34841a44512dcbf7e5ef63697f31620d484
     protected:
 
     private:

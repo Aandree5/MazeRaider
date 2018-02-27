@@ -146,6 +146,19 @@ void Player::chestEvent(void)
     - keys
     - scores
     */
+<<<<<<< HEAD
+=======
+
+    int randomScore, addHealth, addArmour, addDamage, addKeys;
+    randomScore = rand() % 100 + 1;
+    addArmour = rand() % 10 + 1;
+    addHealth = rand() % 10 + 1;
+    addKeys = rand() % 1;
+    addDamage = rand() % 10 + 1;
+
+    playerPoints += randomScore;
+
+>>>>>>> 99b9d34841a44512dcbf7e5ef63697f31620d484
 
     //connecting to database
     MYSQL* connection;
@@ -185,7 +198,10 @@ void Player::chestEvent(void)
 
     playerPoints += randomScore;
     lvlmanager->scoretime->addScores(playerPoints);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 99b9d34841a44512dcbf7e5ef63697f31620d484
     pArmour += addArmour;
     pHealth += addHealth;
     pKeys += addKeys;

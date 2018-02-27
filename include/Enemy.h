@@ -19,7 +19,6 @@ class Enemy
 
         //functions
         void randomMoveEnemy();
-
         void checkPlayer();
 
         // Enemy stats
