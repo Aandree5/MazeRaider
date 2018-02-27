@@ -31,10 +31,6 @@ Enemy::Enemy(Maze* m)
     xPos = x;
     yPos = y;
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> 99b9d34841a44512dcbf7e5ef63697f31620d484
 Enemy::~Enemy()
 {
     //gain points from defeating an enemy
@@ -61,24 +57,10 @@ void Enemy::randomMoveEnemy()
             for(int i = 1;i < ranVal; i++)
             {
                 if(maze->getMazeArray()[xPos][yPos+i]==1) // checks wall forward
-<<<<<<< HEAD
-                {
-                    yPos+=i-1;
-                    break;
-                }else if((maze->getMazeArray()[xPos-1][yPos+i] == 0 || maze->getMazeArray()[xPos+1][yPos+i] == 0) && (ranDecision == 1 || ranDecision == 2)) //checks path from sides
-=======
->>>>>>> 99b9d34841a44512dcbf7e5ef63697f31620d484
                 {
                     yPos+=i-1;
                     break;
                 }
-<<<<<<< HEAD
-                else if(maze->getMazeArray()[xPos][yPos+i]==2) // checks player forward
-                {
-                    yPos+=i-1;
-                }
-=======
->>>>>>> 99b9d34841a44512dcbf7e5ef63697f31620d484
                 else if((maze->getMazeArray()[xPos-1][yPos+i] == 0 || maze->getMazeArray()[xPos+1][yPos+i] == 0) && (ranDecision == 1 || ranDecision == 2)) //checks path from sides
                 {
                     yPos+=i;
@@ -96,31 +78,13 @@ void Enemy::randomMoveEnemy()
             for(int i = 1;i < ranVal; i++)
             {
                 if(maze->getMazeArray()[xPos-i][yPos]==1) // checks wall forwards
-<<<<<<< HEAD
-                {
-                    xPos-=i-1;
-                    break;
-                }else if((maze->getMazeArray()[xPos-i][yPos+1] == 0 || maze->getMazeArray()[xPos-i][yPos-1] == 0) && (ranDecision == 1 || ranDecision == 2)) //checks path from sides
-=======
->>>>>>> 99b9d34841a44512dcbf7e5ef63697f31620d484
                 {
                     xPos-=i-1;
                     break;
                 }
-<<<<<<< HEAD
-                else if(maze->getMazeArray()[xPos-i][yPos]==2) // checks player forward
-                {
-                    xPos-=i-1;
-                    break;
-                }
-                else if((maze->getMazeArray()[xPos-i][yPos+1] == 0 || maze->getMazeArray()[xPos-i][yPos-1] == 0) && (ranDecision == 1 || ranDecision == 2)) //checks path from sides
-                {
-                    xPos-=i-1;
-=======
                 else if((maze->getMazeArray()[xPos-i][yPos+1] == 0 || maze->getMazeArray()[xPos-i][yPos-1] == 0) && (ranDecision == 1 || ranDecision == 2)) //checks path from sides
                 {
                     xPos-=i;
->>>>>>> 99b9d34841a44512dcbf7e5ef63697f31620d484
                     break;
                 }
                 else if(maze->getMazeArray()[xPos-i][yPos]==2) // checks player forward
@@ -181,7 +145,6 @@ void Enemy::checkPlayer(){}
 {
     //run battle scene -
     //Andre, you can call the function that runs the battle scene here. Initiate battle scene or something
-
 }*/
 
 void Enemy::statsFromDatabase()
