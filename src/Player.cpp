@@ -4,7 +4,7 @@
 #include "BattleScene.h"
 #include "UI.h"
 
-Player::Player(weak_ptr<LevelManager> lvlman)
+Player::Player(LevelManager *lvlman)
 {
     lvlmanager = lvlman;
     maze = lvlman->maze;
@@ -146,17 +146,6 @@ void Player::chestEvent(void)
     - keys
     - scores
     */
-<<<<<<< HEAD
-    int randomScore, addHealth, addArmour, addDamage, addKeys;
-    randomScore = rand() % 100 + 1;
-    addArmour = rand() % 10 + 1;
-    addHealth = rand() % 10 + 1;
-    addKeys = rand() % 1;
-    addDamage = rand() % 10 + 1;
-
-    playerPoints += randomScore;
-=======
-
 
     //connecting to database
     MYSQL* connection;
@@ -196,16 +185,11 @@ void Player::chestEvent(void)
 
     playerPoints += randomScore;
     lvlmanager->scoretime->addScores(playerPoints);
->>>>>>> 979a7bdd2014764ad282952f69348112ddc1675e
+
     pArmour += addArmour;
     pHealth += addHealth;
     pKeys += addKeys;
     pDamage += addDamage;
-
-<<<<<<< HEAD
-=======
-
->>>>>>> 979a7bdd2014764ad282952f69348112ddc1675e
 }
 
 void Player::checkChest()
@@ -227,11 +211,11 @@ void Player::checkChest()
 
 void Player::checkEnemy(int x, int y)
 {
-    for(shared_ptr<Enemy> e : lvlmanager->enemies)
+    for(Enemy *e : lvlmanager->enemies)
     {
         if((x == e->xPos) && (y == e->yPos))
         {
-            lvlmanager->ui->btlScene = make_shared<BattleScene>(lvlmanager, e); // Andre's code
+            lvlmanager->ui->btlScene = new BattleScene(lvlmanager, e); // Andre's code
         }
     }
 }

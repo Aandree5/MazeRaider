@@ -12,10 +12,7 @@ class Maze {
         int** getMazeArray();
         std::pair<unsigned, unsigned> getMazeSizeWH();
         std::pair<int,int> getMazeStart();
-<<<<<<< HEAD
-=======
         int getSeed();
->>>>>>> 979a7bdd2014764ad282952f69348112ddc1675e
         void updateChest(int x, int y);
 
     protected:

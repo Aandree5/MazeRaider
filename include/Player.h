@@ -23,10 +23,6 @@ class Player
         void checkChest();
         void checkEnemy(int x, int y);
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 979a7bdd2014764ad282952f69348112ddc1675e
         int playerPoints = 0;
         int pCharID = 0;
         string pName = "<player>";

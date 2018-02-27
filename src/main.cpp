@@ -18,7 +18,7 @@ using namespace UIHelpers;
  * @author Vihan
  */
 
-MYSQL* connection;
+MYSQL *connection;
 
 void printLogo() {
     cout<<"  __  __                 _____       _     _                   \n"
@@ -29,11 +29,7 @@ void printLogo() {
             <<" |_|  |_|\\__,_/___\\___| |_|  \\_\\__,_|_|\\__,_|\\___|_| \n"
             << endl;
 }
-<<<<<<< HEAD
 
-=======
-//this will show up on the screen
->>>>>>> 979a7bdd2014764ad282952f69348112ddc1675e
 void printMenu() {
     cout << "    ------------------------------------------------" << endl;
     cout << "    |  1. Login                                    |" << endl;
@@ -42,7 +38,6 @@ void printMenu() {
     cout << "    ------------------------------------------------" << endl;
     cout << endl << "    Option: ";
 }
-<<<<<<< HEAD
 
 void connectToDatabase() {
     cout << "Connecting to database..." << endl;
@@ -51,23 +46,10 @@ void connectToDatabase() {
     if(connection){
         cout << "Successfully connected to database." << endl;
     } else {
-=======
-//I made a function to connect the database
-void connectToDatabase() {
-    connection = mysql_init(0);
-    //this will connect to the database
-    mysql_real_connect(connection,"server1.jesseprescott.co.uk","jessepre","Mazeraider123?","jessepre_mazeraider",0,NULL,0);
-    //if connection successful it will successfully connect to the database
-    if(connection){
-        cout << "Successfully connected to database." << endl;
-    } else {
-        //if not it will say it didn't connect to do database and exit from the application
->>>>>>> 979a7bdd2014764ad282952f69348112ddc1675e
         cout << "Failed to connect to the database." << endl;
         exit(0);
     }
 }
-<<<<<<< HEAD
 
 void loginUser() {
     string username,password;
@@ -79,119 +61,40 @@ void loginUser() {
     string query="select customer_id from information where username='"+username+"' and password='"+password+"';";
 
     int queryResult = mysql_query(connection, query.c_str());
-    MYSQL_RES* result = mysql_store_result(connection);
+    MYSQL_RES *result = mysql_store_result(connection);
 
     if (mysql_num_rows(result) >= 1) {
         MYSQL_ROW row = mysql_fetch_row(result);
 
-        delete result;
-        result = nullptr;
-        delete connection;
-        connection = nullptr;
-
-        LevelManager *lvlManager = new LevelManager(atoi(row[0]));
-
-        delete lvlManager;
-        lvlManager = nullptr;
-    } else {
-        cout << "Incorrect username or password." << endl;
-        system("pause");
-    }
-}
-
-void registerUser() {
-    string name,username,password;
-    cout<<"First Name: "; cin>>name;
-    cout<<"Username: "; cin>>username;
-    cout<<"Password: "; cin>>password;
-
-    string query="insert into information(name,username,password) values('"+name+"','"+username+"','"+password+"')";
-    const char* q = query.c_str();
-    int qstate = mysql_query(connection,q);
-
-    if(!qstate) {
-        cout<<"Registration successful" << endl;
-        system("pause");
-        cin;
-    } else {
-        cout<<"Failed to register, error: " << mysql_error(connection) << endl;
-        system("pause");
-    }
-}
-
-int main() {
-    setFullScreen();
-
-
-    connectToDatabase();
-
-    while (1) {
-        clearScreen();
-        printLogo();
-        printMenu();
-        char choice;
-        cin >> choice;
-
-        if (choice == '1') {
-            loginUser();
-=======
-
-void loginUser() {
-    string username,password;
-    cout << endl << "   ------------------------------------------------------------------" << endl;
-    //user basically need insert username and password because it has cin
-    cout << "   Username: "; cin >> username;
-    cout << "   Password: "; cin>>password;
-
-    //link the database using sql query
-    string query="select customer_id from information where username='"+username+"' and password='"+password+"';";
-
-    int queryResult = mysql_query(connection, query.c_str());
-    MYSQL_RES* result = mysql_store_result(connection);
-    MYSQL_ROW row;
-    //if there is a row or multiple rows it will allow you to go to the Level manager(actual game)
-    if ((row = mysql_fetch_row(result)) != NULL) {
         new LevelManager(atoi(row[0]));
     } else {
-        //if it is not matching it will say incorrect username or password
         cout << "Incorrect username or password." << endl;
         system("pause");
     }
 }
 
 void registerUser() {
-    //these usename and first name and password will show up on the screen
     string name,username,password;
     cout<<"First Name: "; cin>>name;
     cout<<"Username: "; cin>>username;
     cout<<"Password: "; cin>>password;
-    //then we will link the database using insert into the database. I use insert because it will store data in the database.
-    //Then it will check the values of the database then once user put values in database will automatically store the information.
+
     string register_users="insert into information(name,username,password) values('"+name+"','"+username+"','"+password+"')";
-<<<<<<< HEAD
     int querystate = mysql_query(connection, register_users.c_str());
 
-=======
-    const char* q = register_users.c_str();
-    int querystate = mysql_query(connection,q);
-    //If it allow you to register it will say register successful
->>>>>>> 433b44c149c74648a5fca706b610212f7f9a9f46
     if(!querystate) {
         cout<<"Registration successful" << endl;
         system("pause");
         cin;
     } else {
-        //if it failed to do it; it will send you an error message with the reason why
         cout<<"Failed to register, error: " << mysql_error(connection) << endl;
         system("pause");
     }
 }
 
 int main() {
-    //this will put screen to full screen
     setFullScreen();
 
-    //we are using function to connect to the database
     connectToDatabase();
 
     while (1) {
@@ -200,24 +103,15 @@ int main() {
         printMenu();
         char choice;
         cin >> choice;
-        //when user press one it will call login function
+
         if (choice == '1') {
             loginUser();
-            //when user press 2 it will clear the screen and call the register user function
->>>>>>> 979a7bdd2014764ad282952f69348112ddc1675e
         } else if (choice == '2'){
             clearScreen();
             registerUser();
         } else if (choice == '3'){
-<<<<<<< HEAD
             exit(0);
         } else {
-=======
-            //if user press 3 it will exit from the game
-            exit(0);
-        } else {
-            //if user put a invalid input it will show up an message and wait for user input
->>>>>>> 979a7bdd2014764ad282952f69348112ddc1675e
             clearScreen();
             cout << "Invalid input." << endl;
             system("pause");

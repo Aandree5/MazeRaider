@@ -16,16 +16,7 @@ class ScoreTime
         ScoreTime(LevelManager* lvlman);
         //This will get the highscore
         int getHScore();
-<<<<<<< HEAD
 
-        int getTime();
-
-        int savehighscore();
-
-        void connectToDatabase();
-        void makeHighscoreTable();
-
-=======
         //this will get the timer
         string getTime();
         //this will allow get time in seconds
@@ -39,7 +30,7 @@ class ScoreTime
         //this will allow user to make the highscore
         int makeHighscoreTable();
         void addScores(int score);
->>>>>>> 979a7bdd2014764ad282952f69348112ddc1675e
+
     protected:
 
     private:

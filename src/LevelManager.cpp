@@ -12,35 +12,15 @@ LevelManager::LevelManager(int pID)
     isPaused = false;
     exitToMenu = false;
 
-<<<<<<< HEAD
-    maze = new Maze(31, 31);
-    player = new Player(this);
-    scoretime = new ScoreTime();
-    enemyai = new EnemyAI(this);
-
-
-    enemies.emplace_back(new Enemy(maze));
-    enemies.emplace_back(new Enemy(maze));
-    enemies.emplace_back(new Enemy(maze));
-    enemies.emplace_back(new Enemy(maze));
-    enemies.emplace_back(new Enemy(maze));
-    enemies.emplace_back(new Enemy(maze));
-    enemies.emplace_back(new Enemy(maze));
-    enemies.emplace_back(new Enemy(maze));
-=======
-    mazeSize = make_pair (25,25);
+    mazeSize = make_pair(25,25);
     nrEnemies = 5;
 
     loadLevel();
-
-    mazeSeed = maze->getSeed();
 
     player = new Player(this);
     scoretime = new ScoreTime(this);
     enemyai = new EnemyAI(this);
 
-
->>>>>>> 979a7bdd2014764ad282952f69348112ddc1675e
 
     ui = new UI(this);
     ui->ShowSelectionScreen();
@@ -50,13 +30,6 @@ LevelManager::LevelManager(int pID)
 int LevelManager::getPlayerID()
 {
     return playerID;
-}
-<<<<<<< HEAD
-=======
-
-int LevelManager::getMazeSeed()
-{
-    return mazeSeed;
 }
 
 
@@ -176,9 +149,6 @@ void LevelManager::loadLevel()
 
 }
 
-
-
-
 void LevelManager::lowLevel()
 {
   mazeSize = make_pair(mazeSize.first - 10, mazeSize.second - 10);
@@ -251,4 +221,3 @@ void LevelManager::highLevel()
 
 
 }
->>>>>>> 979a7bdd2014764ad282952f69348112ddc1675e

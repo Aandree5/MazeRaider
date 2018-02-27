@@ -193,11 +193,6 @@ void UI::ShowSelectionScreen()
         }
     }
 
-
-    delete connection;
-    connection = nullptr;
-    delete result;
-    result = nullptr;
 }
 
 // Print array to screen
@@ -583,26 +578,16 @@ void UI::PrintUOptions()
             }
             else if(tolower(userOption) == 'a' || tolower(userOption) == 'd' || tolower(userOption) == 's' || tolower(userOption) == 'w')
             {
-<<<<<<< HEAD
-                lvlManager->player->movePlayer(userOption);
-                for(Enemy* e : lvlManager->enemies)
-                    lvlManager->enemyai->getNextPosition(e);
-<<<<<<< HEAD
-=======
-=======
                 lvlManager->player->movePlayer(userOption);
                 if(lvlManager->enemies.size())
                     for(Enemy* e : lvlManager->enemies)
                         lvlManager->enemyai->getNextPosition(e);
->>>>>>> 979a7bdd2014764ad282952f69348112ddc1675e
 
-                notvalid = false;
             }
             else
             {
                 PrintC(" - Not a valid option... Please choose a valid option.");
                 cout << endl;
->>>>>>> 433b44c149c74648a5fca706b610212f7f9a9f46
             }
         }
     }
@@ -757,7 +742,6 @@ void UI::ShowGameOver()
 }
 
 
-<<<<<<< HEAD
 // Overload for UIHelpers PrintC function for pausing game
 void UI::PrintC(char character, int colour, bool twoChar, bool hideWhenPaused)
 {
@@ -779,7 +763,7 @@ void UI::PrintC(string character, int colour, bool twoChar, bool hideWhenPaused)
 
     UIHelpers::PrintC(character, colour, twoChar);
 }
-=======
+
 void UI::ShowNextLevel()
 {
    clearScreen();
@@ -813,25 +797,21 @@ void UI::ShowNextLevel()
             {
 
                 lvlManager->lowLevel();
-                notvalid = false;
             }
 // Player choose medium difficulty .
             else if (tolower(userOption) == 'm')
             {
                 lvlManager->mediumLevel();
-                notvalid = false;
             }
 // Player choose high difficulty .
             else if (tolower(userOption) == 'h')
             {
                 lvlManager->highLevel();
-                notvalid = false;
             }
 // Player lets the computer to choose the difficulty
                else if (tolower(userOption) == 'c')
             {
                 lvlManager->nextLevel();
-                notvalid = false;
             }
             else
             {
@@ -840,6 +820,3 @@ void UI::ShowNextLevel()
             }
         }
 }
-
-
->>>>>>> 433b44c149c74648a5fca706b610212f7f9a9f46

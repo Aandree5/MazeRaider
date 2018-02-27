@@ -2,22 +2,15 @@
 #include "ScoreTime.h"
 #include "UIHelpers.h"
 #include "LevelManager.h"
-<<<<<<< HEAD
-=======
 #include "Maze.h"
->>>>>>> 979a7bdd2014764ad282952f69348112ddc1675e
+#include "Player.h"
+#include "UI.h"
 #include <iostream>
 #include <tuple>
 #include <string>
 #include <windows.h>
 #include <mysql.h>
 #include <cstdlib>
-<<<<<<< HEAD
-=======
-#include "LevelManager.h"
-#include "Player.h"
-#include "UI.h"
->>>>>>> 979a7bdd2014764ad282952f69348112ddc1675e
 
 using namespace std;
 
@@ -108,43 +101,7 @@ int ScoreTime::getHScore()
     //then this will return to the highscore
     return hScore;
 }
-<<<<<<< HEAD
-int ScoreTime::savehighscore(){
 
-    MYSQL* connection;
-
-    cout << "Connecting to database..." << endl;
-    connection = mysql_init(0);
-    mysql_real_connect(connection,"server1.jesseprescott.co.uk","jessepre","Mazeraider123?","jessepre_mazeraider",0,NULL,0);
-
-<<<<<<< HEAD
-    string data="insert into highscore(customer_id, highscore) values('" + to_string(lvlManager->getPlayerID()) + "', '"+to_string(hScore)+"')";
-    int querystate = mysql_query(connection, data.c_str());
-=======
-    string data="insert into highscore(highscore) values('"+to_string(hScore)+"')";
-    const char* q = data.c_str();
-    int qstate = mysql_query(connection,q);
-
-    if(!qstate) {
-        cout<<"Registration successful" << endl;
-        system("pause");
-    } else {
-        cout<<"Failed to register, error: " << mysql_error(connection) << endl;
-        system("pause");
-    }
-}
-
-/*int ScoreTime::makeHighscoreTable()
-{
-    //get the top 10 scores from the high score table and store the names and scores in to an array
-    string query="select MAX(highscore) from information where username='"+username+"' and password='"+password+"';";
-
->>>>>>> 433b44c149c74648a5fca706b610212f7f9a9f46
-
-
-
-}*/
-=======
 //Saving the Highscore
 int ScoreTime::savehighscore(){
     //you need this to connect to the database
@@ -158,7 +115,7 @@ int ScoreTime::savehighscore(){
     //we are inserting the values in the highscore so I used insert. so it will store customer id and highscore inside the highscore table.
     //We are using values to tell what we need to store in the database. basically I needed to store playerID and the hScore from the game. So I put that in.
     string data="insert into highscore(char_id, highscore, mazeid) values(" +
-    to_string(lvlManager->player->pCharID) + "', '"+to_string(hScore)+"', '" + to_string(lvlManager->getMazeSeed()) + "')";
+    to_string(lvlManager->player->pCharID) + "', '"+to_string(hScore)+"', '" + to_string(lvlManager->maze->getSeed()) + "')";
 
 
     int querystate = mysql_query(connection, data.c_str());
@@ -195,7 +152,7 @@ int ScoreTime::makeHighscoreTable(){
     mysql_real_connect(connection,"server1.jesseprescott.co.uk","jessepre","Mazeraider123?","jessepre_mazeraider",0,NULL,0);
     //Now we are linking tables in the database.
     string getData = "SELECT h.highscore, pc.name FROM highscore h, PlayerChar pc "
-    "WHERE h.char_id=pc.char_id AND h.mazeid=" + to_string(lvlManager->getMazeSeed()) + " ORDER BY h.highscore DESC LIMIT 10";
+    "WHERE h.char_id=pc.char_id AND h.mazeid=" + to_string(lvlManager->maze->getSeed()) + " ORDER BY h.highscore DESC LIMIT 10";
     //this will allow get the data as a sting
     query = mysql_query(connection, getData.c_str());
     if(!query){
@@ -231,9 +188,6 @@ void ScoreTime::addScores(int score)
     hScore += score;
 }
 
-
-
->>>>>>> 979a7bdd2014764ad282952f69348112ddc1675e
 
 
 

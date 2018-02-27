@@ -1,6 +1,7 @@
 #ifndef LEVELMANAGER_H
 #define LEVELMANAGER_H
 #include <vector>
+#include <memory>
 
 using namespace std;
 
@@ -16,35 +17,33 @@ class LevelManager
     public:
         LevelManager(int pID);
 
-        UI* ui;
-        Maze* maze;
+        UI *ui;
+        Maze *maze;
+        Player *player;
+        ScoreTime *scoretime;
+        EnemyAI *enemyai;
+        vector<Enemy*> enemies;
 
         int getPlayerID();
-<<<<<<< HEAD
-=======
-        int getMazeSeed();
+
+        bool isPaused;
+        bool exitToMenu;
 
         void nextLevel();
         void lowLevel();
         void mediumLevel();
         void highLevel();
-        void loadLevel();
-        void saveS();
->>>>>>> 979a7bdd2014764ad282952f69348112ddc1675e
-
-        bool isPaused;
-        bool exitToMenu;
 
     protected:
 
     private:
-        int playerID;
-<<<<<<< HEAD
-=======
-        int mazeSeed;
+
         pair<int, int> mazeSize;
         int nrEnemies;
->>>>>>> 979a7bdd2014764ad282952f69348112ddc1675e
+
+        int playerID;
+
+        void loadLevel();
 };
 
 #endif // LEVELMANAGER_H

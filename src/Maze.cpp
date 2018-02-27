@@ -224,13 +224,10 @@ std::pair<int,int> Maze::getMazeStart()
     return m_start;
 }
 
-<<<<<<< HEAD
-=======
 int Maze::getSeed() {
     return m_seed;
 }
 
->>>>>>> 979a7bdd2014764ad282952f69348112ddc1675e
 void Maze::updateChest(int x, int y)
 {
     m_maze[x][y] = 0;

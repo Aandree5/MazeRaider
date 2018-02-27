@@ -9,7 +9,7 @@
 
 using namespace UIHelpers;
 
-BattleScene::BattleScene(LevelManager* lvlman, Enemy* e)
+BattleScene::BattleScene(LevelManager *lvlman, Enemy *e)
 {
     lvlManager = lvlman;
     enemy = e;
@@ -54,13 +54,13 @@ int BattleScene::BuildScene()
         lvlManager->ui->inBattle = false;
 
         // Delete enemy from vector
-        auto it = find(lvlManager->enemies.begin(), lvlManager->enemies.end(), enemy);
-        if (it != lvlManager->enemies.end())
+        auto it = find(begin(lvlManager->enemies), end(lvlManager->enemies), enemy);
+        if (it != end(lvlManager->enemies))
             lvlManager->enemies.erase(it);
 
         // Delete enemy from memory
-        delete enemy;
-        enemy = nullptr;
+       /* delete enemy;
+        enemy = nullptr;*/
         return 2;
     }
     else
@@ -823,8 +823,8 @@ bool BattleScene::canPlayerRun()
             lvlManager->enemies.erase(it);
 
         // Delete enemy from memory
-        delete enemy;
-        enemy = nullptr;
+        /*delete enemy;
+        enemy = nullptr;*/
 
         lvlManager->enemies.emplace_back(new Enemy(lvlManager->maze));
         return true;

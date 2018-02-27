@@ -111,7 +111,7 @@ namespace UIHelpers
     // change the text colour
     bool ChangeColour(int colour);
     // Show pause screen
-    void buildPause(shared_ptr<LevelManager> lvlManger, int x, int y, bool allowSave = true);
+    void buildPause(LevelManager *lvlManger, int x, int y, bool allowSave = true);
 
 
     string toLower(string str);
@@ -119,7 +119,7 @@ namespace UIHelpers
     void setFullScreen();
 
     template<typename expectedInput>
-    expectedInput requestFromUser(shared_ptr<LevelManager> lvlManager, int minLimit = -999999, int maxLimit = 999999)
+    expectedInput requestFromUser(LevelManager *lvlManager, int minLimit = -999999, int maxLimit = 999999)
     {
 
         string input = "";
