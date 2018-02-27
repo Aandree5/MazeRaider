@@ -21,6 +21,9 @@ class LevelManager
 
         int getPlayerID();
 
+        bool isPaused;
+        bool exitToMenu;
+
     protected:
 
     private:
