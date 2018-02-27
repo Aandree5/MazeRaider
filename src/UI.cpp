@@ -24,6 +24,18 @@ void UI::ShowSelectionScreen()
 {
     bool selected = false;
 
+
+    MYSQL *connection;
+    connection = mysql_init(0);
+    MYSQL_RES *result;
+
+    mysql_real_connect(connection, "server1.jesseprescott.co.uk", "jessepre", "Mazeraider123?", "jessepre_mazeraider", 0, NULL, 0);
+    if(!connection)
+    {
+        cout << "Failed to connect to the database." << endl;
+        exit(0);
+    }
+
     while(!selected)
     {
         clearScreen();
@@ -43,16 +55,6 @@ void UI::ShowSelectionScreen()
 
         cout << endl << endl;
 
-        MYSQL* connection;
-        connection = mysql_init(0);
-
-        mysql_real_connect(connection, "server1.jesseprescott.co.uk", "jessepre", "Mazeraider123?", "jessepre_mazeraider", 0, NULL, 0);
-        if(!connection)
-        {
-            cout << "Failed to connect to the database." << endl;
-            exit(0);
-        }
-
         string query = "SELECT pc.char_id, pc.name, pc.mesh, pc.health, pc.armour, pc.attack_power, w.weapon_id, "
         "w.weapon_name, w.weapon_power, w.attack_type, w.attack_colour, pc.heal_power, pc.defence_type, pc.defence_colour, pc.heal_type, pc.heal_colour "
         "FROM information i, PlayerChar pc, Weapon w WHERE i.customer_id = " + to_string(lvlManager->getPlayerID()) +
@@ -62,13 +64,13 @@ void UI::ShowSelectionScreen()
         if (mysql_query(connection, query.c_str()))
             cout << mysql_error(connection) << endl;
 
-        MYSQL_RES* result = mysql_store_result(connection);
+        result = mysql_store_result(connection);
         MYSQL_ROW row;
 
         map<int, map<string, int>> charOptions; // i count - Stats
         map<int, string> charNames; // Char id - Name
         map<int, pair<string, int>> charWeapons; // Weapon id - [Weapon name - Weapon power]
-        array<string, 12> meshOptions; // 0 - 7 = Mesh | 8 = White Space | 9 = Name | 10 = Health
+        array<string, 12> meshOptions; // 0 - 7 = Mesh | 8 = White Space | 9 = Name | 10 = Health | 11 = Weapon
         int charsPerLine = 4;
         int c = 0;
         int i = 1;
@@ -127,6 +129,7 @@ void UI::ShowSelectionScreen()
 // If there is still something to print on the array
         if(meshOptions[0] != "")
             selCharPrintOptions(meshOptions, c);
+
 
         int selection;
         while(true)
@@ -189,6 +192,12 @@ void UI::ShowSelectionScreen()
             }
         }
     }
+
+
+    delete connection;
+    connection = nullptr;
+    delete result;
+    result = nullptr;
 }
 
 // Print array to screen
@@ -233,7 +242,7 @@ void UI::selCharWhiteSpaceDivider(array<string, 12> &mOptions, int c)
 }
 
 // Screen to create character
-void UI::selCharCreateNew(MYSQL* connection)
+void UI::selCharCreateNew(MYSQL *connection)
 {
     clearScreen();
 
@@ -242,7 +251,7 @@ void UI::selCharCreateNew(MYSQL* connection)
     if (mysql_query(connection, query.c_str()))
         cout << mysql_error(connection) << endl;
 
-    MYSQL_RES* result = mysql_store_result(connection);
+    MYSQL_RES *result = mysql_store_result(connection);
     MYSQL_ROW row = mysql_fetch_row(result);
 
     // Randomize stats
@@ -330,11 +339,13 @@ void UI::selCharCreateNew(MYSQL* connection)
     else
         PrintC(name + " created.");
 
+    delete result;
+    result = nullptr;
     Sleep(1000);
 }
 
 // Delete character
-void UI::selCharDelete(MYSQL* connection, int charID, string name)
+void UI::selCharDelete(MYSQL *connection, int charID, string name)
 {
     string deleteQuery = "DELETE FROM PlayerChar WHERE char_id = " + to_string(charID);
     string safety;
@@ -366,7 +377,7 @@ void UI::selCharDelete(MYSQL* connection, int charID, string name)
 void  UI::ShowUI()
 {
     int battleState = 0; // 0 = Battle Continues  |  1 = Player Lost (GameOver)  |  2 = Enemy Killed
-    while (battleState != 1)
+    while (battleState != 1 && !lvlManager->exitToMenu)
     {
         clearScreen();
         battleState = 0;
@@ -407,38 +418,43 @@ void  UI::PrintMaze()
     lvlManager->maze->getMazeArray()[lvlManager->player->xPos][lvlManager->player->yPos] = 2;
 
     // Get enemy positions, 4 = Enemy
-    for(int i = 0 ; i < lvlManager->enemies.size(); i++)
+    for(unsigned i = 0 ; i < lvlManager->enemies.size(); i++)
         lvlManager->maze->getMazeArray()[lvlManager->enemies[i]->xPos][lvlManager->enemies[i]->yPos] = 4;
 
     // Print maze with objects
-    for(int h = 0; h < lvlManager->maze->getMazeSizeWH().second ; h++) {
+    for(unsigned h = 0; h < lvlManager->maze->getMazeSizeWH().second ; h++) {
         cout << endl;
 
-        for(int w = 0; w < lvlManager->maze->getMazeSizeWH().first ; w++)
+        for(unsigned w = 0; w < lvlManager->maze->getMazeSizeWH().first ; w++)
             {
             switch ( lvlManager->maze->getMazeArray()[w][h]){
             case 0: // 0: Path
                 PrintC( mazePath, 7, true);
                 break;
             case 1: // 1: Wall
-                PrintC( mazeWall, 7, true );
+                if(w == 0 || h == 0 || w == lvlManager->maze->getMazeSizeWH().first - 1
+                   || h == lvlManager->maze->getMazeSizeWH().second - 1)
+                    PrintC(mazeWall, 7, true);
+                else
+                    PrintC(mazeWall, 7, true, true );
+
                 break;
             case 2: // 2: Player
-                PrintC( mazeWall, 11, true  );
+                PrintC(mazeWall, 11, true);
                 lvlManager->maze->getMazeArray()[w][h] = 0;
                 break;
             case 3: // 3: Chest
-                PrintC( mazeWall, 14, true );
+                PrintC(mazeWall, 14, true);
                 break;
             case 4: // 4: Enemy
-                PrintC( mazeWall, 2, true );
+                PrintC(mazeWall, 2, true);
                 lvlManager->maze->getMazeArray()[w][h] = 0;
                 break;
             case 5: // 5: Exit
-                PrintC( mazeWall, 15, true );
+                PrintC(mazeWall, 15, true);
                 break;
             default:
-                PrintC( lvlManager->maze->getMazeArray()[w][h], 7, true );
+                PrintC(lvlManager->maze->getMazeArray()[w][h], 7, true);
                 break;
             }
         }
@@ -467,14 +483,15 @@ void UI::PrintUOptions()
 
     if (!inBattle)
     {
-// Draw maze bottom info
+// Character name
         PrintC("                                 ");
         PrintC(playerMesh[lvlManager->player->pMesh][0]);
         cout << endl;
         PrintC("                                 ");
         PrintC(playerMesh[lvlManager->player->pMesh][1]);
         PrintC(bsLeftRightLines, 15);
-        PrintC("      " + lvlManager->player->pName, lvlManager->player->pAttackColour);
+        PrintC("      ");
+        PrintC(lvlManager->player->pName, lvlManager->player->pAttackColour);
 
         cout << endl;
         PrintC("          ");
@@ -540,36 +557,35 @@ void UI::PrintUOptions()
 
         cout << endl;
 
-        bool notvalid = true;
-        while(notvalid)
+        if(lvlManager->isPaused)
         {
-            PrintC("Choose option: ");
-            cin >> userOption;
+            int mazeW = lvlManager->maze->getMazeSizeWH().first * 2;
+            int mazeH = lvlManager->maze->getMazeSizeWH().second;
+
+            buildPause(lvlManager, mazeW - (mazeW / 2), (mazeH - (mazeH / 2)) + 3);
+        }
+        else
+        {
+            userOption = requestFromUser<char>(lvlManager);
+
+            if (lvlManager->isPaused)
+                return;
 
             //quit the game
             if (userOption == 'e'){
                 lvlManager->scoretime->savehighscore();
                 lvlManager->scoretime->makeHighscoreTable();
-                exit(1);
             }
 
             if (userOption == 'b') // TEMP - TESTING
             {
                 btlScene = new BattleScene(lvlManager, lvlManager->enemies[0]); // TEMP - TESTING
-                notvalid = false;
             }
             else if(tolower(userOption) == 'a' || tolower(userOption) == 'd' || tolower(userOption) == 's' || tolower(userOption) == 'w')
             {
                 lvlManager->player->movePlayer(userOption);
                 for(Enemy* e : lvlManager->enemies)
                     lvlManager->enemyai->getNextPosition(e);
-
-                notvalid = false;
-            }
-            else
-            {
-                PrintC(" - Not a valid option... Please choose a valid option.");
-                cout << endl;
             }
         }
     }
@@ -583,7 +599,7 @@ void UI::PrintUOptions()
         PrintC("   ");
         string n = lvlManager->player->pName;
         PrintC(n, 8);
-        for(int i = 0; i < 33 - n.size(); i++)
+        for(unsigned i = 0; i < 33 - n.size(); i++)
             PrintC(" ");
         PrintC(bsLeftRightLines, 15);
         PrintC("   ");
@@ -597,7 +613,7 @@ void UI::PrintUOptions()
         PrintC("Health: ");
         string h = to_string(lvlManager->player->pHealth);
         PrintC(to_string(lvlManager->player->pHealth), 15);
-        for(int i = 0; i < 25 - h.size(); i++)
+        for(unsigned i = 0; i < 25 - h.size(); i++)
             PrintC(" ");
         PrintC(bsLeftRightLines, 15);
         PrintC("   ");
@@ -619,7 +635,7 @@ void UI::PrintUOptions()
         PrintC("Armour: ");
         string a = to_string(lvlManager->player->pArmour);
         PrintC(to_string(lvlManager->player->pArmour), 15);
-        for(int i = 0; i < 25 - a.size(); i++)
+        for(unsigned i = 0; i < 25 - a.size(); i++)
             PrintC(" ");
         PrintC(bsLeftRightLines, 15);
         PrintC("   ");
@@ -643,7 +659,7 @@ void UI::PrintUOptions()
         PrintC(to_string(lvlManager->player->pDamage + lvlManager->player->pWeapon.second), 15);
         PrintC("/ ");
         PrintC(to_string(lvlManager->player->pDamage));
-        for(int i = 0; i < 25 - d.size(); i++)
+        for(unsigned i = 0; i < 25 - d.size(); i++)
             PrintC(" ");
         PrintC(bsLeftRightLines, 15);
         PrintC("   ");
@@ -660,7 +676,7 @@ void UI::PrintUOptions()
         PrintC("Weapon: ");
         string w = lvlManager->player->pWeapon.first;
         PrintC(lvlManager->player->pWeapon.first, 15);
-        for(int i = 0; i < 25 - w.size(); i++)
+        for(unsigned i = 0; i < 25 - w.size(); i++)
             PrintC(" ");
         PrintC(bsLeftRightLines, 15);
         PrintC("   ");
@@ -721,4 +737,27 @@ void UI::ShowGameOver()
     clearScreen();
     PrintC("Game Over!");
 
+}
+
+
+// Overload for UIHelpers PrintC function for pausing game
+void UI::PrintC(char character, int colour, bool twoChar, bool hideWhenPaused)
+{
+    if(lvlManager->isPaused && !hideWhenPaused)
+        colour = 8;
+    else if (lvlManager->isPaused)
+        colour = 0;
+
+    UIHelpers::PrintC(character, colour, twoChar);
+}
+
+// Overload for UIHelpers PrintC function for pausing game
+void UI::PrintC(string character, int colour, bool twoChar, bool hideWhenPaused)
+{
+    if(lvlManager->isPaused && !hideWhenPaused)
+        colour = 8;
+    else if (lvlManager->isPaused)
+        colour = 0;
+
+    UIHelpers::PrintC(character, colour, twoChar);
 }

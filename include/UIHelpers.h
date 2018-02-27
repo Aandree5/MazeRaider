@@ -3,9 +3,12 @@
 
 #include <string>
 #include <iostream>
+#include <sstream>
 #include <vector>
 #include <array>
 #include <cctype>
+
+#include "LevelManager.h"
 
 #ifdef _WIN32
 #define _WIN32_WINNT 0x0500
@@ -50,6 +53,8 @@
 #define debugBlackRed SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 192)
 #define darkgrey SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8)
 #define armygreen SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 6)
+#define blackonwhite SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 240)
+#define blackonblack SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0)
 
 #endif // _WIN32
 
@@ -100,15 +105,51 @@ using namespace std;
 namespace UIHelpers
 {
     // cout with colour   CHAR Overload
-    void PrintC(char character, int color = 7, bool twoChar = false);
+    void PrintC(char character, int colour = 7, bool twoChar = false);
     // cout with colour   STRING Overload
-    void PrintC(string character, int color = 7, bool twoChar = false);
+    void PrintC(string character, int colour = 7, bool twoChar = false);
     // change the text colour
-    bool ChangeColor(int color);
+    bool ChangeColour(int colour);
+    // Show pause screen
+    void buildPause(shared_ptr<LevelManager> lvlManger, int x, int y, bool allowSave = true);
+
 
     string toLower(string str);
 
     void setFullScreen();
+
+    template<typename expectedInput>
+    expectedInput requestFromUser(shared_ptr<LevelManager> lvlManager, int minLimit = -999999, int maxLimit = 999999)
+    {
+
+        string input = "";
+        expectedInput userInput;
+
+        while (true)
+        {
+            PrintC("Choose an option: ");
+            cin >> input;
+
+            if(toLower(input) == "p")
+            {
+                lvlManager->isPaused = !lvlManager->isPaused;
+                break;
+            }
+
+            // This code converts from string to number safely.
+            stringstream inpStream(input);
+            if(inpStream >> userInput)
+                if((minLimit == -999999 && maxLimit == 999999) || (userInput >= minLimit && userInput < maxLimit))
+                break;
+            if(!lvlManager->isPaused)
+            {
+                PrintC("Not a valid option.", 15);
+                cout << endl;
+            }
+        }
+
+        return userInput;
+    }
 
 
 };

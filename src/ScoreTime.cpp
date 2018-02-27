@@ -80,8 +80,7 @@ int ScoreTime::savehighscore(){
     mysql_real_connect(connection,"server1.jesseprescott.co.uk","jessepre","Mazeraider123?","jessepre_mazeraider",0,NULL,0);
 
     string data="insert into highscore(customer_id, highscore) values('" + to_string(lvlManager->getPlayerID()) + "', '"+to_string(hScore)+"')";
-    const char* q = data.c_str();
-    int querystate = mysql_query(connection,q);
+    int querystate = mysql_query(connection, data.c_str());
 
     if(!querystate) {
         cout<<"Saved...\n\n" << endl;
@@ -91,6 +90,10 @@ int ScoreTime::savehighscore(){
         cout<<"Failed to save " <<endl;
         system("pause");
     }
+
+
+    delete connection;
+    connection = nullptr;
 }
 
 int ScoreTime::makeHighscoreTable(){
@@ -118,6 +121,11 @@ int ScoreTime::makeHighscoreTable(){
     else{
         cout<<"Sorry Rank table maintaining stage at this moment try again later"<<endl;
     }
+
+    delete connection;
+    connection = nullptr;
+    delete results;
+    results = nullptr;
 
 }
 

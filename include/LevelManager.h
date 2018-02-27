@@ -18,10 +18,6 @@ class LevelManager
 
         UI* ui;
         Maze* maze;
-        Player* player;
-        ScoreTime* scoretime;
-        EnemyAI* enemyai;
-        vector<Enemy*> enemies;
 
         int getPlayerID();
 

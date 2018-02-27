@@ -65,7 +65,16 @@ void loginUser() {
 
     if (mysql_num_rows(result) >= 1) {
         MYSQL_ROW row = mysql_fetch_row(result);
-        new LevelManager(atoi(row[0]));
+
+        delete result;
+        result = nullptr;
+        delete connection;
+        connection = nullptr;
+
+        LevelManager *lvlManager = new LevelManager(atoi(row[0]));
+
+        delete lvlManager;
+        lvlManager = nullptr;
     } else {
         cout << "Incorrect username or password." << endl;
         system("pause");
@@ -79,8 +88,7 @@ void registerUser() {
     cout<<"Password: "; cin>>password;
 
     string register_users="insert into information(name,username,password) values('"+name+"','"+username+"','"+password+"')";
-    const char* q = register_users.c_str();
-    int querystate = mysql_query(connection,q);
+    int querystate = mysql_query(connection, register_users.c_str());
 
     if(!querystate) {
         cout<<"Registration successful" << endl;

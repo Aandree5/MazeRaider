@@ -4,7 +4,7 @@
 #include "BattleScene.h"
 #include "UI.h"
 
-Player::Player(LevelManager* lvlman)
+Player::Player(weak_ptr<LevelManager> lvlman)
 {
     lvlmanager = lvlman;
     maze = lvlman->maze;
@@ -157,11 +157,11 @@ void Player::checkChest()
 
 void Player::checkEnemy(int x, int y)
 {
-    for(Enemy* e : lvlmanager->enemies)
+    for(shared_ptr<Enemy> e : lvlmanager->enemies)
     {
         if((x == e->xPos) && (y == e->yPos))
         {
-            lvlmanager->ui->btlScene = new BattleScene(lvlmanager, e); // Andre's code
+            lvlmanager->ui->btlScene = make_shared<BattleScene>(lvlmanager, e); // Andre's code
         }
     }
 }
