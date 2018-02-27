@@ -27,6 +27,28 @@ LevelManager::LevelManager(int pID)
     ui->ShowUI();
 }
 
+LevelManager::~LevelManager()
+{
+    delete ui;
+    ui = nullptr;
+    delete maze;
+    maze = nullptr;
+    delete player;
+    player = nullptr;
+    delete scoretime;
+    scoretime = nullptr;
+    delete enemyai;
+    enemyai = nullptr;
+
+    for(Enemy *e : enemies)
+    {
+        delete e;
+        e = nullptr;
+    }
+
+    enemies.clear();
+}
+
 int LevelManager::getPlayerID()
 {
     return playerID;
@@ -85,6 +107,7 @@ void LevelManager::nextLevel()
     enemies.clear();
 
     delete maze;
+    maze = nullptr;
 
     loadLevel();
 
@@ -108,6 +131,7 @@ void LevelManager::nextLevel()
         enemies.clear();
 
         delete maze;
+        maze = nullptr;
 
         loadLevel();
 
@@ -130,6 +154,7 @@ void LevelManager::nextLevel()
         enemies.clear();
 
         delete maze;
+        maze = nullptr;
 
         loadLevel();
 
@@ -163,6 +188,7 @@ void LevelManager::lowLevel()
     enemies.clear();
 
     delete maze;
+    maze = nullptr;
 
     loadLevel();
 
@@ -188,6 +214,7 @@ void LevelManager::mediumLevel()
     enemies.clear();
 
     delete maze;
+    maze = nullptr;
 
     loadLevel();
 
@@ -212,6 +239,7 @@ void LevelManager::highLevel()
     enemies.clear();
 
     delete maze;
+    maze = nullptr;
 
     loadLevel();
 

@@ -16,6 +16,7 @@ class LevelManager
 {
     public:
         LevelManager(int pID);
+        ~LevelManager();
 
         UI *ui;
         Maze *maze;

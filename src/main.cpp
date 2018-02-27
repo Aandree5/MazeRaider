@@ -62,11 +62,14 @@ void loginUser() {
 
     int queryResult = mysql_query(connection, query.c_str());
     MYSQL_RES *result = mysql_store_result(connection);
+    MYSQL_ROW row;
 
-    if (mysql_num_rows(result) >= 1) {
-        MYSQL_ROW row = mysql_fetch_row(result);
+    if ((row = mysql_fetch_row(result)) != NULL) {
 
-        new LevelManager(atoi(row[0]));
+        LevelManager *lvlManager = new LevelManager(atoi(row[0]));
+        delete lvlManager;
+        lvlManager = nullptr;
+
     } else {
         cout << "Incorrect username or password." << endl;
         system("pause");

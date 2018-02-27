@@ -334,8 +334,6 @@ void UI::selCharCreateNew(MYSQL *connection)
     else
         PrintC(name + " created.");
 
-    delete result;
-    result = nullptr;
     Sleep(1000);
 }
 

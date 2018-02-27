@@ -132,10 +132,6 @@ int ScoreTime::savehighscore(){
         exit(1);
         system("pause");
     }
-
-
-    delete connection;
-    connection = nullptr;
 }
 //Showing up the Highscore in the actual game
 int ScoreTime::makeHighscoreTable(){
@@ -176,12 +172,6 @@ int ScoreTime::makeHighscoreTable(){
         //if it showed the error it will exit from the game.
         exit(0);
     }
-
-    delete connection;
-    connection = nullptr;
-    delete results;
-    results = nullptr;
-
 }
 
 void ScoreTime::addScores(int score)
