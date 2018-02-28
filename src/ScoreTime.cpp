@@ -51,8 +51,7 @@ string ScoreTime::getTime(){
     int passedSeconds = ((difSec % 3600) % 60);
 
     //This will allow you to see the timer and also they are starting by zero and increasing by when player input something to the system.
-    if(tm.wHour > 0)
-        return to_string(passedHours) + ":" + to_string(passedMinutes)+ ":" + to_string(passedSeconds);
+    return to_string(passedHours) + ":" + to_string(passedMinutes)+ ":" + to_string(passedSeconds);
 
 }
 

@@ -121,6 +121,17 @@ namespace UIHelpers
     template<typename expectedInput>
     expectedInput requestFromUser(LevelManager *lvlManager, int minLimit = -999999, int maxLimit = 999999)
     {
+        #ifdef _WIN32
+            HANDLE hStdOut = GetStdHandle( STD_OUTPUT_HANDLE );
+            CONSOLE_SCREEN_BUFFER_INFO cbsi;
+            GetConsoleScreenBufferInfo(hStdOut, &cbsi);
+            COORD originalPos = cbsi.dwCursorPosition;
+        #endif // _WIN32
+
+        #ifdef __linux__
+            cout << "\033[s";
+        #endif // __linux__
+
 
         string input = "";
         expectedInput userInput;
@@ -128,7 +139,7 @@ namespace UIHelpers
         while (true)
         {
             PrintC("Choose an option: ");
-            cin >> input;
+            getline(cin, input);
 
             if(toLower(input) == "p")
             {
@@ -146,12 +157,19 @@ namespace UIHelpers
                 PrintC("Not a valid option.", 15);
                 cout << endl;
             }
+
+
+            #ifdef _WIN32
+                SetConsoleCursorPosition( hStdOut, originalPos );
+            #endif // _WIN32
+
+            #ifdef __linux__
+                cout << "\033[u";
+            #endif // __linux__
         }
 
         return userInput;
     }
-
-
 };
 
 #endif // UIHELPERS_H

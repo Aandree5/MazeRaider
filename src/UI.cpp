@@ -141,6 +141,7 @@ void UI::ShowSelectionScreen()
             cout << endl << endl;
             PrintC("Choose option: ");
             cin >> selection;
+            cin.ignore();
 
             if(selection <= 0 || selection >= i + 2)
             {
@@ -460,7 +461,9 @@ void  UI::PrintMaze()
 void UI::PrintStateInfo()
 {
     cout << endl;
-    PrintC("        Time: ");
+    PrintC("  (P)", 15);
+    PrintC(" Pause Menu");
+    PrintC("     Time: ");
     PrintC((lvlManager->scoretime->getTime()), 15);
     PrintC("        Score: ");
     PrintC(to_string(lvlManager->scoretime->getHScore()), 15);
@@ -549,6 +552,7 @@ void UI::PrintUOptions()
         PrintC(to_string(lvlManager->enemies.size()), 15);
 
         cout << endl;
+
 
         if(lvlManager->isPaused)
         {
@@ -684,32 +688,37 @@ void UI::PrintUOptions()
         PrintC(btlScene->enemy->getWeapon().first, 15);
         cout << endl << endl;
 
-        bool notvalid = true;
-        while(notvalid)
-        {
-            PrintC("Choose option: ");
-            cin >> userOption;
 
+        if(lvlManager->isPaused)
+        {
+            int sceneW = btlScene->getSceneSizeWH().first;
+            int sceneH = btlScene->getSceneSizeWH().second;
+
+            buildPause(lvlManager, sceneW - (sceneW / 2), (sceneH - (sceneH / 2)) + 3);
+        }
+        else
+        {
+            userOption = requestFromUser<char>(lvlManager);
+
+            if (lvlManager->isPaused)
+                return;
 
 
 // Player attacks
             if (tolower(userOption) == 'a')
             {
                 btlScene->PlayerAttack();
-                notvalid = false;
             }
 // Player defends
             else if (tolower(userOption) == 'd')
             {
                 btlScene->PlayerDefend();
-                notvalid = false;
             }
 
 // Player heals
             else if (tolower(userOption) == 'h')
             {
                 btlScene->PlayerHeal();
-                notvalid = false;
             }
 // Player runs
             else if (tolower(userOption) == 'r')
@@ -721,12 +730,6 @@ void UI::PrintUOptions()
                     delete btlScene;
                     btlScene = nullptr;
                 }
-                notvalid = false;
-            }
-            else
-            {
-                PrintC(" - Not a valid option... Please choose a valid option.");
-                cout << endl;
             }
         }
     }

@@ -6,7 +6,6 @@
 #include <windows.h>
 #include <mysql.h>
 #include <cstdlib>
-#include <windows.h>
 
 using namespace std;
 using namespace UIHelpers;

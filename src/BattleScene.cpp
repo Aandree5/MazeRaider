@@ -19,6 +19,9 @@ BattleScene::BattleScene(LevelManager *lvlman, Enemy *e)
     enemyHealth = enemy->getHealth();
     enemyMaxHealth = enemyHealth;
 
+    sceneWidth = 100;
+    sceneHeight = 15;
+
     lvlman->ui->inBattle = true;
     TPlayerFEnemy =  true;
     isPlayerDefending = false;
@@ -30,8 +33,6 @@ BattleScene::BattleScene(LevelManager *lvlman, Enemy *e)
 
 int BattleScene::BuildScene()
 {
-    int sceneWidth = 100;
-    int sceneHeight = 15;
     int playerCounter = 0;
     int enemyCounter = 0;
     int playerWidth = 16;
@@ -73,85 +74,85 @@ int BattleScene::BuildScene()
 // Top left corner battle scene, and healths
                 if ((h == 0 && w == 0)  || (h == 2 && w == 4) || (h == 10 && w == 67))
                 {
-                    PrintC(bsTopLeftCorner);
+                    PrintC(bsTopLeftCorner, pauseColour(7));
                 }
 
 // Top right corner
                 else if ((h == 0 && w == sceneWidth - 1) || (h == 2 && w == 26) || (h == 10 && w == 89))
                 {
-                    PrintC(bsTopRightCorner);
+                    PrintC(bsTopRightCorner, pauseColour(7));
                 }
 
 // Bottom left corner
                 else if ((h == sceneHeight - 1 && w == 0) || (h == 4 && w == 4) || (h == 12 && w == 67))
                 {
-                    PrintC(bsBottomLeftCorner);
+                    PrintC(bsBottomLeftCorner, pauseColour(7));
                 }
 
 // Bottom right corner
                 else if ((h == sceneHeight - 1 && w == sceneWidth - 1) || (h == 4 && w == 26) || (h == 12 && w == 89))
                 {
-                    PrintC(bsBottomRightCorner);
+                    PrintC(bsBottomRightCorner, pauseColour(7));
                 }
 
 // Top and bottom lines
                 else if (h == 0 || h == sceneHeight - 1)
                 {
-                    PrintC(bsTopBottomLines);
+                    PrintC(bsTopBottomLines, pauseColour(7));
                 }
 
 // Left and right lines and battle info lines
                 else if (w == 0 || w == sceneWidth - 1)
                 {
-                    PrintC(bsLeftRightLines);
+                    PrintC(bsLeftRightLines, pauseColour(7));
 
                     if (w == sceneWidth - 1 && h > 0 && h <= sceneHeight + 3 && battleInfo[h - 1].first != "")
                     {
                         if(h == 13)
                         {
                             PrintC(" ");
-                            PrintC(bsLeftRightLines, 15);
+                            PrintC(bsLeftRightLines, pauseColour(15));
                             PrintC(" ");
                             switch (battleInfo[h - 1].second)
                             {
                             case 0:
-                                PrintC(battleInfo[h - 1].first, 15);
+                                PrintC(battleInfo[h - 1].first, pauseColour(15));
                                 break;
                             case 1:
-                                PrintC(battleInfo[h - 1].first, 12);
+                                PrintC(battleInfo[h - 1].first, pauseColour(12));
                                 break;
                             case 2:
-                                PrintC(battleInfo[h - 1].first, 11);
+                                PrintC(battleInfo[h - 1].first, pauseColour(11));
                                 break;
                             case 3:
-                                PrintC(battleInfo[h - 1].first, 10);
+                                PrintC(battleInfo[h - 1].first, pauseColour(10));
                                 break;
                             default:
-                                PrintC(battleInfo[h - 1].first, 15);
+                                PrintC(battleInfo[h - 1].first, pauseColour(15));
                                 break;
                             }
                         }
                         else
                         {
                             PrintC(" ");
-                            PrintC(bsLeftRightLines, 8);
+                            PrintC(bsLeftRightLines, pauseColour(8));
                             PrintC(" ");
                             switch (battleInfo[h - 1].second)
                             {
                             case 0:
-                                PrintC(battleInfo[h - 1].first, 8);
+                                PrintC(battleInfo[h - 1].first, pauseColour(8));
                                 break;
                             case 1:
-                                PrintC(battleInfo[h - 1].first, 4);
+                                PrintC(battleInfo[h - 1].first, pauseColour(4));
                                 break;
                             case 2:
-                                PrintC(battleInfo[h - 1].first, 3);
+                                PrintC(battleInfo[h - 1].first, pauseColour(3));
                                 break;
                             case 3:
-                                PrintC(battleInfo[h - 1].first, 2);
+                                PrintC(battleInfo[h - 1].first, pauseColour(2));
                                 break;
                             default:
-                                PrintC(battleInfo[h - 1].first, 8);
+                                PrintC(battleInfo[h - 1].first, pauseColour(8));
                                 break;
                             }
                         }
@@ -162,7 +163,7 @@ int BattleScene::BuildScene()
                 else if (w == 5 && h == 1)
                 {
                     string name = lvlManager->player->pName;
-                    PrintC(name, lvlManager->player->pAttackColour);
+                    PrintC(name, pauseColour(lvlManager->player->pAttackColour));
 
                     w += name.size() - 1;
                 }
@@ -171,7 +172,7 @@ int BattleScene::BuildScene()
                 else if (w == 68 && h == 9)
                 {
                     string name = enemy->getName();
-                    PrintC(name, enemy->getAttackColour());
+                    PrintC(name, pauseColour(enemy->getAttackColour()));
 
                     w += name.size() - 1;
                 }
@@ -193,7 +194,7 @@ int BattleScene::BuildScene()
                 {
                     string pValue = to_string(playerHealth) + "/" + to_string(playerMaxHealth);
                     PrintC(to_string(playerHealth), HealthColor(pHealth, false));
-                    PrintC("/" + to_string(playerMaxHealth));
+                    PrintC("/" + to_string(playerMaxHealth), pauseColour(7));
                     w += pValue.size() - 1;
                 }
 
@@ -202,20 +203,20 @@ int BattleScene::BuildScene()
                 {
                     string eValue = to_string(enemyHealth) + "/" + to_string(enemyMaxHealth);
                     PrintC(to_string(enemyHealth), HealthColor(eHealth, false));
-                    PrintC("/" + to_string(enemyMaxHealth));
+                    PrintC("/" + to_string(enemyMaxHealth), pauseColour(7));
                     w += eValue.size() - 1;
                 }
 
 // Draw player shield
                 else if(w == 27 && h == 3 && isPlayerDefending)
                 {
-                    PrintC(shieldSymbol, 11);
+                    PrintC(shieldSymbol, pauseColour(11));
                 }
 
 // Draw enemy shield
                 else if(w == 66 && h == 11 && isEnemyDefending)
                 {
-                    PrintC(shieldSymbol, 11);
+                    PrintC(shieldSymbol, pauseColour(11));
                 }
 
 // Draw player
@@ -223,7 +224,7 @@ int BattleScene::BuildScene()
                 {
                     if (h - ((sceneHeight / 2) - 1) < lvlManager->ui->playerMesh[lvlManager->player->pMesh].size())
                     {
-                        cout << lvlManager->ui->playerMesh[lvlManager->player->pMesh][h - ((sceneHeight / 2) - 1)];
+                        PrintC(lvlManager->ui->playerMesh[lvlManager->player->pMesh][h - ((sceneHeight / 2) - 1)], pauseColour(7));
                         playerCounter++;
                         w += playerWidth - 1;
                     }
@@ -234,7 +235,7 @@ int BattleScene::BuildScene()
                 {
                     if (h - 1 < lvlManager->ui->enemyMesh[enemy->getMesh()].size())
                     {
-                        cout << lvlManager->ui->enemyMesh[enemy->getMesh()][h - 1];
+                        PrintC(lvlManager->ui->enemyMesh[enemy->getMesh()][h - 1], pauseColour(7));
                         enemyCounter++;
                         w += enemyWidth - 1;
                     }
@@ -242,7 +243,7 @@ int BattleScene::BuildScene()
 
 // Empty space
                 else
-                    cout << (char)32;
+                    PrintC((char)32, pauseColour(7));
             }
             cout << endl;
         }
@@ -256,24 +257,28 @@ int BattleScene::BuildScene()
 
 int BattleScene::HealthColor(int health, bool TBackFFront)
 {
+    int colour;
+
     if(TBackFFront)
     {
         if (health > 10)
-            return 34;
+            colour = 34;
         else if (health > 5)
-            return 238;
+            colour = 238;
         else
-            return 68;
+            colour = 68;
     }
     else
     {
         if (health > 10)
-            return 7;
+            colour = 7;
         else if (health > 5)
-            return 14;
+            colour = 14;
         else
-            return 4;
+            colour = 4;
     }
+
+    return pauseColour(colour);
 }
 
 // Add line to battleInfo - Text to show and type action | 0 = attack   1 = defend    2 = heal
@@ -912,3 +917,18 @@ void BattleScene::EnemyAction()
     else if (chance <= healChance)
         EnemyHeal();
 }
+
+
+ pair<int, int> BattleScene::getSceneSizeWH()
+ {
+     return make_pair(sceneWidth, sceneHeight);
+ }
+
+
+ int BattleScene::pauseColour(int colour)
+ {
+     if(lvlManager->isPaused)
+        return 8;
+     else
+        return colour;
+ }
