@@ -35,7 +35,7 @@ void printMenu() {
     cout << "    |  2. Signup                                   |" << endl;
     cout << "    |  3. Exit                                     |" << endl;
     cout << "    ------------------------------------------------" << endl;
-    cout << endl << "    Option: ";
+    cout << endl;
 }
 
 void connectToDatabase() {
@@ -53,8 +53,8 @@ void connectToDatabase() {
 void loginUser() {
     string username,password;
     cout << endl << "   ------------------------------------------------------------------" << endl;
-    cout << "   Username: "; cin >> username;
-    cout << "   Password: "; cin>>password;
+    username = requestFromUser<string>("Username: ");
+    password = requestFromUser<string>("Password: ");
 
     // TODO: Fix SQL Injection.
     string query=SQLPrepare("select customer_id from information where username = '%?' and password = '%?'", username, password);
@@ -105,8 +105,8 @@ int main() {
         printLogo();
         printMenu();
 
-        char choice;
-        cin >> choice;
+        char choice = requestFromUser<char>("Choose an option: ", 1, 4);
+
 
         if (choice == '1') {
             loginUser();

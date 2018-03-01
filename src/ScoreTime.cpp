@@ -157,7 +157,7 @@ int ScoreTime::makeHighscoreTable(){
         //this will allow to show the number of their rank.
         int i=0;
         //rows represent the actual able rows and we will cout them to show up in the actual game.
-        while(row = mysql_fetch_row(results))
+        while((row = mysql_fetch_row(results)))
         {
             //This is the layout of the highscore system.
             cout<<i<<  ".   ||   "<<row[0]<<  "   ||   "<<row[1]<<" ||"<<endl;

@@ -155,7 +155,7 @@ void UIHelpers::buildPause(LevelManager *lvlManager, int x, int y, bool allowSav
                                        "----------------------------------",
                                        "  ",
                                        "(P) Resume to game    ",
-                                       "(S) Save game         ",
+                                       "(H) HighScore         ",
                                        "  ",
                                        "(E) Exit to main menu ",
                                        "  ",

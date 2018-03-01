@@ -67,9 +67,9 @@ int BattleScene::BuildScene()
     else
     {
 // Print battle scene
-        for (int h = 0; h < sceneHeight; h++)
+        for (unsigned h = 0; h < sceneHeight; h++)
         {
-            for (int w = 0; w < sceneWidth; w++)
+            for (unsigned w = 0; w < sceneWidth; w++)
             {
 // Top left corner battle scene, and healths
                 if ((h == 0 && w == 0)  || (h == 2 && w == 4) || (h == 10 && w == 67))
@@ -284,9 +284,7 @@ int BattleScene::HealthColor(int health, bool TBackFFront)
 // Add line to battleInfo - Text to show and type action | 0 = attack   1 = defend    2 = heal
 void BattleScene::UpdateBattleInfo(string text, int type)
 {
-    bool needReplace = true;
-
-    for(int i = 0; i < battleInfo.size(); i++)
+    for(unsigned i = 0; i < battleInfo.size(); i++)
     {
         if( i + 1 < battleInfo.size())
             battleInfo[i] = battleInfo[i + 1];

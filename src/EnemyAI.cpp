@@ -292,7 +292,7 @@ void EnemyAI::debugPrintNodes(vector<pos> showParentList)
     #endif // __linux__
 
 
-    for(int i = 0; i < showParentList.size() - 1; i++)
+    for(unsigned i = 0; i < showParentList.size() - 1; i++)
     {
         pos dir = showParentList[i] - showParentList[i - 1];
 

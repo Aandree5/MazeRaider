@@ -34,7 +34,7 @@
 #define attackTop (char)220
 #define healSymbol (char)207
 #define shieldSymbol (char)245
-#define cursorPosition(h, x, y) SetConsoleCursorPosition( h, { x, y } )
+#define cursorPosition(h, x, y) SetConsoleCursorPosition( h, { SHORT(x), SHORT(y) } )
 #define red SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12)
 #define blue SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 9)
 #define green SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 10)
@@ -120,38 +120,48 @@ namespace UIHelpers
 
     void setFullScreen();
 
-
+    // Check argument values from SQLPrepare function
     template<typename Value>
     string convToString(Value v)
     {
-
+        // Convert v to string
         stringstream ss;
         string convString;
 
         ss << v;
         ss >> convString;
 
+        // Iterate through v and remove any not allowed characters
         for(string::iterator it = begin(convString); it != end(convString); it++)
         {
-            char c = *it;
+            unsigned char c = *it;
+
+            // ASCII numbers
+            // 0 - 9 = 48 - 57
+            // A - Z = 65 - 90
+            // a - z = 97 - 122
+            // Special letters - All other numbers
 
             if(!(c >= 48 && c <= 57) && !(c >= 65 && c <= 90) && !(c >= 97 && c <= 122) && !(c >= 128 && c <= 154) &&
                !(c >= 160 && c <= 165) && !(c >= 181 && c <= 183) && !(c >= 198 && c <= 199) && !(c >= 210 && c <= 212) &&
                !(c >= 224 && c <= 237))
             {
                 convString.erase(it);
-                it--;
+                it--; // If erases, decrease iterator to not skip any character
             }
         }
 
         return convString;
     }
 
+    // Clean user input to query, take all special characters out
     template<typename... Args>
     string SQLPrepare(string query, Args... args)
     {
+        // Create a vector of strings with all the values of the arguments
         vector<string> values = { convToString(forward<Args>(args))... };
 
+        // For each value, find the first available place holder and replace it
         for(string v : values)
         {
             size_t pos = query.find("%?");
@@ -164,8 +174,10 @@ namespace UIHelpers
         return query;
     }
 
+    // Actual requestFrpmUser template
     template<typename expectedInput>
-    expectedInput requestFromUser(LevelManager *lvlManager, int minLimit = -999999, int maxLimit = 999999)
+    expectedInput requestFromUser(LevelManager *lvlManager = nullptr, string question = "Choose an option: ",
+                                  const int &minLimit = -999999, const int &maxLimit = 999999)
     {
         #ifdef _WIN32
             HANDLE hStdOut = GetStdHandle( STD_OUTPUT_HANDLE );
@@ -179,31 +191,57 @@ namespace UIHelpers
         #endif // __linux__
 
 
-        string input = "";
+        string input;
         expectedInput userInput;
+        bool showError = false;
 
-        while (true)
+        while(true)
         {
-            PrintC("Choose an option: ");
+            PrintC(question);
             getline(cin, input);
 
-            if(toLower(input) == "p")
+            if(lvlManager != nullptr && toLower(input) == "p")
             {
                 lvlManager->isPaused = !lvlManager->isPaused;
                 break;
             }
 
-            // This code converts from string to number safely.
-            stringstream inpStream(input);
-            if(inpStream >> userInput)
-                if((minLimit == -999999 && maxLimit == 999999) || (userInput >= minLimit && userInput < maxLimit))
-                break;
+            // Check if input is of requested type
+            istringstream iss(input);
+            if(iss >> userInput)
+            {
+                istringstream issToNum(input);
+                int isNumber;
+                if(issToNum >> isNumber)
+                {
+                    if((minLimit == -999999 && maxLimit == 999999) || (isNumber >= minLimit && isNumber < maxLimit))
+                        break;
+                }
+                else
+                    break;
+            }
 
-            if(!lvlManager->isPaused)
+
+            if(lvlManager == nullptr || !lvlManager->isPaused)
             {
                 PrintC("Not a valid option.", 15);
                 cout << endl;
+                showError = true;
             }
+
+
+            #ifdef _WIN32
+                SetConsoleCursorPosition( hStdOut, originalPos );
+            #endif // _WIN32
+
+            #ifdef __linux__
+                cout << "\033[u";
+            #endif // __linux__
+
+
+            // Delete the previous option, going to be re-written at the loop start
+            for(char c : (question + input))
+                PrintC(" ");
 
 
             #ifdef _WIN32
@@ -215,8 +253,41 @@ namespace UIHelpers
             #endif // __linux__
         }
 
+        // Clear invalid input message if it was shown
+        if(showError)
+        {
+                    #ifdef _WIN32
+                    HANDLE hStdOut = GetStdHandle( STD_OUTPUT_HANDLE );
+                    CONSOLE_SCREEN_BUFFER_INFO cbsi;
+                    GetConsoleScreenBufferInfo(hStdOut, &cbsi);
+                    COORD originalPos = cbsi.dwCursorPosition;
+                    #endif // _WIN32
+
+                    #ifdef __linux__
+                        cout << "\033[s";
+                    #endif // __linux__
+
+                    PrintC("                    ");
+
+                    #ifdef _WIN32
+                        SetConsoleCursorPosition( hStdOut, originalPos );
+                    #endif // _WIN32
+
+                    #ifdef __linux__
+                        cout << "\033[u";
+                    #endif // __linux__
+        }
+
         return userInput;
     }
+
+    // Overload for non level manager cases
+    template<typename expectedInput>
+    expectedInput requestFromUser(string question, const int &minLimit = -999999, const int &maxLimit = 999999)
+    {
+        return requestFromUser<expectedInput>(nullptr, question, minLimit, maxLimit);
+    }
+
 };
 
 #endif // UIHELPERS_H

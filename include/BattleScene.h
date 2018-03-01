@@ -55,8 +55,8 @@ class BattleScene
         // Text to show and type action | 0 = attack   1 = defend    2 = heal
         array<pair<string, int>, 13> battleInfo;
 
-        int sceneWidth;
-        int sceneHeight;
+        unsigned sceneWidth;
+        unsigned sceneHeight;
 
         int pauseColour(int colour);
 

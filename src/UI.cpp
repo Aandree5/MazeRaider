@@ -82,7 +82,7 @@ void UI::ShowSelectionScreen()
                 selCharPrintOptions(meshOptions, c);
 
 //Mesh
-            for(int line = 0; line < playerMesh[atoi(row[2])].size(); line++)
+            for(unsigned line = 0; line < playerMesh[atoi(row[2])].size(); line++)
             {
                 meshOptions[line] += "      " + playerMesh[atoi(row[2])][line] + "      ";
                 meshOptions[line] += bsLeftRightLines;
@@ -131,77 +131,58 @@ void UI::ShowSelectionScreen()
             selCharPrintOptions(meshOptions, c);
 
 
+
+        cout << endl;
+        PrintC(to_string(i) + ". Create new character");
+        cout << endl;
+        PrintC(to_string(i + 1) + ". Delete character");
+        cout << endl << endl;
+
         int selection;
-        while(true)
+        selection = requestFromUser<int>("Choose an option: ", 1, i + 2);
+
+
+        if(selection == i) // Create character
+            selCharCreateNew(connection);
+
+        else if(selection == i + 1) // Delete character
         {
+            int c;
             cout << endl;
-            PrintC(to_string(i) + ". Create new character");
-            cout << endl;
-            PrintC(to_string(i + 1) + ". Delete character");
-            cout << endl << endl;
-            PrintC("Choose option: ");
-            cin >> selection;
-            cin.ignore();
+            c = requestFromUser<int>(lvlManager, "Select character: ", 1, i + 1);
 
-            if(selection <= 0 || selection >= i + 2)
-            {
-                cout << endl;
-                PrintC("Please select a valid option.", 4);
+            selCharDelete(connection, charOptions[c]["id"], charNames[charOptions[c]["id"]]);
+        }
+        else
+        {
+            lvlManager->player->pCharID = charOptions[selection]["id"];
+            lvlManager->player->pName = charNames[charOptions[selection]["id"]];
+            lvlManager->player->pMesh = charOptions[selection]["mesh"];
+            lvlManager->player->pHealth = charOptions[selection]["health"];
+            lvlManager->player->pDamage = charOptions[selection]["attack_power"];
+            lvlManager->player->pArmour = charOptions[selection]["armour"];
+            lvlManager->player->pWeapon = charWeapons[charOptions[selection]["weapon_id"]];
+            lvlManager->player->pHealPower = charOptions[selection]["heal_power"];
+            lvlManager->player->pAttackType = charOptions[selection]["attack_type"];
+            lvlManager->player->pAttackColour = charOptions[selection]["attack_colour"];
+            lvlManager->player->pDefenceType = charOptions[selection]["defence_type"];
+            lvlManager->player->pDefenceColour = charOptions[selection]["defence_colour"];
+            lvlManager->player->pHealType = charOptions[selection]["heal_type"];
+            lvlManager->player->pHealColour = charOptions[selection]["heal_colour"];
 
-            }
-            else if(selection == i) // Create character
-            {
-                selCharCreateNew(connection);
-                break;
-            }
-            else if(selection == i + 1) // Delete character
-            {
-                int c;
-                cout << endl;
-                PrintC("Select character: ");
-                cin >> c;
-
-                if(c <= 0 || c > i)
-                {
-                    cout << endl;
-                    PrintC("Please select a valid character.", 4);
-                    continue;
-                }
-
-                selCharDelete(connection, charOptions[c]["id"], charNames[charOptions[c]["id"]]);
-                break;
-            }
-            else
-            {
-                lvlManager->player->pCharID = charOptions[selection]["id"];
-                lvlManager->player->pName = charNames[charOptions[selection]["id"]];
-                lvlManager->player->pMesh = charOptions[selection]["mesh"];
-                lvlManager->player->pHealth = charOptions[selection]["health"];
-                lvlManager->player->pDamage = charOptions[selection]["attack_power"];
-                lvlManager->player->pArmour = charOptions[selection]["armour"];
-                lvlManager->player->pWeapon = charWeapons[charOptions[selection]["weapon_id"]];
-                lvlManager->player->pHealPower = charOptions[selection]["heal_power"];
-                lvlManager->player->pAttackType = charOptions[selection]["attack_type"];
-                lvlManager->player->pAttackColour = charOptions[selection]["attack_colour"];
-                lvlManager->player->pDefenceType = charOptions[selection]["defence_type"];
-                lvlManager->player->pDefenceColour = charOptions[selection]["defence_colour"];
-                lvlManager->player->pHealType = charOptions[selection]["heal_type"];
-                lvlManager->player->pHealColour = charOptions[selection]["heal_colour"];
-
-                selected = true;
-                break;
-            }
+            selected = true;
+            break;
         }
     }
-
 }
+
 
 // Print array to screen
 void UI::selCharPrintOptions(array<string, 12> &mOptions, int &c)
 {
     selCharWhiteSpaceDivider(mOptions, c);
 
-    for(int l = 0; l < mOptions.size(); l++)
+    for(unsigned l = 0; l < mOptions.size(); l++)
     {
         if(l >= mOptions.size() - 2)
             PrintC(mOptions[l], 8);
@@ -298,7 +279,7 @@ void UI::selCharCreateNew(MYSQL *connection)
     }
 
     // Show choice numbers
-    for(int i = 1; i <= playerMesh.size(); i++)
+    for(unsigned i = 1; i <= playerMesh.size(); i++)
     {
         string number = "  " + to_string(i) + ". ";
         PrintC(number);
@@ -307,21 +288,8 @@ void UI::selCharCreateNew(MYSQL *connection)
     }
     cout << endl;
 
-    while(true)
-    {
-        PrintC("Choose character: ");
-        cin >> mesh;
-        cout << endl;
-        if(mesh > 0 && mesh <= playerMesh.size())
-            break;
-
-        PrintC("Please choose a valid character.", 4);
-        cout << endl;
-    }
-
-    PrintC("Character name: ");
-    cin >> name;
-    cout << endl;
+    mesh = requestFromUser<int>("Choose character: ", 1, playerMesh.size() + 1);
+    name = requestFromUser<string>("Character name: ");
 
     string createQuery = "INSERT INTO PlayerChar(player_id, name, mesh, health, armour, attack_power, "
     "weapon_id, heal_power, defence_type, defence_colour, heal_type, heal_colour) "
@@ -342,11 +310,7 @@ void UI::selCharCreateNew(MYSQL *connection)
 void UI::selCharDelete(MYSQL *connection, int charID, string name)
 {
     string deleteQuery = "DELETE FROM PlayerChar WHERE char_id = " + to_string(charID);
-    string safety;
-
-    PrintC("ARE YOU 100% SURE YOU WANT TO DELETE -> " + name + " [y/n]: ");
-    cin >> safety;
-    cout << endl;
+    string safety = requestFromUser<string>("ARE YOU 100% SURE YOU WANT TO DELETE -> " + name + " [y/n]: ");
 
     if(toLower(safety) != "y" && toLower(safety) != "yes")
     {
@@ -790,29 +754,31 @@ void UI::ShowNextLevel()
         bool notvalid = true;
         while(notvalid)
         {
-            PrintC("Choose option: ");
-            cin >> userOption;
+            userOption = requestFromUser<char>();
 
 // Player choose low difficulty .
             if (tolower(userOption) == 'l' )
             {
-
                 lvlManager->lowLevel();
+                notvalid = false;
             }
 // Player choose medium difficulty .
             else if (tolower(userOption) == 'm')
             {
                 lvlManager->mediumLevel();
+                notvalid = false;
             }
 // Player choose high difficulty .
             else if (tolower(userOption) == 'h')
             {
                 lvlManager->highLevel();
+                notvalid = false;
             }
 // Player lets the computer to choose the difficulty
                else if (tolower(userOption) == 'c')
             {
                 lvlManager->nextLevel();
+                notvalid = false;
             }
             else
             {
