@@ -17,6 +17,7 @@ class  UI
 {
     public:
         UI(LevelManager* lvlman);
+        ~UI();
 
         // Build UI
         void ShowUI();

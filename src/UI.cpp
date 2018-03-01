@@ -19,6 +19,12 @@ UI::UI(LevelManager* lvlman)
     btlScene = nullptr;
 }
 
+UI::~UI()
+{
+    delete btlScene;
+    btlScene = nullptr;
+}
+
 //Show player character selection screen
 void UI::ShowSelectionScreen()
 {
