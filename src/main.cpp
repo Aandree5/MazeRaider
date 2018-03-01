@@ -2,6 +2,7 @@
 #include "LevelManager.h"
 #include <iostream>
 #include <tuple>
+#include <mmsystem.h>
 #include <string>
 #include <windows.h>
 #include <mysql.h>
@@ -96,8 +97,8 @@ void registerUser() {
 }
 
 int main() {
+    PlaySound(TEXT("Track.wav"),NULL, SND_ASYNC);
     setFullScreen();
-
     connectToDatabase();
 
     while (1) {
@@ -119,6 +120,7 @@ int main() {
             clearScreen();
             cout << "Invalid input." << endl;
             system("pause");
+
         }
     }
 }
