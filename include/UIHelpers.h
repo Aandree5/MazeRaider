@@ -7,6 +7,8 @@
 #include <vector>
 #include <array>
 #include <cctype>
+#include <sstream>
+#include <algorithm>
 
 #include "LevelManager.h"
 
@@ -118,6 +120,50 @@ namespace UIHelpers
 
     void setFullScreen();
 
+
+    template<typename Value>
+    string convToString(Value v)
+    {
+
+        stringstream ss;
+        string convString;
+
+        ss << v;
+        ss >> convString;
+
+        for(string::iterator it = begin(convString); it != end(convString); it++)
+        {
+            char c = *it;
+
+            if(!(c >= 48 && c <= 57) && !(c >= 65 && c <= 90) && !(c >= 97 && c <= 122) && !(c >= 128 && c <= 154) &&
+               !(c >= 160 && c <= 165) && !(c >= 181 && c <= 183) && !(c >= 198 && c <= 199) && !(c >= 210 && c <= 212) &&
+               !(c >= 224 && c <= 237))
+            {
+                convString.erase(it);
+                it--;
+            }
+        }
+
+        return convString;
+    }
+
+    template<typename... Args>
+    string SQLPrepare(string query, Args... args)
+    {
+        vector<string> values = { convToString(forward<Args>(args))... };
+
+        for(string v : values)
+        {
+            size_t pos = query.find("%?");
+            if (pos != string::npos)
+                query.replace(pos, 2, v);
+            else
+                throw invalid_argument("More arguments than place holders");
+        }
+
+        return query;
+    }
+
     template<typename expectedInput>
     expectedInput requestFromUser(LevelManager *lvlManager, int minLimit = -999999, int maxLimit = 999999)
     {
@@ -152,6 +198,7 @@ namespace UIHelpers
             if(inpStream >> userInput)
                 if((minLimit == -999999 && maxLimit == 999999) || (userInput >= minLimit && userInput < maxLimit))
                 break;
+
             if(!lvlManager->isPaused)
             {
                 PrintC("Not a valid option.", 15);
