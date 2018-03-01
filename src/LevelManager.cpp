@@ -45,8 +45,6 @@ LevelManager::~LevelManager()
         delete e;
         e = nullptr;
     }
-
-    enemies.clear();
 }
 
 int LevelManager::getPlayerID()

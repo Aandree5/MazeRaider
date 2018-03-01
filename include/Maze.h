@@ -9,6 +9,7 @@ class Maze {
     public:
         Maze(unsigned width, unsigned height, unsigned seed);
         Maze(unsigned width, unsigned height) : Maze(width, height, 0) {}
+        ~Maze();
         int** getMazeArray();
         std::pair<unsigned, unsigned> getMazeSizeWH();
         std::pair<int,int> getMazeStart();

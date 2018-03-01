@@ -71,6 +71,14 @@ Maze::Maze(unsigned width, unsigned height, unsigned seed) : m_width(width), m_h
     generateMaze();
 }
 
+Maze::~Maze()
+{
+    delete [] *m_maze;
+    *m_maze = nullptr;
+    delete [] m_maze;
+    m_maze = nullptr;
+}
+
 /**
  * Generate the maze.
  */
