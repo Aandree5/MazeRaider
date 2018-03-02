@@ -39,6 +39,7 @@
 		</Compiler>
 		<Linker>
 			<Add library="libmysql-505/lib/libmysql.a" />
+			<Add library="winmm" />
 		</Linker>
 		<Unit filename="include/BattleScene.h" />
 		<Unit filename="include/Enemy.h" />
