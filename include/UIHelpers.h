@@ -113,7 +113,7 @@ namespace UIHelpers
     // change the text colour
     bool ChangeColour(int colour);
     // Show pause screen
-    void buildPause(LevelManager *lvlManger, int x, int y, bool allowSave = true);
+    void BuildPause(LevelManager *lvlManger, int x, int y, bool allowSave = true);
 
 
     string toLower(string str);
@@ -203,6 +203,12 @@ namespace UIHelpers
             if(lvlManager != nullptr && toLower(input) == "p")
             {
                 lvlManager->isPaused = !lvlManager->isPaused;
+
+                if(lvlManager->isPaused)
+                    lvlManager->playEffect(LevelManager::Effect::PauseOpen);
+                else
+                    lvlManager->playEffect(LevelManager::Effect::PauseClose);
+
                 break;
             }
 

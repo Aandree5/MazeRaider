@@ -21,6 +21,7 @@ check to see if player meets enemy
 
 void Player::movePlayer(char direction)
 {
+    lvlmanager->playEffect(LevelManager::Effect::Move);
     Player::checkEnemy(xPos,yPos);
     int steps = 1;
     if(direction == 's')
@@ -134,6 +135,8 @@ void Player::movePlayer(char direction)
 
 void Player::chestEvent(void)
 {
+    lvlmanager->playEffect(LevelManager::Effect::PickUp);
+
     /*
     random rewards or drops
     - health

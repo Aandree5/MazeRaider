@@ -28,6 +28,8 @@ UI::~UI()
 //Show player character selection screen
 void UI::ShowSelectionScreen()
 {
+    lvlManager->changeMusic(LevelManager::Music::SelectionScreen);
+
     bool selected = false;
 
 
@@ -378,6 +380,8 @@ void  UI::ShowUI()
 // Print Maze
 void  UI::PrintMaze()
 {
+    lvlManager->changeMusic(LevelManager::Music::Map);
+
     // Get player position, 2 = Player
     lvlManager->maze->getMazeArray()[lvlManager->player->xPos][lvlManager->player->yPos] = 2;
 
@@ -529,7 +533,7 @@ void UI::PrintUOptions()
             int mazeW = lvlManager->maze->getMazeSizeWH().first * 2;
             int mazeH = lvlManager->maze->getMazeSizeWH().second;
 
-            buildPause(lvlManager, mazeW - (mazeW / 2), (mazeH - (mazeH / 2)) + 3);
+            BuildPause(lvlManager, mazeW - (mazeW / 2), (mazeH - (mazeH / 2)) + 3);
         }
         else
         {
@@ -664,7 +668,7 @@ void UI::PrintUOptions()
             int sceneW = btlScene->getSceneSizeWH().first;
             int sceneH = btlScene->getSceneSizeWH().second;
 
-            buildPause(lvlManager, sceneW - (sceneW / 2), (sceneH - (sceneH / 2)) + 3);
+            BuildPause(lvlManager, sceneW - (sceneW / 2), (sceneH - (sceneH / 2)) + 3);
         }
         else
         {
@@ -693,6 +697,9 @@ void UI::PrintUOptions()
 // Player runs
             else if (tolower(userOption) == 'r')
             {
+                //Music
+                lvlManager->playEffect(LevelManager::Effect::Run);
+
                 bool canRun = btlScene->canPlayerRun();
                 if(canRun)
                 {
@@ -707,6 +714,7 @@ void UI::PrintUOptions()
 
 void UI::ShowGameOver()
 {
+    lvlManager->playEffect(LevelManager::Effect::LevelLost);
     clearScreen();
     PrintC("Game Over!");
 
@@ -737,6 +745,8 @@ void UI::PrintC(string character, int colour, bool twoChar, bool hideWhenPaused)
 
 void UI::ShowNextLevel()
 {
+    lvlManager->playEffect(LevelManager::Effect::LevelPassed);
+
    clearScreen();
    PrintC("You've finished your level. Choose the difficulty for the next level OR computer can choose for you");
       cout << endl;

@@ -97,11 +97,11 @@ void registerUser() {
 }
 
 int main() {
-    PlaySound(TEXT("Track.wav"),NULL, SND_ASYNC);
     setFullScreen();
     connectToDatabase();
 
     while (1) {
+        PlaySound(TEXT("Track.wav"),NULL, SND_ASYNC | SND_LOOP);
         clearScreen();
         printLogo();
         printMenu();

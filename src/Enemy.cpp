@@ -238,6 +238,7 @@ int Enemy::getDefenceColour()
 
 int Enemy::getDefenceType()
 {
+
     return defenceType;
 }
 

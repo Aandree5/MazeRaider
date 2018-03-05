@@ -296,6 +296,9 @@ void BattleScene::UpdateBattleInfo(string text, int type)
 
 void BattleScene::PlayAttack(int atype, int colour)
 {
+    //music
+    lvlManager->playEffect(LevelManager::Effect::Attack);
+
     #ifdef _WIN32
         HANDLE hStdOut = GetStdHandle( STD_OUTPUT_HANDLE );
         CONSOLE_SCREEN_BUFFER_INFO cbsi;
@@ -778,6 +781,9 @@ void BattleScene::PlayerAttack()
 
 void BattleScene::PlayerDefend()
 {
+    //music
+    lvlManager->playEffect(LevelManager::Effect::Defend);
+
     PlayDefend(lvlManager->player->pDefenceType, lvlManager->player->pDefenceColour);
 
     UpdateBattleInfo(lvlManager->player->pName + " is defending", 2);
@@ -789,6 +795,9 @@ void BattleScene::PlayerDefend()
 
 void BattleScene::PlayerHeal()
 {
+    //music
+    lvlManager->playEffect(LevelManager::Effect::Heal);
+
     int tempHealth = playerHealth;
 
     PlayHeal(lvlManager->player->pHealType, lvlManager->player->pHealColour);
@@ -871,6 +880,8 @@ void BattleScene::EnemyAttack()
 
 void BattleScene::EnemyDefend()
 {
+    lvlManager->playEffect(LevelManager::Effect::Defend);
+
     PlayDefend(enemy->getDefenceType(), enemy->getDefenceColour());
 
     UpdateBattleInfo(enemy->getName() + " is defending", 2);
@@ -883,6 +894,9 @@ void BattleScene::EnemyDefend()
 
 void BattleScene::EnemyHeal()
 {
+    //music
+    lvlManager->playEffect(LevelManager::Effect::Defend);
+
     int tempHealth = enemyHealth;
 
     PlayHeal(enemy->getHealType(), enemy->getHealColour());

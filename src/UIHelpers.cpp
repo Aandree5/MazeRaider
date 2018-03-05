@@ -136,7 +136,7 @@ void UIHelpers::setFullScreen()
 }
 
 // Show pause screen
-void UIHelpers::buildPause(LevelManager *lvlManager, int x, int y, bool allowSave)
+void UIHelpers::BuildPause(LevelManager *lvlManager, int x, int y, bool allowSave)
 {
     #ifdef _WIN32
         HANDLE hStdOut = GetStdHandle( STD_OUTPUT_HANDLE );
@@ -147,6 +147,8 @@ void UIHelpers::buildPause(LevelManager *lvlManager, int x, int y, bool allowSav
     #ifdef __linux__
         int hStdOut;
     #endif // __linux__
+
+
 
     int input;
     array<string, 14> menuContent = {R"( __             _                 )",
