@@ -21,12 +21,14 @@ LevelManager::LevelManager(int pID)
     loadLevel();
 
     player = new Player(this);
-    scoretime = new ScoreTime(this);
     enemyai = new EnemyAI(this);
 
 
     ui = new UI(this);
     ui->ShowSelectionScreen();
+
+    scoretime = new ScoreTime(this);
+
     ui->ShowUI();
 }
 
@@ -272,7 +274,7 @@ void LevelManager::loadLevel()
     maze = new Maze(mazeSize.first, mazeSize.second);
     for(int i=0; i<nrEnemies; i++)
      {
-         enemies.emplace_back(new Enemy(maze));
+         //enemies.emplace_back(new Enemy(maze));
      }
 
 }

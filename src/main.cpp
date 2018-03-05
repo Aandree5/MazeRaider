@@ -59,7 +59,6 @@ void loginUser() {
 
     // TODO: Fix SQL Injection.
     string query=SQLPrepare("select customer_id from information where username = '%?' and password = '%?'", username, password);
-    //string query="select customer_id from information where username='"+username+"' and password='"+password+"';";
 
     int queryResult = mysql_query(connection, query.c_str());
     MYSQL_RES *result = mysql_store_result(connection);
@@ -83,7 +82,7 @@ void registerUser() {
     cout<<"Username: "; cin>>username;
     cout<<"Password: "; cin>>password;
 
-    string register_users="insert into information(name,username,password) values('"+name+"','"+username+"','"+password+"')";
+    string register_users = SQLPrepare("insert into information(name,username,password) values('%?','%?','%?')", name, username, password);
     int querystate = mysql_query(connection, register_users.c_str());
 
     if(!querystate) {

@@ -419,7 +419,7 @@ void  UI::PrintMaze()
                 lvlManager->maze->getMazeArray()[w][h] = 0;
                 break;
             case 5: // 5: Exit
-                PrintC(mazeWall, 15, true);
+                PrintC(mazePath, true);
                 break;
             default:
                 PrintC(lvlManager->maze->getMazeArray()[w][h], 7, true);
@@ -748,6 +748,12 @@ void UI::ShowNextLevel()
     lvlManager->playEffect(LevelManager::Effect::LevelPassed);
 
    clearScreen();
+
+   lvlManager->scoretime->savehighscore();
+   lvlManager->scoretime->makeHighscoreTable();
+
+   cout << endl;
+
    PrintC("You've finished your level. Choose the difficulty for the next level OR computer can choose for you");
       cout << endl;
         PrintC("        Low: ");
