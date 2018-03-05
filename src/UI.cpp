@@ -65,8 +65,8 @@ void UI::ShowSelectionScreen()
 
         string query = "SELECT pc.char_id, pc.name, pc.mesh, pc.health, pc.armour, pc.attack_power, w.weapon_id, "
         "w.weapon_name, w.weapon_power, w.attack_type, w.attack_colour, pc.heal_power, pc.defence_type, pc.defence_colour, pc.heal_type, pc.heal_colour "
-        "FROM information i, PlayerChar pc, Weapon w WHERE i.customer_id = " + to_string(lvlManager->getPlayerID()) +
-        " AND i.customer_id = pc.player_id AND pc.weapon_id = w.weapon_id "
+        "FROM user_info i, PlayerChar pc, Weapon w WHERE i.user_id = " + to_string(lvlManager->getPlayerID()) +
+        " AND i.user_id = pc.player_id AND pc.weapon_id = w.weapon_id "
         "ORDER BY pc.health DESC";
 
         if (mysql_query(connection, query.c_str()))

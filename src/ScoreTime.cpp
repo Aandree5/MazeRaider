@@ -119,7 +119,7 @@ int ScoreTime::savehighscore(){
     //Once it successful it will say saved successfull.
     if(!querystate) {
         cout<<"Saved...\n\n" << endl;
-        cout<<"Rank   ID          Player name"<<endl;
+        cout<<"Rank   ID              Character ID"<<endl;
 
     } else {
         //if not it will say failed to save and system will pause. It will wait user to put an input
