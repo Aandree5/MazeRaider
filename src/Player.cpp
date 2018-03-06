@@ -7,7 +7,7 @@
 Player::Player(LevelManager *lvlman)
 {
     lvlmanager = lvlman;
-    maze = lvlman->maze;
+    maze = lvlman->maze.get();
     xPos = lvlman->maze->getMazeStart().first;
     yPos = lvlman->maze->getMazeStart().second;
 
@@ -21,6 +21,8 @@ check to see if player meets enemy
 
 void Player::movePlayer(char direction)
 {
+    lvlmanager->playEffect(LevelManager::Effect::Move);
+
     Player::checkEnemy(xPos,yPos);
     int steps = 1;
     if(direction == 's')
@@ -28,6 +30,9 @@ void Player::movePlayer(char direction)
         while(maze->getMazeArray()[xPos][yPos+steps]!=1)  //this works
         {
             checkEnemy(xPos,yPos+steps);
+            if(lvlmanager->ui->inBattle)
+                break;
+
             if(maze->getMazeArray()[xPos-1][yPos+steps] == 0 || maze->getMazeArray()[xPos+1][yPos+steps] == 0)
             {
                 steps+=1;
@@ -55,6 +60,9 @@ void Player::movePlayer(char direction)
         while(maze->getMazeArray()[xPos-steps][yPos]!=1)
         {
             checkEnemy(xPos-steps,yPos);
+            if(lvlmanager->ui->inBattle)
+                break;
+
             if(maze->getMazeArray()[xPos-steps][yPos+1] == 0 || maze->getMazeArray()[xPos-steps][yPos-1] == 0)
             {
                 steps+=1;
@@ -80,7 +88,11 @@ void Player::movePlayer(char direction)
     {
         while(maze->getMazeArray()[xPos+steps][yPos]!=1)
         {
+        void startBattleScene(Enemy &enemy);
             checkEnemy(xPos+steps,yPos);
+            if(lvlmanager->ui->inBattle)
+                break;
+
             if(maze->getMazeArray()[xPos+steps][yPos+1] == 0 || maze->getMazeArray()[xPos+steps][yPos-1] == 0)
             {
                 steps+=1;
@@ -108,6 +120,9 @@ void Player::movePlayer(char direction)
         while(maze->getMazeArray()[xPos][yPos-steps]!=1)
         {
             checkEnemy(xPos, yPos-steps);
+            if(lvlmanager->ui->inBattle)
+                break;
+
             if(maze->getMazeArray()[xPos-1][yPos-steps] == 0 || maze->getMazeArray()[xPos+1][yPos-steps] == 0)
             {
                 steps+=1;
@@ -143,6 +158,8 @@ void Player::chestEvent(void)
     - keys
     - scores
     */
+
+    lvlmanager->playEffect(LevelManager::Effect::PickUp);
 
     //connecting to database
     MYSQL* connection;
@@ -207,11 +224,12 @@ void Player::checkChest()
 
 void Player::checkEnemy(int x, int y)
 {
-    for(Enemy *e : lvlmanager->enemies)
+    for(shared_ptr<Enemy> e : lvlmanager->enemies)
     {
         if((x == e->xPos) && (y == e->yPos))
         {
-            lvlmanager->ui->btlScene = new BattleScene(lvlmanager, e); // Andre's code
+           lvlmanager->ui->StartBattleScene(e); // Andre's code
+           break;
         }
     }
 }

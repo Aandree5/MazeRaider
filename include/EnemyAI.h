@@ -3,6 +3,7 @@
 #include <vector>
 #include <array>
 #include <algorithm>
+#include <memory>
 
 using namespace std;
 
@@ -12,16 +13,16 @@ class Enemy;
 class EnemyAI
 {
     public:
-        EnemyAI(LevelManager* lvman);
+        EnemyAI(shared_ptr<LevelManager> lvman);
 
-        void getNextPosition(Enemy* enemy);
+        void getNextPosition(shared_ptr<Enemy> enemy);
 
         int followPlayerLimit = 5;
     protected:
 
     private:
         //variables
-        LevelManager* lvlManager;
+        weak_ptr<LevelManager> lvlManager;
 
         // Path finding node structure
         struct pos

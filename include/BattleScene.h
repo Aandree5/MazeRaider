@@ -3,6 +3,7 @@
 #include <vector>
 #include <iostream>
 #include <array>
+#include <memory>
 
 #define attackAnimSpeed 10
 #define defenceHealAnimSpeed 150
@@ -15,7 +16,7 @@ class Enemy;
 class BattleScene
 {
     public:
-        BattleScene(LevelManager* lvlman, Enemy* e);
+        BattleScene(shared_ptr<LevelManager> lvlman, shared_ptr<Enemy> e);
 
         // Call battle scene
         int BuildScene();
@@ -46,11 +47,11 @@ class BattleScene
 
         pair<int, int> getSceneSizeWH();
 
-        Enemy* enemy;
+        weak_ptr<Enemy> enemy;
     protected:
 
     private:
-        LevelManager* lvlManager;
+        weak_ptr<LevelManager> lvlManager;
 
         // Text to show and type action | 0 = attack   1 = defend    2 = heal
         array<pair<string, int>, 13> battleInfo;

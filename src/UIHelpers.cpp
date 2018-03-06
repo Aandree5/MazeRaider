@@ -62,8 +62,17 @@ bool UIHelpers::ChangeColour(int colour)
     case 164:
         debugBlackGreen;
         break;
+    case 185:
+        playerColor;
+        break;
     case 192:
         debugBlackRed;
+        break;
+    case 196:
+        enemyColor;
+        break;
+    case 232:
+        chestColor;
         break;
     case 238:
         healthYellow;
@@ -136,7 +145,7 @@ void UIHelpers::setFullScreen()
 }
 
 // Show pause screen
-void UIHelpers::buildPause(LevelManager *lvlManager, int x, int y, bool allowSave)
+void UIHelpers::buildPause(shared_ptr<LevelManager> lvlManager, int x, int y, bool allowSave)
 {
     #ifdef _WIN32
         HANDLE hStdOut = GetStdHandle( STD_OUTPUT_HANDLE );
@@ -149,13 +158,18 @@ void UIHelpers::buildPause(LevelManager *lvlManager, int x, int y, bool allowSav
     #endif // __linux__
 
     int input;
-    array<string, 14> menuContent = {R"( __             _                 )",
+    string mute = "Mute  ";
+    if(lvlManager->isMuted)
+        mute = "Unmute";
+
+    array<string, 15> menuContent = {R"( __             _                 )",
                                      R"(/__ _ __  _    |_) _     _  _  _| )",
                                      R"(\_|(_||||(/_   |  (_||_|_> (/_(_| )",
                                        "----------------------------------",
                                        "  ",
                                        "(P) Resume to game    ",
                                        "(H) HighScore         ",
+                                       "(M) " + mute + "            ",
                                        "  ",
                                        "(E) Exit to main menu ",
                                        "  ",
@@ -231,4 +245,9 @@ void UIHelpers::buildPause(LevelManager *lvlManager, int x, int y, bool allowSav
 
     if(tolower(input) == 'e')
         lvlManager->exitToMenu = true;
+    else if(tolower(input) == 'm')
+    {
+        lvlManager->changeMusic(LevelManager::Music::Muted);
+        lvlManager->isMuted = !lvlManager->isMuted;
+    }
 }

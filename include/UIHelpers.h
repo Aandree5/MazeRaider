@@ -9,6 +9,7 @@
 #include <cctype>
 #include <sstream>
 #include <algorithm>
+#include "memory"
 
 #include "LevelManager.h"
 
@@ -19,6 +20,9 @@
 #define clearScreen() system("cls")
 #define mazeWall (char)219
 #define mazePath (char)32
+#define mazePlayer (char)111
+#define mazeEnemy (char)207
+#define mazeChest (char)36
 #define bsTopLeftCorner (char)218
 #define bsTopRightCorner (char)191
 #define bsBottomLeftCorner (char)192
@@ -57,6 +61,9 @@
 #define armygreen SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 6)
 #define blackonwhite SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 240)
 #define blackonblack SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0)
+#define playerColor SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 185)
+#define enemyColor SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 196)
+#define chestColor SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 232)
 
 #endif // _WIN32
 
@@ -113,8 +120,7 @@ namespace UIHelpers
     // change the text colour
     bool ChangeColour(int colour);
     // Show pause screen
-    void buildPause(LevelManager *lvlManger, int x, int y, bool allowSave = true);
-
+    void buildPause(shared_ptr<LevelManager> lvlManger, int x, int y, bool allowSave = true);
 
     string toLower(string str);
 
@@ -176,7 +182,7 @@ namespace UIHelpers
 
     // Actual requestFrpmUser template
     template<typename expectedInput>
-    expectedInput requestFromUser(LevelManager *lvlManager = nullptr, string question = "Choose an option: ",
+    expectedInput requestFromUser(shared_ptr<LevelManager> lvlManager = nullptr, string question = "Choose an option: ",
                                   const int &minLimit = -999999, const int &maxLimit = 999999)
     {
         #ifdef _WIN32
@@ -203,6 +209,12 @@ namespace UIHelpers
             if(lvlManager != nullptr && toLower(input) == "p")
             {
                 lvlManager->isPaused = !lvlManager->isPaused;
+
+                if(lvlManager->isPaused)
+                    lvlManager->playEffect(LevelManager::Effect::PauseOpen);
+                else
+                    lvlManager->playEffect(LevelManager::Effect::PauseClose);
+
                 break;
             }
 

@@ -58,8 +58,8 @@ void loginUser() {
     password = requestFromUser<string>("Password: ");
 
     // TODO: Fix SQL Injection.
-    string query=SQLPrepare("select customer_id from information where username = '%?' and password = '%?'", username, password);
-    //string query="select customer_id from information where username='"+username+"' and password='"+password+"';";
+    string query=SQLPrepare("select user_id from user_info where username = '%?' and password = '%?'", username, password);
+    //string query="select user_id from user_info where username='"+username+"' and password='"+password+"';";
 
     int queryResult = mysql_query(connection, query.c_str());
     MYSQL_RES *result = mysql_store_result(connection);
@@ -67,13 +67,11 @@ void loginUser() {
 
     if ((row = mysql_fetch_row(result)) != NULL) {
 
-        LevelManager *lvlManager = new LevelManager(atoi(row[0]));
-        delete lvlManager;
-        lvlManager = nullptr;
+        shared_ptr<LevelManager> lvlManager = make_shared<LevelManager>(atoi(row[0]));
+        lvlManager->BuildLevel();
 
     } else {
         cout << "Incorrect username or password." << endl;
-        system("pause");
     }
 }
 
@@ -83,7 +81,7 @@ void registerUser() {
     cout<<"Username: "; cin>>username;
     cout<<"Password: "; cin>>password;
 
-    string register_users="insert into information(name,username,password) values('"+name+"','"+username+"','"+password+"')";
+    string register_users="insert into user_info(name,username,password) values('"+name+"','"+username+"','"+password+"')";
     int querystate = mysql_query(connection, register_users.c_str());
 
     if(!querystate) {
@@ -97,11 +95,13 @@ void registerUser() {
 }
 
 int main() {
-    PlaySound(TEXT("Track.wav"),NULL, SND_ASYNC);
+    waveOutSetVolume(0, -1);
+
     setFullScreen();
     connectToDatabase();
 
     while (1) {
+        PlaySound(TEXT("sounds/musics/MainMenu.wav"),NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
         clearScreen();
         printLogo();
         printMenu();

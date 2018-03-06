@@ -6,117 +6,124 @@
 
 using namespace UIHelpers;
 
-EnemyAI::EnemyAI(LevelManager* lvlman)
+EnemyAI::EnemyAI(shared_ptr<LevelManager> lvlman)
 {
     lvlManager = lvlman;
 }
 
-void EnemyAI::getNextPosition(Enemy* enemy)
+void EnemyAI::getNextPosition(shared_ptr<Enemy> enemy)
 {
-    if (abs(lvlManager->player->xPos - enemy->xPos) < followPlayerLimit ||
-        abs(lvlManager->player->yPos - enemy->yPos) < followPlayerLimit )
+    if(shared_ptr<LevelManager> lvlman = lvlManager.lock())
     {
-        vector<pos> path = findPath({enemy->xPos, enemy->yPos});
-
-        //DEBUG
-        //debugPrintNodes(path);
-        //system("pause");
-
-        // (1, 0) = Parent at right | (-1, 0) = Parent at Left | (0, 1) = Parent at Top | (0, -1) = Parent at Bottom
-
-        pos dir = path[1] - path[0];
-        pos nextPos;
-
-        for(pos p : path)
+         if (abs(lvlman->player->xPos - enemy->xPos) < followPlayerLimit ||
+            abs(lvlman->player->yPos - enemy->yPos) < followPlayerLimit )
         {
-            if((p.X != path[0].X && dir.X == 0) || (p.Y != path[0].Y && dir.Y == 0))
-                break;
-            else
+
+            vector<pos> path = findPath({enemy->xPos, enemy->yPos});
+
+            //DEBUG
+            //debugPrintNodes(path);
+            //system("pause");
+
+            // (1, 0) = Parent at right | (-1, 0) = Parent at Left | (0, 1) = Parent at Top | (0, -1) = Parent at Bottom
+
+            pos dir = path[1] - path[0];
+            pos nextPos;
+
+            for(pos p : path)
             {
-                enemy->xPos = p.X;
-                enemy->yPos = p.Y;
+                if((p.X != path[0].X && dir.X == 0) || (p.Y != path[0].Y && dir.Y == 0))
+                    break;
+                else
+                {
+                    enemy->xPos = p.X;
+                    enemy->yPos = p.Y;
+                }
             }
         }
-    }
-    else
-    {
-        enemy->randomMoveEnemy();
+        else
+        {
+            enemy->randomMoveEnemy();
+        }
     }
 }
 
 // Find shortest path to player
 vector<EnemyAI::pos> EnemyAI::findPath(pos p)
 {
-    pos startPosition = p;
-    pos destPosition = {lvlManager->player->xPos, lvlManager->player->yPos};
-    vector<node> openList;
-    vector<node> closeList;
-    node currNode;
-
-    currNode.position = startPosition;
-    currNode.F = 0;
-    currNode.G = 0;
-    currNode.H = 0;
-    currNode.parent.X = 0;
-    currNode.parent.Y = 0;
-
-    openList.emplace_back(currNode);
-
-    while (openList.size() > 0)
+    if(shared_ptr<LevelManager> lvlman = lvlManager.lock())
     {
-        if(currNode.position == destPosition)
-            break;
+        pos startPosition = p;
+        pos destPosition = {lvlman->player->xPos, lvlman->player->yPos};
+        vector<node> openList;
+        vector<node> closeList;
+        node currNode;
 
-        closeList.emplace_back(currNode);
-        auto it = find(openList.begin(), openList.end(), currNode);
-            if (it != openList.end())
-                openList.erase(it);
+        currNode.position = startPosition;
+        currNode.F = 0;
+        currNode.G = 0;
+        currNode.H = 0;
+        currNode.parent.X = 0;
+        currNode.parent.Y = 0;
 
-        vector<node> tempList = checkNodes(currNode, startPosition, destPosition, closeList);
-        openList.insert(openList.end(), tempList.begin(), tempList.end());
+        openList.emplace_back(currNode);
 
-        sort(openList.begin(), openList.end());
-
-        vector<node> sameFValue;
-        sameFValue.emplace_back(openList[0]);
-        for(node n : openList)
+        while (openList.size() > 0)
         {
-            if(n.F == sameFValue[0].F)
-                sameFValue.emplace_back(n);
-            else
+            if(currNode.position == destPosition)
                 break;
+
+            closeList.emplace_back(currNode);
+            auto it = find(openList.begin(), openList.end(), currNode);
+                if (it != openList.end())
+                    openList.erase(it);
+
+            vector<node> tempList = checkNodes(currNode, startPosition, destPosition, closeList);
+            openList.insert(openList.end(), tempList.begin(), tempList.end());
+
+            sort(openList.begin(), openList.end());
+
+            vector<node> sameFValue;
+            sameFValue.emplace_back(openList[0]);
+            for(node n : openList)
+            {
+                if(n.F == sameFValue[0].F)
+                    sameFValue.emplace_back(n);
+                else
+                    break;
+            }
+
+            if(sameFValue.size() > 1)
+                sort(sameFValue.begin(), sameFValue.end(), node::compareH);
+
+            currNode = sameFValue[0];
         }
 
-        if(sameFValue.size() > 1)
-            sort(sameFValue.begin(), sameFValue.end(), node::compareH);
+        //DEBUG
+        //debugPrintNodes(openList, closeList);
+        //system("pause");
 
-        currNode = sameFValue[0];
-    }
+        //debugPrintNodes(closeList);
+        //system("pause");
 
-    //DEBUG
-    //debugPrintNodes(openList, closeList);
-    //system("pause");
+        vector<pos> path;
+        path.emplace_back(currNode.position);
 
-    //debugPrintNodes(closeList);
-    //system("pause");
-
-    vector<pos> path;
-    path.emplace_back(currNode.position);
-
-    while(currNode.position != startPosition)
-    {
-        for(node n : closeList)
+        while(currNode.position != startPosition)
         {
-            if(n.position == currNode.parent)
+            for(node n : closeList)
             {
-                path.insert(path.begin(), n.position);
-                currNode = n;
-                break;
+                if(n.position == currNode.parent)
+                {
+                    path.insert(path.begin(), n.position);
+                    currNode = n;
+                    break;
+                }
             }
         }
-    }
 
-    return path;
+        return path;
+    }
 }
 
 // Check surrounding nodes
@@ -150,7 +157,8 @@ vector<EnemyAI::node> EnemyAI::checkNodes(node cNode, pos sPosition, pos dPositi
                 continue;
             }
         // 0 = to path
-        if(notChecked && lvlManager->maze->getMazeArray()[cNode.position.X + dir.X][cNode.position.Y + dir.Y] == 0)
+        if(notChecked &&
+           lvlManager.lock()->maze->getMazeArray()[cNode.position.X + dir.X][cNode.position.Y + dir.Y] == 0)
         {
             tempNode.position = cNode.position + dir;
             tempNode.parent = cNode.position;

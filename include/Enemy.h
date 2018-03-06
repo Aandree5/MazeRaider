@@ -5,6 +5,7 @@
 #include <vector>
 #include <cstdlib> //random generation
 #include <iostream>
+#include "memory"
 
 using namespace std;
 
@@ -14,7 +15,7 @@ class LevelManager;
 class Enemy
 {
     public:
-        Enemy(Maze* m);
+        Enemy(shared_ptr<Maze> m);
         ~Enemy();
 
         //functions
@@ -40,7 +41,7 @@ class Enemy
 
 
         //variables
-        Maze* maze;
+        weak_ptr<Maze> maze;
         int xPos, yPos;
 
 

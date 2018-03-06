@@ -3,6 +3,7 @@
 #include <vector>
 #include <memory>
 
+
 using namespace std;
 
 class UI;
@@ -12,18 +13,52 @@ class Enemy;
 class ScoreTime;
 class EnemyAI;
 
-class LevelManager
+class LevelManager : public std::enable_shared_from_this<LevelManager>
 {
     public:
         LevelManager(int pID);
         ~LevelManager();
 
-        UI *ui;
-        Maze *maze;
+        void BuildLevel();
+
+        shared_ptr<UI> ui;
+        shared_ptr<Maze>maze;
         Player *player;
+        shared_ptr<EnemyAI>enemyai;
         ScoreTime *scoretime;
-        EnemyAI *enemyai;
-        vector<Enemy*> enemies;
+        vector<shared_ptr<Enemy>> enemies;
+
+        enum Music
+        {
+            Muted,
+            MainMenu,
+            SelectionScreen,
+            Map,
+            Battle,
+            GameOver,
+            Victory
+        };
+
+        enum Effect
+        {
+            Move,
+            Run,
+            PickUp,
+            Attack,
+            Defend,
+            Heal,
+            EnemyKilled,
+            LevelLost,
+            LevelPassed,
+            PauseOpen,
+            PauseClose
+        };
+
+        Music music;
+        bool isMuted;
+
+        void changeMusic(Music m);
+        void playEffect(Effect e);
 
         int getPlayerID();
 

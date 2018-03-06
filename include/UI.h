@@ -5,6 +5,7 @@
 #include <map>
 #include <windows.h>
 #include <mysql.h>
+#include <memory>
 
 
 
@@ -12,12 +13,13 @@ using namespace std;
 
 class LevelManager;
 class BattleScene;
+class Enemy;
+class ScoreTime;
 
 class  UI
 {
     public:
-        UI(LevelManager* lvlman);
-        ~UI();
+        UI(shared_ptr<LevelManager> lvlman);
 
         // Build UI
         void ShowUI();
@@ -28,7 +30,8 @@ class  UI
         // Check if it's in battle
         bool inBattle;
 
-        BattleScene* btlScene;
+        unique_ptr<BattleScene> btlScene;
+        void StartBattleScene(shared_ptr<Enemy> enemy);
 
          // Meshes
         vector<array<string, 8>> enemyMesh = {{"                                   ",
@@ -107,7 +110,7 @@ class  UI
 
     private:
         // Pointer to level manager
-        LevelManager* lvlManager;
+        weak_ptr<LevelManager> lvlManager;
 
         // Overload for UIHelpers PrintC function for pausing game
         void PrintC(char character, int colour = 7, bool twoChar = false, bool hideWhenPaused = false);
