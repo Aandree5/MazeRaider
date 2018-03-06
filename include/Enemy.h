@@ -5,7 +5,7 @@
 #include <vector>
 #include <cstdlib> //random generation
 #include <iostream>
-#include "memory"
+#include <memory>
 
 using namespace std;
 
@@ -44,6 +44,7 @@ class Enemy
         weak_ptr<Maze> maze;
         int xPos, yPos;
 
+        bool followingPlayer;
 
     protected:
 

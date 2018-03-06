@@ -3,6 +3,8 @@
 #include "LevelManager.h"
 #include "Player.h"
 #include "UIHelpers.h"
+#include "Enemy.h"
+#include "UI.h"
 
 using namespace UIHelpers;
 
@@ -18,6 +20,11 @@ void EnemyAI::getNextPosition(shared_ptr<Enemy> enemy)
          if (abs(lvlman->player->xPos - enemy->xPos) < followPlayerLimit ||
             abs(lvlman->player->yPos - enemy->yPos) < followPlayerLimit )
         {
+            string m = "An enemy just felt you, it's coming to find you!";
+            if(lvlman->ui->mazeInfo[lvlman->ui->mazeInfo.size() - 1].first != m)
+                UpdateMessageInfo(lvlman->ui->mazeInfo, m, MessageType::Enemy);
+
+            enemy->followingPlayer = true;
 
             vector<pos> path = findPath({enemy->xPos, enemy->yPos});
 
@@ -43,6 +50,7 @@ void EnemyAI::getNextPosition(shared_ptr<Enemy> enemy)
         }
         else
         {
+            enemy->followingPlayer = false;
             enemy->randomMoveEnemy();
         }
     }

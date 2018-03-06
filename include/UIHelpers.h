@@ -9,7 +9,7 @@
 #include <cctype>
 #include <sstream>
 #include <algorithm>
-#include "memory"
+#include <memory>
 
 #include "LevelManager.h"
 
@@ -120,11 +120,11 @@ namespace UIHelpers
     // change the text colour
     bool ChangeColour(int colour);
     // Show pause screen
-    void buildPause(shared_ptr<LevelManager> lvlManger, int x, int y, bool allowSave = true);
+    void BuildPause(shared_ptr<LevelManager> lvlManger, int x, int y, bool allowSave = true);
 
     string toLower(string str);
 
-    void setFullScreen();
+    void SetFullScreen();
 
     // Check argument values from SQLPrepare function
     template<typename Value>
@@ -310,6 +310,30 @@ namespace UIHelpers
     expectedInput requestFromUser(string question, const int &minLimit = -999999, const int &maxLimit = 999999)
     {
         return requestFromUser<expectedInput>(nullptr, question, minLimit, maxLimit);
+    }
+
+    enum class MessageType
+    {
+        Attack,
+        Defend,
+        Heal,
+        PickUp,
+        Enemy,
+        General,
+        Victory
+    };
+
+    // Add line to battleInfo - Text to show and type action
+    template<typename T>
+    void UpdateMessageInfo(T &messageArray, string text, MessageType mType)
+    {
+        for(unsigned i = 0; i < messageArray.size(); i++)
+        {
+            if( i + 1 < messageArray.size())
+                messageArray[i] = messageArray[i + 1];
+            else
+                messageArray[i] = make_pair(text, mType);
+        }
     }
 
 };

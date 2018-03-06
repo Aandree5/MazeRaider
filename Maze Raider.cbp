@@ -42,6 +42,7 @@
 			<Add library="winmm" />
 		</Linker>
 		<Unit filename="include/BattleScene.h" />
+		<Unit filename="include/CharacterSelection.h" />
 		<Unit filename="include/Enemy.h" />
 		<Unit filename="include/EnemyAI.h" />
 		<Unit filename="include/Highscore.h" />
@@ -53,6 +54,7 @@
 		<Unit filename="include/UIHelpers.h" />
 		<Unit filename="include/Utils.h" />
 		<Unit filename="src/BattleScene.cpp" />
+		<Unit filename="src/CharacterSelection.cpp" />
 		<Unit filename="src/Enemy.cpp" />
 		<Unit filename="src/EnemyAI.cpp" />
 		<Unit filename="src/LevelManager.cpp" />

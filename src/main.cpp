@@ -97,7 +97,7 @@ void registerUser() {
 int main() {
     waveOutSetVolume(0, -1);
 
-    setFullScreen();
+    SetFullScreen();
     connectToDatabase();
 
     while (1) {

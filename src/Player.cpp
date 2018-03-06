@@ -4,6 +4,8 @@
 #include "BattleScene.h"
 #include "UI.h"
 #include "UIHelpers.h"
+#include "Maze.h"
+#include "ScoreTime.h"
 
 using namespace UIHelpers;
 
@@ -201,6 +203,18 @@ void Player::chestEvent(void)
     pHealth += addHealth;
     pKeys += addKeys;
     pDamage += addDamage;
+
+    // Andre's Code
+    string message = "You just earned " + to_string(randomScore) + " points, " +  to_string(addArmour) +
+    " armour, " + to_string(addHealth) + " health, " + to_string(addDamage) + " damage";
+
+    if(addKeys > 0)
+        message += " ," + to_string(addKeys) + " keys";
+
+    message += ".";
+
+
+    UpdateMessageInfo(lvlmanager->ui->mazeInfo, message, MessageType::PickUp);
 }
 
 void Player::checkChest()

@@ -31,6 +31,7 @@ Enemy::Enemy(shared_ptr<Maze> m)
 
     xPos = x;
     yPos = y;
+    followingPlayer = false;
 }
 Enemy::~Enemy()
 {

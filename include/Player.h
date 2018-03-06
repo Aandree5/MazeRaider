@@ -1,8 +1,5 @@
 #ifndef PLAYER_H
 #define PLAYER_H
-#include "Maze.h"
-#include "Enemy.h"
-#include "ScoreTime.h"
 #include <array>
 #include <vector>
 #include <cstdlib> //random generation
@@ -12,6 +9,9 @@
 using namespace std;
 
 class LevelManager;
+class Enemy;
+class Maze;
+class ScoreTime;
 
 class Player
 {

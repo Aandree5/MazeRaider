@@ -32,7 +32,7 @@ class LevelManager : public std::enable_shared_from_this<LevelManager>
         ScoreTime *scoretime;
         vector<shared_ptr<Enemy>> enemies;
 
-        enum Music
+        enum class Music
         {
             Muted,
             MainMenu,
@@ -43,7 +43,7 @@ class LevelManager : public std::enable_shared_from_this<LevelManager>
             Victory
         };
 
-        enum Effect
+        enum class Effect
         {
             Move,
             Run,

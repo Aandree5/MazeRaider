@@ -1,5 +1,4 @@
 #include "UI.h"
-#include "UIHelpers.h"
 #include "Maze.h"
 #include "Player.h"
 #include "ScoreTime.h"
@@ -16,6 +15,8 @@ UI::UI(shared_ptr<LevelManager> lvlman)
     lvlManager = lvlman;
 
     inBattle = false;
+
+    mazeInfo[mazeInfo.size() - 1] = make_pair("You just want to leave!", MessageType::General);
 }
 
 // Build UI
@@ -39,7 +40,14 @@ void  UI::ShowUI()
             break;
     // 2 = Enemy Killed
         else if (battleState == 2)
+        {
+            if(lvlManager.lock()->enemies.size() > 0)
+                UpdateMessageInfo(mazeInfo, "You defeated the enemy!", MessageType::Victory);
+            else
+                UpdateMessageInfo(mazeInfo, "You defeated all enemies!!", MessageType::Victory);
+
             continue;
+        }
 
         if (!inBattle || (!btlScene->enemyJustAttacked && btlScene->TPlayerFEnemy))
             PrintUOptions();
@@ -209,17 +217,68 @@ void UI::PrintUOptions()
             PrintC(to_string(lvlman->enemies.size()), 15);
 
             cout << endl;
+            PrintC(bsTopLeftCorner, 8);
+            for(int i = 0; i < 70; i++)
+                PrintC(bsTopBottomLines, 8);
+            cout << endl;
 
+            for(int i = 0; i < mazeInfo.size(); i++)
+            {
+                if(i == mazeInfo.size() - 1)
+                {
+                    PrintC(bsLeftRightLines, 15);
+                    PrintC(" ");
+                    switch(mazeInfo[i].second)
+                    {
+                    case MessageType::PickUp:
+                        PrintC(" " + mazeInfo[i].first, 14);
+                        break;
+                    case MessageType::Enemy:
+                        PrintC(" " + mazeInfo[i].first, 12);
+                        break;
+                    case MessageType::General:
+                        PrintC(" " + mazeInfo[i].first, 15);
+                        break;
+                    case MessageType::Victory:
+                        PrintC(" " + mazeInfo[i].first, 10);
+                        break;
+                    }
+
+                }
+                else
+                {
+                    PrintC(bsLeftRightLines, 8);
+                    PrintC(" ");
+                    switch(mazeInfo[i].second)
+                    {
+                    case MessageType::PickUp:
+                        PrintC(" " + mazeInfo[i].first, 6);
+                        break;
+                    case MessageType::Enemy:
+                        PrintC(" " + mazeInfo[i].first, 4);
+                        break;
+                    case MessageType::General:
+                        PrintC(" " + mazeInfo[i].first, 8);
+                        break;
+                    case MessageType::Victory:
+                        PrintC(" " + mazeInfo[i].first, 2);
+                        break;
+                    }
+                }
+
+                cout << endl;
+            }
 
             if(lvlman->isPaused)
             {
                 int mazeW = lvlman->maze->getMazeSizeWH().first * 2;
                 int mazeH = lvlman->maze->getMazeSizeWH().second;
 
-                buildPause(lvlman, mazeW - (mazeW / 2), (mazeH - (mazeH / 2)) + 3);
+                BuildPause(lvlman, mazeW - (mazeW / 2), (mazeH - (mazeH / 2)) + 3);
             }
             else
             {
+                cout << endl;
                 userOption = requestFromUser<char>(lvlman);
 
                 if (lvlman->isPaused)
@@ -241,8 +300,18 @@ void UI::PrintUOptions()
                     if(inBattle)
                         return;
 
+                    bool enemyFollowing = false;
                     for(shared_ptr<Enemy> e : lvlman->enemies)
+                    {
                         lvlman->enemyai->getNextPosition(e);
+                        if(e->followingPlayer)
+                            enemyFollowing = true;
+                    }
+
+                    string m = "Nice, the enemy has lost you!";
+                    if(mazeInfo[mazeInfo.size() - 1].first != m)
+                        if(!enemyFollowing)
+                            UpdateMessageInfo(mazeInfo, m, MessageType::General);
 
                 }
                 else
@@ -356,7 +425,7 @@ void UI::PrintUOptions()
                     int sceneW = btlScene->getSceneSizeWH().first;
                     int sceneH = btlScene->getSceneSizeWH().second;
 
-                    buildPause(lvlman, sceneW - (sceneW / 2), (sceneH - (sceneH / 2)) + 3);
+                    BuildPause(lvlman, sceneW - (sceneW / 2), (sceneH - (sceneH / 2)) + 3);
                 }
                 else
                 {

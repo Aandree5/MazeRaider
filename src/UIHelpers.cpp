@@ -134,7 +134,7 @@ string UIHelpers::toLower(string str)
     return strLower;
 }
 
-void UIHelpers::setFullScreen()
+void UIHelpers::SetFullScreen()
 {
     /*keybd_event(VK_MENU,0x38,0,0);
     keybd_event(VK_RETURN,0x1c,0,0);
@@ -145,7 +145,7 @@ void UIHelpers::setFullScreen()
 }
 
 // Show pause screen
-void UIHelpers::buildPause(shared_ptr<LevelManager> lvlManager, int x, int y, bool allowSave)
+void UIHelpers::BuildPause(shared_ptr<LevelManager> lvlManager, int x, int y, bool allowSave)
 {
     #ifdef _WIN32
         HANDLE hStdOut = GetStdHandle( STD_OUTPUT_HANDLE );

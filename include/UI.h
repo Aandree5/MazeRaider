@@ -1,5 +1,6 @@
 #ifndef UI_H
 #define UI_H
+#include "UIHelpers.h"
 #include <vector>
 #include <array>
 #include <map>
@@ -10,6 +11,7 @@
 
 
 using namespace std;
+using namespace UIHelpers;
 
 class LevelManager;
 class BattleScene;
@@ -32,6 +34,8 @@ class  UI
 
         unique_ptr<BattleScene> btlScene;
         void StartBattleScene(shared_ptr<Enemy> enemy);
+
+        array<pair<string, UIHelpers::MessageType>, 3> mazeInfo;
 
          // Meshes
         vector<array<string, 8>> enemyMesh = {{"                                   ",

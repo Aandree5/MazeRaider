@@ -1,5 +1,6 @@
 #ifndef BATTLESCENE_H
 #define BATTLESCENE_H
+#include "UIHelpers.h"
 #include <vector>
 #include <iostream>
 #include <array>
@@ -9,6 +10,7 @@
 #define defenceHealAnimSpeed 150
 
 using namespace std;
+using namespace UIHelpers;
 
 class LevelManager;
 class Enemy;
@@ -54,7 +56,7 @@ class BattleScene
         weak_ptr<LevelManager> lvlManager;
 
         // Text to show and type action | 0 = attack   1 = defend    2 = heal
-        array<pair<string, int>, 13> battleInfo;
+        array<pair<string, MessageType>, 13> battleInfo;
 
         unsigned sceneWidth;
         unsigned sceneHeight;
@@ -68,9 +70,6 @@ class BattleScene
 
         // Check health color
         int HealthColor(int health, bool TBackFFront = true);
-
-        // Add line to battleInfo - Text to show and type action | 0 = info  1 = attack   2 = defend    3 = heal
-        void UpdateBattleInfo(string text, int type);
 
         // Play attack animation
         void PlayAttack(int atype, int colour);

@@ -1,7 +1,6 @@
 #include <math.h>
 #include <algorithm>
 #include "BattleScene.h"
-#include "UIHelpers.h"
 #include "UI.h"
 #include "LevelManager.h"
 #include "Enemy.h"
@@ -28,7 +27,7 @@ BattleScene::BattleScene(shared_ptr<LevelManager> lvlman, shared_ptr<Enemy> e)
     isEnemyDefending = false;
     enemyJustAttacked = false;
 
-    battleInfo[battleInfo.size() - 1] = make_pair(e->getName() + " encountered.", 0);
+    battleInfo[battleInfo.size() - 1] = make_pair(e->getName() + " encountered.", MessageType::General);
 }
 
 int BattleScene::BuildScene()
@@ -122,16 +121,16 @@ int BattleScene::BuildScene()
                                 PrintC(" ");
                                 switch (battleInfo[h - 1].second)
                                 {
-                                case 0:
+                                case MessageType::General:
                                     PrintC(battleInfo[h - 1].first, pauseColour(15));
                                     break;
-                                case 1:
+                                case MessageType::Attack:
                                     PrintC(battleInfo[h - 1].first, pauseColour(12));
                                     break;
-                                case 2:
+                                case MessageType::Defend:
                                     PrintC(battleInfo[h - 1].first, pauseColour(11));
                                     break;
-                                case 3:
+                                case MessageType::Heal:
                                     PrintC(battleInfo[h - 1].first, pauseColour(10));
                                     break;
                                 default:
@@ -146,16 +145,16 @@ int BattleScene::BuildScene()
                                 PrintC(" ");
                                 switch (battleInfo[h - 1].second)
                                 {
-                                case 0:
+                                case MessageType::General:
                                     PrintC(battleInfo[h - 1].first, pauseColour(8));
                                     break;
-                                case 1:
+                                case MessageType::Attack:
                                     PrintC(battleInfo[h - 1].first, pauseColour(4));
                                     break;
-                                case 2:
+                                case MessageType::Defend:
                                     PrintC(battleInfo[h - 1].first, pauseColour(3));
                                     break;
-                                case 3:
+                                case MessageType::Heal:
                                     PrintC(battleInfo[h - 1].first, pauseColour(2));
                                     break;
                                 default:
@@ -287,18 +286,6 @@ int BattleScene::HealthColor(int health, bool TBackFFront)
     }
 
     return pauseColour(colour);
-}
-
-// Add line to battleInfo - Text to show and type action | 0 = attack   1 = defend    2 = heal
-void BattleScene::UpdateBattleInfo(string text, int type)
-{
-    for(unsigned i = 0; i < battleInfo.size(); i++)
-    {
-        if( i + 1 < battleInfo.size())
-            battleInfo[i] = battleInfo[i + 1];
-        else
-            battleInfo[i] = make_pair(text, type);
-    }
 }
 
 
@@ -789,7 +776,7 @@ void BattleScene::PlayerAttack()
         }
 
         tempHealth = tempHealth - enemyHealth;
-        UpdateBattleInfo(lvlman->player->pName + " dealt " + to_string(tempHealth) + " damage", 1);
+        UpdateMessageInfo(battleInfo, lvlman->player->pName + " dealt " + to_string(tempHealth) + " damage", MessageType::Attack);
 
         isEnemyDefending = false;
         TPlayerFEnemy = false;
@@ -802,7 +789,7 @@ void BattleScene::PlayerDefend()
     {
         PlayDefend(lvlman->player->pDefenceType, lvlman->player->pDefenceColour);
 
-        UpdateBattleInfo(lvlman->player->pName + " is defending", 2);
+        UpdateMessageInfo(battleInfo, lvlman->player->pName + " is defending", MessageType::Defend);
 
         isPlayerDefending = true;
         isEnemyDefending = false;
@@ -824,7 +811,7 @@ void BattleScene::PlayerHeal()
             playerHealth = playerMaxHealth;
 
         tempHealth = playerHealth - tempHealth;
-        UpdateBattleInfo(lvlman->player->pName + " healed by " + to_string(tempHealth), 3);
+        UpdateMessageInfo(battleInfo, lvlman->player->pName + " healed by " + to_string(tempHealth), MessageType::Heal);
 
         isEnemyDefending = false;
         TPlayerFEnemy = false;
@@ -848,7 +835,8 @@ bool BattleScene::canPlayerRun()
 
         if (chance <= changeLimit)
         {
-            UpdateBattleInfo(lvlman->player->pName + " ran from battle.", 0);
+            UpdateMessageInfo(battleInfo, lvlman->player->pName + " ran from battle.", MessageType::General);
+            UpdateMessageInfo(lvlman->ui->mazeInfo, lvlman->player->pName + " ran from battle.", MessageType::General);
 
             // Delete enemy from vector
             auto it = find(begin(lvlman->enemies), end(lvlman->enemies), e);
@@ -861,7 +849,7 @@ bool BattleScene::canPlayerRun()
         }
         else
         {
-            UpdateBattleInfo(e->getName() + " stopped " + lvlman->player->pName + " from running.", 0);
+            UpdateMessageInfo(battleInfo, e->getName() + " stopped " + lvlman->player->pName + " from running.", MessageType::General);
             isEnemyDefending = false;
             TPlayerFEnemy = false;
             return false;
@@ -894,7 +882,7 @@ void BattleScene::EnemyAttack()
         }
 
             tempHealth = tempHealth - playerHealth;
-            UpdateBattleInfo(e->getName() + " dealt " + to_string(tempHealth) + " damage", 1);
+            UpdateMessageInfo(battleInfo, e->getName() + " dealt " + to_string(tempHealth) + " damage", MessageType::Attack);
 
         isPlayerDefending = false;
         TPlayerFEnemy = true;
@@ -908,7 +896,7 @@ void BattleScene::EnemyDefend()
     {
          PlayDefend(e->getDefenceType(), e->getDefenceColour());
 
-        UpdateBattleInfo(e->getName() + " is defending", 2);
+        UpdateMessageInfo(battleInfo, e->getName() + " is defending", MessageType::Defend);
 
         isEnemyDefending = true;
         isPlayerDefending = false;
@@ -931,7 +919,7 @@ void BattleScene::EnemyHeal()
             enemyHealth = enemyMaxHealth;
 
         tempHealth = enemyHealth - tempHealth;
-        UpdateBattleInfo(e->getName() + " healed by " + to_string(tempHealth), 3);
+        UpdateMessageInfo(battleInfo, e->getName() + " healed by " + to_string(tempHealth), MessageType::Heal);
 
         isPlayerDefending = false;
         TPlayerFEnemy = true;
