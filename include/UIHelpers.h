@@ -133,9 +133,12 @@ namespace UIHelpers
         // Convert v to string
         stringstream ss;
         string convString;
+        string tempConv;
 
         ss << v;
         ss >> convString;
+        while(ss >> tempConv)
+            convString += ' ' + tempConv;
 
         // Iterate through v and remove any not allowed characters
         for(string::iterator it = begin(convString); it != end(convString); it++)
@@ -147,10 +150,11 @@ namespace UIHelpers
             // A - Z = 65 - 90
             // a - z = 97 - 122
             // Special letters - All other numbers
+            // 20 = Space
 
             if(!(c >= 48 && c <= 57) && !(c >= 65 && c <= 90) && !(c >= 97 && c <= 122) && !(c >= 128 && c <= 154) &&
                !(c >= 160 && c <= 165) && !(c >= 181 && c <= 183) && !(c >= 198 && c <= 199) && !(c >= 210 && c <= 212) &&
-               !(c >= 224 && c <= 237))
+               !(c >= 224 && c <= 237) && c != 32)
             {
                 convString.erase(it);
                 it--; // If erases, decrease iterator to not skip any character
@@ -203,6 +207,8 @@ namespace UIHelpers
 
         while(true)
         {
+            cin.clear();
+
             PrintC(question);
             getline(cin, input);
 
@@ -219,12 +225,19 @@ namespace UIHelpers
             }
 
             // Check if input is of requested type
-            istringstream iss(input);
-            if(iss >> userInput)
+            stringstream ss(input);
+            if(ss >> userInput)
             {
-                istringstream issToNum(input);
+                // Variable to check if there is more to read from user input
+                expectedInput uImp;
+                // if the is more to read add it to previous variable
+                while(ss >> uImp)
+                    userInput += ' ' + uImp;
+
+                // Check if it's a number, and if it's inside the limits
+                stringstream ssToNum(input);
                 int isNumber;
-                if(issToNum >> isNumber)
+                if(ssToNum >> isNumber)
                 {
                     if((minLimit == -999999 && maxLimit == 999999) || (isNumber >= minLimit && isNumber < maxLimit))
                         break;
@@ -232,7 +245,6 @@ namespace UIHelpers
                 else
                     break;
             }
-
 
             if(lvlManager == nullptr || !lvlManager->isPaused)
             {

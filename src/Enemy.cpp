@@ -163,10 +163,10 @@ void Enemy::statsFromDatabase()
         exit(0);
     }
 
-    string query = "SELECT e.name, e.mesh, e.health, e.armour, e.attack_power, w.weapon_name, w.weapon_power, e.heal_power, w.attack_type,"
-    " w.attack_colour, e.defence_type, e.defence_colour, e.heal_type, e.heal_colour "
+    string query = "SELECT e.name, e.mesh, e.health, e.armour, e.attack_power, w.weapon_name, w.weapon_power, e.heal_power, "
+    "w.attack_type, w.attack_colour, e.defence_type, e.defence_colour, e.heal_type, e.heal_colour "
     "FROM Enemy e, Weapon w WHERE e.weapon_id = w.weapon_id "
-    "ORDER BY RAND() LIMIT 1;";
+    "ORDER BY RAND() LIMIT 1";
 
     if (mysql_query(connection, query.c_str()))
         cout << mysql_error(connection) << endl;

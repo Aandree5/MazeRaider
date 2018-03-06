@@ -58,11 +58,10 @@ void UI::ShowSelectionScreen()
 
             cout << endl << endl;
 
-            string query = "SELECT pc.char_id, pc.name, pc.mesh, pc.health, pc.armour, pc.attack_power, w.weapon_id, "
+            string query = SQLPrepare("SELECT pc.char_id, pc.name, pc.mesh, pc.health, pc.armour, pc.attack_power, w.weapon_id, "
             "w.weapon_name, w.weapon_power, w.attack_type, w.attack_colour, pc.heal_power, pc.defence_type, pc.defence_colour, pc.heal_type, pc.heal_colour "
-            "FROM user_info i, PlayerChar pc, Weapon w WHERE i.user_id = " + to_string(lvlman->getPlayerID()) +
-            " AND i.user_id = pc.player_id AND pc.weapon_id = w.weapon_id "
-            "ORDER BY pc.health DESC";
+            "FROM user_info i, PlayerChar pc, Weapon w WHERE i.user_id = %? AND i.user_id = pc.player_id AND pc.weapon_id = w.weapon_id "
+            "ORDER BY pc.health DESC", lvlman->getPlayerID());
 
             if (mysql_query(connection, query.c_str()))
                 cout << mysql_error(connection) << endl;
@@ -227,6 +226,7 @@ void UI::selCharCreateNew(MYSQL *connection)
 {
     clearScreen();
 
+    // Get a random weapon from database
     string query = "SELECT weapon_id, weapon_name, weapon_power FROM Weapon ORDER BY RAND() LIMIT 1";
 
     if (mysql_query(connection, query.c_str()))
@@ -295,12 +295,10 @@ void UI::selCharCreateNew(MYSQL *connection)
     mesh = requestFromUser<int>("Choose character: ", 1, playerMesh.size() + 1);
     name = requestFromUser<string>("Character name: ");
 
-    string createQuery = "INSERT INTO PlayerChar(player_id, name, mesh, health, armour, attack_power, "
+    string createQuery = SQLPrepare("INSERT INTO PlayerChar(player_id, name, mesh, health, armour, attack_power, "
     "weapon_id, heal_power, defence_type, defence_colour, heal_type, heal_colour) "
-    "VALUES (" + to_string(lvlManager.lock()->getPlayerID()) +", '" + name + "', " + to_string(mesh - 1) + ", " + to_string(health) +
-    ", " + to_string(armour) + ", " + to_string(attack_power) + ", " + to_string(weapon_id) + ", " + to_string(heal_power) +
-    ", " + to_string(defenceType) + ", " + to_string(defenceColour) + ", " + to_string(healType) + ", " +
-    to_string(healColour) +");";
+    "VALUES (%?, '%?', %?, %?, %?, %?, %?, %?, %?, %?, %?, %?)", lvlManager.lock()->getPlayerID(), name, mesh - 1, health, armour,
+    attack_power, weapon_id, heal_power, defenceType, defenceColour, healType, healColour);
 
     if (mysql_query(connection, createQuery.c_str()))
         cout << mysql_error(connection) << endl;
@@ -313,7 +311,7 @@ void UI::selCharCreateNew(MYSQL *connection)
 // Delete character
 void UI::selCharDelete(MYSQL *connection, int charID, string name)
 {
-    string deleteQuery = "DELETE FROM PlayerChar WHERE char_id = " + to_string(charID);
+    string deleteQuery = SQLPrepare("DELETE FROM PlayerChar WHERE char_id = %?", charID);
     string safety = requestFromUser<string>("ARE YOU 100% SURE YOU WANT TO DELETE -> " + name + " [y/n]: ");
 
     if(toLower(safety) != "y" && toLower(safety) != "yes")

@@ -887,7 +887,7 @@ void BattleScene::EnemyAttack()
             if(e->getAttackPower() > lvlman->player->pArmour)
                 damageToDeal = (e->getAttackPower() + e->getWeapon().second) - lvlman->player->pArmour;
 
-            if(enemyHealth - damageToDeal >= 0)
+            if(playerHealth - damageToDeal >= 0)
                 playerHealth -= damageToDeal;
             else
                 playerHealth = 0;

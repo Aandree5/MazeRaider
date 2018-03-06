@@ -169,7 +169,7 @@ void Player::chestEvent(void)
     }
 
     //query for getting the weapon
-    string getWeapon = "SELECT weapon_name, weapon_power, weapon_id FROM Weapon ORDER BY RAND() LIMIT 1;";
+    string getWeapon = "SELECT weapon_name, weapon_power, weapon_id FROM Weapon ORDER BY RAND() LIMIT 1";
 
     if (!mysql_query(connection, getWeapon.c_str()))
         cout << mysql_error(connection) << endl;
