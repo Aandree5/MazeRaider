@@ -6,6 +6,7 @@
 #include "Enemy.h"
 #include "EnemyAI.h"
 #include "BattleScene.h"
+#include "CharacterSelection.h"
 #include <sstream>
 #include <mmsystem.h>
 
@@ -31,7 +32,9 @@ void LevelManager::BuildLevel()
 
     enemyai = make_shared<EnemyAI>(shared_from_this());
     ui = make_shared<UI>(shared_from_this());
-    ui->ShowSelectionScreen();
+
+    cSelection = make_shared<CharacterSelection>(shared_from_this());
+    cSelection->ShowSelectionScreen();
 
     scoretime = new ScoreTime(this);
 

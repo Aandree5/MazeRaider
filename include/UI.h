@@ -124,14 +124,6 @@ class  UI
         void PrintUOptions();
         // Screen for gameover
         void ShowGameOver();
-        // Print array to screen
-        void selCharPrintOptions(array<string, 12> &mOptions, int &c);
-        // White space between char info
-        void selCharWhiteSpaceDivider(array<string, 12> &mOptions, int c);
-        // Screen to create character
-        void selCharCreateNew(MYSQL *connection);
-        // Delete character
-        void selCharDelete(MYSQL *connection, int charID, string name);
 
 };
 

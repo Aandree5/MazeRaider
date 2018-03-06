@@ -14,6 +14,7 @@ class Player;
 class Enemy;
 class ScoreTime;
 class EnemyAI;
+class CharacterSelection;
 
 class LevelManager : public std::enable_shared_from_this<LevelManager>
 {
@@ -24,6 +25,7 @@ class LevelManager : public std::enable_shared_from_this<LevelManager>
         void BuildLevel();
 
         shared_ptr<UI> ui;
+        shared_ptr<CharacterSelection> cSelection;
         shared_ptr<Maze>maze;
         Player *player;
         shared_ptr<EnemyAI>enemyai;
