@@ -186,8 +186,6 @@ void UI::PrintUOptions()
             PrintC(bsLeftRightLines, 15);
             PrintC("   Damage: ");
             PrintC(to_string(lvlman->player->pDamage + lvlman->player->pWeapon.second), 15);
-            PrintC("/ ");
-            PrintC(to_string(lvlman->player->pDamage));
             cout << endl;
 
             PrintC("          S          ", 15);
@@ -332,26 +330,24 @@ void UI::PrintUOptions()
                 PrintC(bsLeftRightLines, 15);
                 PrintC("   ");
                 string n = lvlman->player->pName;
-                PrintC(n, 8);
-                for(unsigned i = 0; i < 33 - n.size(); i++)
+                for(unsigned i = 0; i < 25 - n.size(); i++)
                     PrintC(" ");
-                PrintC(bsLeftRightLines, 15);
-                PrintC("   ");
-                PrintC(bScE->getName(), 8);
+
+                PrintC(n, lvlman->player->pAttackColour);
+                PrintC("          ");
+                PrintC(bScE->getName(), bScE->getAttackColour());
                 cout << endl;
 
         // Player, Enemy - Health
                 PrintC("                                                 ");
                 PrintC(bsLeftRightLines, 15);
                 PrintC("   ");
-                PrintC("Health: ");
                 string h = to_string(lvlman->player->pHealth);
-                PrintC(to_string(lvlman->player->pHealth), 15);
                 for(unsigned i = 0; i < 25 - h.size(); i++)
                     PrintC(" ");
-                PrintC(bsLeftRightLines, 15);
-                PrintC("   ");
-                PrintC("Health: ");
+
+                PrintC(to_string(lvlman->player->pHealth), 15);
+                PrintC(" :Health: ");
                 PrintC(to_string(bScE->getHealth()), 15);
                 cout << endl;
 
@@ -366,14 +362,12 @@ void UI::PrintUOptions()
                 PrintC("                ");
                 PrintC(bsLeftRightLines, 15);
                 PrintC("   ");
-                PrintC("Armour: ");
                 string a = to_string(lvlman->player->pArmour);
-                PrintC(to_string(lvlman->player->pArmour), 15);
                 for(unsigned i = 0; i < 25 - a.size(); i++)
                     PrintC(" ");
-                PrintC(bsLeftRightLines, 15);
-                PrintC("   ");
-                PrintC("Armour: ");
+
+                PrintC(to_string(lvlman->player->pArmour), 15);
+                PrintC(" :Armour: ");
                 PrintC(to_string(bScE->getArmour()), 15);
 
                 cout << endl;
@@ -388,34 +382,25 @@ void UI::PrintUOptions()
                 PrintC("                ");
                 PrintC(bsLeftRightLines, 15);
                 PrintC("   ");
-                PrintC("Damage: ");
-                string d = to_string(lvlman->player->pDamage + lvlman->player->pWeapon.second) + "/ " +
-                to_string(lvlman->player->pDamage);
-                PrintC(to_string(lvlman->player->pDamage + lvlman->player->pWeapon.second), 15);
-                PrintC("/ ");
-                PrintC(to_string(lvlman->player->pDamage));
+                string d = to_string(lvlman->player->pDamage + lvlman->player->pWeapon.second);
                 for(unsigned i = 0; i < 25 - d.size(); i++)
                     PrintC(" ");
-                PrintC(bsLeftRightLines, 15);
-                PrintC("   ");
-                PrintC("Damage: ");
+
+                PrintC(d, 15);
+                PrintC(" :Damage: ");
                 PrintC(to_string(bScE->getAttackPower() + bScE->getWeapon().second), 15);
-                PrintC("/ ");
-                PrintC(to_string(bScE->getAttackPower()));
                 cout << endl;
 
         // Player, Enemy - Weapon
                 PrintC("                                                 ");
                 PrintC(bsLeftRightLines, 15);
                 PrintC("   ");
-                PrintC("Weapon: ");
                 string w = lvlman->player->pWeapon.first;
-                PrintC(lvlman->player->pWeapon.first, 15);
                 for(unsigned i = 0; i < 25 - w.size(); i++)
                     PrintC(" ");
-                PrintC(bsLeftRightLines, 15);
-                PrintC("   ");
-                PrintC("Weapon: ");
+
+                PrintC(lvlman->player->pWeapon.first, 15);
+                PrintC(" :Weapon: ");
                 PrintC(bScE->getWeapon().first, 15);
                 cout << endl << endl;
 
