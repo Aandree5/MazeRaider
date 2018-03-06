@@ -157,6 +157,8 @@ void UIHelpers::buildPause(shared_ptr<LevelManager> lvlManager, int x, int y, bo
         int hStdOut;
     #endif // __linux__
 
+
+
     int input;
     string mute = "Mute  ";
     if(lvlManager->isMuted)

@@ -316,6 +316,7 @@ void BattleScene::PlayAttack(int atype, int colour)
         cout << "\033[s";
     #endif // __linux__
 
+    //music
     lvlManager.lock()->playEffect(LevelManager::Effect::Attack);
 
     switch (atype)

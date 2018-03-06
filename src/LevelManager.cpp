@@ -31,10 +31,10 @@ void LevelManager::BuildLevel()
 
     enemyai = make_shared<EnemyAI>(shared_from_this());
     ui = make_shared<UI>(shared_from_this());
-
-    changeMusic(Music::SelectionScreen);
     ui->ShowSelectionScreen();
+
     scoretime = new ScoreTime(this);
+
     ui->ShowUI();
 }
 
@@ -59,7 +59,7 @@ void LevelManager::changeMusic(Music m)
             PlaySound(TEXT("sounds/musics/SelectionScreen.wav"),NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
             break;
         case Music::Map:
-            i = rand() % 7 + 1;
+            i = rand() % 8 + 1;
             oss << "sounds/musics/Map_" << i << ".wav";
             PlaySound(TEXT(oss.str().c_str()),NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
             break;

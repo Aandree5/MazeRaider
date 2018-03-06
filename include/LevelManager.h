@@ -2,6 +2,8 @@
 #define LEVELMANAGER_H
 #include <vector>
 #include <memory>
+#include <cstdlib>
+#include <string>
 
 
 using namespace std;

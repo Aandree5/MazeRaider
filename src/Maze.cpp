@@ -6,7 +6,9 @@
 #include <stdexcept>
 #include <vector>
 #include <time.h>
+#include <LevelManager.h>
 #include <algorithm>
+
 
 /**
  * Constructor.

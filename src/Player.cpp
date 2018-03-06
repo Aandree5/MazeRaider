@@ -3,6 +3,9 @@
 #include "Enemy.h"
 #include "BattleScene.h"
 #include "UI.h"
+#include "UIHelpers.h"
+
+using namespace UIHelpers;
 
 Player::Player(LevelManager *lvlman)
 {
@@ -33,24 +36,25 @@ void Player::movePlayer(char direction)
             if(lvlmanager->ui->inBattle)
                 break;
 
+            //checking to see if there's a path on both sides
             if(maze->getMazeArray()[xPos-1][yPos+steps] == 0 || maze->getMazeArray()[xPos+1][yPos+steps] == 0)
             {
                 steps+=1;
                 break;
             }
+            //checking to see if there's a chest in front
             else if(maze->getMazeArray()[xPos][yPos+steps] == 3)
             {
                 Player::chestEvent();
                 break;
             }
-            else if(maze->getMazeArray()[xPos][yPos+steps] == 5)
+            //checking to see if the exit is on the right
+            else if(maze->getMazeArray()[xPos+1][yPos+steps] == 5)
             {
-                 lvlmanager->ui->ShowNextLevel();
+                steps+=1;
                 break;
             }
             steps+=1;
-
-
         }
         yPos += steps-1;
         checkChest();
@@ -73,13 +77,7 @@ void Player::movePlayer(char direction)
                 Player::chestEvent();
                 break;
             }
-            else if(maze->getMazeArray()[xPos-steps][yPos] == 5)
-            {
-                lvlmanager->ui->ShowNextLevel();
-                break;
-            }
             steps+=1;
-
         }
         xPos -= steps-1;
         checkChest();
@@ -103,10 +101,10 @@ void Player::movePlayer(char direction)
                 Player::chestEvent();
                 break;
             }
+            //checking to see if the player is facing the exit
             else if(maze->getMazeArray()[xPos+steps][yPos] == 5)
             {
                 lvlmanager->ui->ShowNextLevel();
-
                 break;
             }
             steps+=1;
@@ -135,7 +133,7 @@ void Player::movePlayer(char direction)
             }
             else if(maze->getMazeArray()[xPos+1][yPos-steps] == 5)
             {
-                lvlmanager->ui->ShowNextLevel();
+                steps+=1;
                 break;
             }
 
@@ -183,7 +181,7 @@ void Player::chestEvent(void)
     cout << row[0] << row[1] << endl;
 
     //query for changing the value on the player's weapon
-    string saveWeapon = "UPDATE PlayerChar SET weapon_id=" + to_string(atoi(row[2])) + " WHERE char_id=" + to_string(pCharID);
+    string saveWeapon = SQLPrepare("UPDATE PlayerChar SET weapon_id= '%?' WHERE char_id= '%?'", atoi(row[2]), pCharID);
 
     if (!mysql_query(connection, saveWeapon.c_str()))
         cout << mysql_error(connection) << endl;

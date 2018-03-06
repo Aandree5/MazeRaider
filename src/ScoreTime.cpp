@@ -114,15 +114,12 @@ int ScoreTime::savehighscore(){
 
     //we are inserting the values in the highscore so I used insert. so it will store customer id and highscore inside the highscore table.
     //We are using values to tell what we need to store in the database. basically I needed to store playerID and the hScore from the game. So I put that in.
-    string data="insert into highscore(char_id, highscore, mazeid) values(" +
-    to_string(lvlManager->player->pCharID) + "', '"+to_string(hScore)+"', '" + to_string(lvlManager->maze->getSeed()) + "')";
-
-
+    string data= UIHelpers::SQLPrepare("insert into highscore(char_id, highscore, mazeid) values('%?', '%?', '%?')",lvlManager->player->pCharID, hScore, lvlManager->maze->getSeed());
     int querystate = mysql_query(connection, data.c_str());
     //Once it successful it will say saved successfull.
     if(!querystate) {
         cout<<"Saved...\n\n" << endl;
-        cout<<"Rank   ID      High Score"<<endl;
+        cout<<"Rank   ID              Character ID"<<endl;
 
     } else {
         //if not it will say failed to save and system will pause. It will wait user to put an input
@@ -147,15 +144,16 @@ int ScoreTime::makeHighscoreTable(){
     //This will allow you to connect to the database.
     mysql_real_connect(connection,"server1.jesseprescott.co.uk","jessepre","Mazeraider123?","jessepre_mazeraider",0,NULL,0);
     //Now we are linking tables in the database.
-    string getData = "SELECT h.highscore, pc.name FROM highscore h, PlayerChar pc "
-    "WHERE h.char_id=pc.char_id AND h.mazeid=" + to_string(lvlManager->maze->getSeed()) + " ORDER BY h.highscore DESC LIMIT 10";
+    string getData = UIHelpers::SQLPrepare("SELECT h.highscore, pc.name FROM highscore h, PlayerChar pc "
+    "WHERE h.char_id=pc.char_id AND h.mazeid=%? ORDER BY h.highscore DESC LIMIT 10", lvlManager->maze->getSeed());
+
     //this will allow get the data as a sting
     query = mysql_query(connection, getData.c_str());
     if(!query){
         //this will allow you to show up the results
         results = mysql_store_result(connection);
         //this will allow to show the number of their rank.
-        int i=0;
+        int i=1;
         //rows represent the actual able rows and we will cout them to show up in the actual game.
         while((row = mysql_fetch_row(results)))
         {

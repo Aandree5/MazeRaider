@@ -21,23 +21,25 @@ UI::UI(shared_ptr<LevelManager> lvlman)
 //Show player character selection screen
 void UI::ShowSelectionScreen()
 {
-    bool selected = false;
-
-
-    MYSQL *connection;
-    connection = mysql_init(0);
-    MYSQL_RES *result;
-
-    mysql_real_connect(connection, "server1.jesseprescott.co.uk", "jessepre", "Mazeraider123?", "jessepre_mazeraider", 0, NULL, 0);
-    if(!connection)
+    if(shared_ptr<LevelManager> lvlman = lvlManager.lock())
     {
-        cout << "Failed to connect to the database." << endl;
-        exit(0);
-    }
+        lvlman->changeMusic(LevelManager::Music::SelectionScreen);
 
-    while(!selected)
-    {
-        if(shared_ptr<LevelManager> lvlman = lvlManager.lock())
+        bool selected = false;
+
+
+        MYSQL *connection;
+        connection = mysql_init(0);
+        MYSQL_RES *result;
+
+        mysql_real_connect(connection, "server1.jesseprescott.co.uk", "jessepre", "Mazeraider123?", "jessepre_mazeraider", 0, NULL, 0);
+        if(!connection)
+        {
+            cout << "Failed to connect to the database." << endl;
+            exit(0);
+        }
+
+        while(!selected)
         {
             clearScreen();
             cout << endl;
@@ -711,6 +713,7 @@ void UI::PrintUOptions()
 
 void UI::ShowGameOver()
 {
+    lvlManager.lock()->playEffect(LevelManager::Effect::LevelLost);
     clearScreen();
     PrintC("Game Over!");
 
@@ -756,8 +759,15 @@ void UI::ShowNextLevel()
     {
         lvlman->playEffect(LevelManager::Effect::LevelPassed);
         clearScreen();
+
+       lvlman->scoretime->savehighscore();
+       lvlman->scoretime->makeHighscoreTable();
+
+       cout << endl;
+
         PrintC("You've finished your level. Choose the difficulty for the next level OR computer can choose for you");
         cout << endl;
+
         PrintC("        Low: ");
         PrintC("L", 15);
         PrintC("    ");
