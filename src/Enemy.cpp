@@ -157,16 +157,16 @@ void Enemy::statsFromDatabase()
     MYSQL* connection;
     connection = mysql_init(0);
 
-    mysql_real_connect(connection, "server1.jesseprescott.co.uk", "jessepre", "Mazeraider123?", "jessepre_mazeraider", 0, NULL, 0);
+    mysql_real_connect(connection, "server1.jesseprescott.co.uk", "jessepre", "Mazeraider123?", "MazeRaider_DB", 0, NULL, 0);
     if(!connection)
     {
         cout << "Failed to connect to the database." << endl;
         exit(0);
     }
 
-    string query = "SELECT e.name, e.mesh, e.health, e.armour, e.attack_power, w.weapon_name, w.weapon_power, e.heal_power, "
-    "w.attack_type, w.attack_colour, e.defence_type, e.defence_colour, e.heal_type, e.heal_colour "
-    "FROM Enemy e, Weapon w WHERE e.weapon_id = w.weapon_id "
+    string query = "SELECT e.name, e.mesh, e.health, e.armour, e.attackPower, w.weaponName, w.weaponPower, e.healPower, "
+    "w.attackType, w.attackColour, e.defenceType, e.defenceColour, e.healType, e.healColour "
+    "FROM Enemy e, Weapon w WHERE e.weaponID = w.weaponID "
     "ORDER BY RAND() LIMIT 1";
 
     if (mysql_query(connection, query.c_str()))

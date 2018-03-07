@@ -110,11 +110,11 @@ int ScoreTime::savehighscore(){
     cout << "Saving in the database..." << endl;
     connection = mysql_init(0);
     //this will allow you to connect to the database
-    mysql_real_connect(connection,"server1.jesseprescott.co.uk","jessepre","Mazeraider123?","jessepre_mazeraider",0,NULL,0);
+    mysql_real_connect(connection,"server1.jesseprescott.co.uk","jessepre","Mazeraider123?","MazeRaider_DB",0,NULL,0);
 
     //we are inserting the values in the highscore so I used insert. so it will store customer id and highscore inside the highscore table.
     //We are using values to tell what we need to store in the database. basically I needed to store playerID and the hScore from the game. So I put that in.
-    string data= UIHelpers::SQLPrepare("insert into highscore(char_id, highscore, mazeid) values('%?', '%?', '%?')",lvlManager->player->pCharID, hScore, lvlManager->maze->getSeed());
+    string data= UIHelpers::SQLPrepare("insert into Highscore(charID, highscore, mazeID) values('%?', '%?', '%?')",lvlManager->player->pCharID, hScore, lvlManager->maze->getSeed());
     int querystate = mysql_query(connection, data.c_str());
     //Once it successful it will say saved successfull.
     if(!querystate) {
@@ -142,10 +142,10 @@ int ScoreTime::makeHighscoreTable(){
 
     connection = mysql_init(0);
     //This will allow you to connect to the database.
-    mysql_real_connect(connection,"server1.jesseprescott.co.uk","jessepre","Mazeraider123?","jessepre_mazeraider",0,NULL,0);
+    mysql_real_connect(connection,"server1.jesseprescott.co.uk","jessepre","Mazeraider123?","MazeRaider_DB",0,NULL,0);
     //Now we are linking tables in the database.
-    string getData = UIHelpers::SQLPrepare("SELECT h.highscore, pc.name FROM highscore h, PlayerChar pc "
-    "WHERE h.char_id=pc.char_id AND h.mazeid=%? ORDER BY h.highscore DESC LIMIT 10", lvlManager->maze->getSeed());
+    string getData = UIHelpers::SQLPrepare("SELECT h.highscore, pc.name FROM Highscore h, PlayerChar pc "
+    "WHERE h.charID=pc.charID AND h.mazeID=%? ORDER BY h.highscore DESC LIMIT 10", lvlManager->maze->getSeed());
 
     //this will allow get the data as a sting
     query = mysql_query(connection, getData.c_str());

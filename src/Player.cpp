@@ -165,13 +165,13 @@ void Player::chestEvent(void)
     MYSQL* connection;
 
     connection = mysql_init(0);
-    mysql_real_connect(connection,"server1.jesseprescott.co.uk","jessepre","Mazeraider123?","jessepre_mazeraider",0,NULL,0);
+    mysql_real_connect(connection,"server1.jesseprescott.co.uk","jessepre","Mazeraider123?","MazeRaider_DB",0,NULL,0);
     if(!connection){
         cout << "Failed to connect to the database." << endl;
     }
 
     //query for getting the weapon
-    string getWeapon = "SELECT weapon_name, weapon_power, weapon_id FROM Weapon ORDER BY RAND() LIMIT 1";
+    string getWeapon = "SELECT weaponName, weaponPower, weaponID FROM Weapon ORDER BY RAND() LIMIT 1";
 
     if (!mysql_query(connection, getWeapon.c_str()))
         cout << mysql_error(connection) << endl;
@@ -183,7 +183,7 @@ void Player::chestEvent(void)
     cout << row[0] << row[1] << endl;
 
     //query for changing the value on the player's weapon
-    string saveWeapon = SQLPrepare("UPDATE PlayerChar SET weapon_id= '%?' WHERE char_id= '%?'", atoi(row[2]), pCharID);
+    string saveWeapon = SQLPrepare("UPDATE PlayerChar SET weaponID= '%?' WHERE charID= '%?'", atoi(row[2]), pCharID);
 
     if (!mysql_query(connection, saveWeapon.c_str()))
         cout << mysql_error(connection) << endl;

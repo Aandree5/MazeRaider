@@ -24,7 +24,7 @@ void CharacterSelection::ShowSelectionScreen()
         connection = mysql_init(0);
         MYSQL_RES *result;
 
-        mysql_real_connect(connection, "server1.jesseprescott.co.uk", "jessepre", "Mazeraider123?", "jessepre_mazeraider", 0, NULL, 0);
+        mysql_real_connect(connection, "server1.jesseprescott.co.uk", "jessepre", "Mazeraider123?", "MazeRaider_DB", 0, NULL, 0);
         if(!connection)
         {
             cout << "Failed to connect to the database." << endl;
@@ -50,9 +50,9 @@ void CharacterSelection::ShowSelectionScreen()
 
             cout << endl << endl;
 
-            string query = SQLPrepare("SELECT pc.char_id, pc.name, pc.mesh, pc.health, pc.armour, pc.attack_power, w.weapon_id, "
-            "w.weapon_name, w.weapon_power, w.attack_type, w.attack_colour, pc.heal_power, pc.defence_type, pc.defence_colour, pc.heal_type, pc.heal_colour "
-            "FROM user_info i, PlayerChar pc, Weapon w WHERE i.user_id = %? AND i.user_id = pc.player_id AND pc.weapon_id = w.weapon_id "
+            string query = SQLPrepare("SELECT pc.charID, pc.name, pc.mesh, pc.health, pc.armour, pc.attackPower, w.weaponID, "
+            "w.weaponName, w.weaponPower, w.attackType, w.attackColour, pc.healPower, pc.defenceType, pc.defenceColour, pc.healType, pc.healColour "
+            "FROM UserInfo i, PlayerChar pc, Weapon w WHERE i.userID = %? AND i.userID = pc.playerID AND pc.weaponID = w.weaponID "
             "ORDER BY pc.health DESC", lvlman->getPlayerID());
 
             if (mysql_query(connection, query.c_str()))
@@ -103,15 +103,15 @@ void CharacterSelection::ShowSelectionScreen()
                 charOptions[i]["mesh"] = atoi(row[2]);
                 charOptions[i]["health"] = atoi(row[3]);
                 charOptions[i]["armour"] = atoi(row[4]);
-                charOptions[i]["attack_power"] = atoi(row[5]);
-                charOptions[i]["weapon_id"] = atoi(row[6]);
-                charOptions[i]["attack_type"] = atoi(row[9]);
-                charOptions[i]["attack_colour"] = atoi(row[10]);
-                charOptions[i]["heal_power"] = atoi(row[11]);
-                charOptions[i]["defence_type"] = atoi(row[12]);
-                charOptions[i]["defence_colour"] = atoi(row[13]);
-                charOptions[i]["heal_type"] = atoi(row[14]);
-                charOptions[i]["heal_colour"] = atoi(row[15]);
+                charOptions[i]["attackPower"] = atoi(row[5]);
+                charOptions[i]["weaponID"] = atoi(row[6]);
+                charOptions[i]["attackType"] = atoi(row[9]);
+                charOptions[i]["attackColour"] = atoi(row[10]);
+                charOptions[i]["healPower"] = atoi(row[11]);
+                charOptions[i]["defenceType"] = atoi(row[12]);
+                charOptions[i]["defenceColour"] = atoi(row[13]);
+                charOptions[i]["healType"] = atoi(row[14]);
+                charOptions[i]["healColour"] = atoi(row[15]);
 
                 if(charWeapons.find(atoi(row[6])) == charWeapons.end())
                     charWeapons[atoi(row[6])] = make_pair(row[7], atoi(row[8]));
@@ -153,16 +153,16 @@ void CharacterSelection::ShowSelectionScreen()
                 lvlman->player->pName = charNames[charOptions[selection]["id"]];
                 lvlman->player->pMesh = charOptions[selection]["mesh"];
                 lvlman->player->pHealth = charOptions[selection]["health"];
-                lvlman->player->pDamage = charOptions[selection]["attack_power"];
+                lvlman->player->pDamage = charOptions[selection]["attackPower"];
                 lvlman->player->pArmour = charOptions[selection]["armour"];
-                lvlman->player->pWeapon = charWeapons[charOptions[selection]["weapon_id"]];
-                lvlman->player->pHealPower = charOptions[selection]["heal_power"];
-                lvlman->player->pAttackType = charOptions[selection]["attack_type"];
-                lvlman->player->pAttackColour = charOptions[selection]["attack_colour"];
-                lvlman->player->pDefenceType = charOptions[selection]["defence_type"];
-                lvlman->player->pDefenceColour = charOptions[selection]["defence_colour"];
-                lvlman->player->pHealType = charOptions[selection]["heal_type"];
-                lvlman->player->pHealColour = charOptions[selection]["heal_colour"];
+                lvlman->player->pWeapon = charWeapons[charOptions[selection]["weaponID"]];
+                lvlman->player->pHealPower = charOptions[selection]["healPower"];
+                lvlman->player->pAttackType = charOptions[selection]["attackType"];
+                lvlman->player->pAttackColour = charOptions[selection]["attackColour"];
+                lvlman->player->pDefenceType = charOptions[selection]["defenceType"];
+                lvlman->player->pDefenceColour = charOptions[selection]["defenceColour"];
+                lvlman->player->pHealType = charOptions[selection]["healType"];
+                lvlman->player->pHealColour = charOptions[selection]["healColour"];
 
                 selected = true;
                 break;
@@ -221,7 +221,7 @@ void CharacterSelection::selCharCreateNew(MYSQL *connection)
         clearScreen();
 
         // Get a random weapon from database
-        string query = "SELECT weapon_id, weapon_name, weapon_power FROM Weapon ORDER BY RAND() LIMIT 1";
+        string query = "SELECT weaponID, weaponName, weaponPower FROM Weapon ORDER BY RAND() LIMIT 1";
 
         if (mysql_query(connection, query.c_str()))
             cout << mysql_error(connection) << endl;
@@ -234,9 +234,9 @@ void CharacterSelection::selCharCreateNew(MYSQL *connection)
         int mesh;
         int health = rand() % 200 + 90;      // 90 - 200
         int armour = rand() % 10;            // 0 - 9
-        int attack_power = rand() % 30 + 10; // 10 - 29
-        int weapon_id = atoi(row[0]);
-        int heal_power = rand() % 20;        // 0 - 19
+        int attackPower = rand() % 30 + 10; // 10 - 29
+        int weaponID = atoi(row[0]);
+        int healPower = rand() % 20;        // 0 - 19
         int defenceType = rand() % 2;        // 0 - 1
         int defenceColour = rand() % 16 + 1; // 1 - 15
         int healType = rand() % 2;           // 0 - 1
@@ -254,14 +254,14 @@ void CharacterSelection::selCharCreateNew(MYSQL *connection)
         PrintC(to_string(armour), 15);
         cout << endl;
         PrintC("   Damage: ", 8);
-        PrintC(to_string(attack_power + atoi(row[2])), 15);
-        PrintC("/ " + to_string(attack_power), 8);
+        PrintC(to_string(attackPower + atoi(row[2])), 15);
+        PrintC("/ " + to_string(attackPower), 8);
         cout << endl;
         PrintC("   Weapon: ", 8);
         PrintC(row[1], 15);
         cout << endl;
         PrintC("   Heal Power: ", 8);
-        PrintC(to_string(heal_power), 15);
+        PrintC(to_string(healPower), 15);
 
         cout << endl;
         PrintC("   -----------------------");
@@ -289,10 +289,10 @@ void CharacterSelection::selCharCreateNew(MYSQL *connection)
         mesh = requestFromUser<int>("Choose character: ", 1, lvlman->ui->playerMesh.size() + 1);
         name = requestFromUser<string>("Character name: ");
 
-        string createQuery = SQLPrepare("INSERT INTO PlayerChar(player_id, name, mesh, health, armour, attack_power, "
-        "weapon_id, heal_power, defence_type, defence_colour, heal_type, heal_colour) "
+        string createQuery = SQLPrepare("INSERT INTO PlayerChar(playerID, name, mesh, health, armour, attackPower, "
+        "weaponID, healPower, defenceType, defenceColour, healType, healColour) "
         "VALUES (%?, '%?', %?, %?, %?, %?, %?, %?, %?, %?, %?, %?)", lvlManager.lock()->getPlayerID(), name, mesh - 1, health, armour,
-        attack_power, weapon_id, heal_power, defenceType, defenceColour, healType, healColour);
+        attackPower, weaponID, healPower, defenceType, defenceColour, healType, healColour);
 
         if (mysql_query(connection, createQuery.c_str()))
             cout << mysql_error(connection) << endl;
@@ -306,7 +306,7 @@ void CharacterSelection::selCharCreateNew(MYSQL *connection)
 // Delete character
 void CharacterSelection::selCharDelete(MYSQL *connection, int charID, string name)
 {
-    string deleteQuery = SQLPrepare("DELETE FROM PlayerChar WHERE char_id = %?", charID);
+    string deleteQuery = SQLPrepare("DELETE FROM PlayerChar WHERE charID = %?", charID);
     string safety = requestFromUser<string>("ARE YOU 100% SURE YOU WANT TO DELETE -> " + name + " [y/n]: ");
 
     if(toLower(safety) != "y" && toLower(safety) != "yes")

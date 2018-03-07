@@ -158,13 +158,13 @@ int LevelManager::getPlayerID()
     //MYSQL* connection;
 
     connection = mysql_init(0);
-    mysql_real_connect(connection,"server1.jesseprescott.co.uk","jessepre","Mazeraider123?","jessepre_mazeraider",0,NULL,0);
+    mysql_real_connect(connection,"server1.jesseprescott.co.uk","jessepre","Mazeraider123?","MazeRaider_DB",0,NULL,0);
     if(!connection)
     {
         cout << "Failed to connect to the database." << endl;
     }
     int getS = maze->getSeed();
-    string inSeed = "INSERT into maze(mazeid)values('"getS"')";
+    string inSeed = "INSERT into Maze(mazeID)values('"getS"')";
     int qstate = mysql_query(connection,inSeed.c_str());
 
     if(!qstate) {
