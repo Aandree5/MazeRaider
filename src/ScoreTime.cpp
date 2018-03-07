@@ -40,7 +40,7 @@ string ScoreTime::getTime(){
     //this allow you to get the system time
     SYSTEMTIME tm;
     GetLocalTime(&tm);
-
+    //This allow us to get the time to our game.
     int startSec = (startTime.wHour * 3600) + (startTime.wMinute * 60) + startTime.wSecond;
     int tmSec = (tm.wHour * 3600) + (tm.wMinute * 60) + tm.wSecond;
 
@@ -114,12 +114,13 @@ int ScoreTime::savehighscore(){
 
     //we are inserting the values in the highscore so I used insert. so it will store customer id and highscore inside the highscore table.
     //We are using values to tell what we need to store in the database. basically I needed to store playerID and the hScore from the game. So I put that in.
+    //also I put place holders in so database will be clean
     string data= UIHelpers::SQLPrepare("insert into Highscore(charID, highscore, mazeID) values('%?', '%?', '%?')",lvlManager->player->pCharID, hScore, lvlManager->maze->getSeed());
     int querystate = mysql_query(connection, data.c_str());
     //Once it successful it will say saved successfull.
     if(!querystate) {
         cout<<"Saved...\n\n" << endl;
-        cout<<"Rank   ID              Character ID"<<endl;
+        cout<<"Rank   ID              Character name"<<endl;
 
     } else {
         //if not it will say failed to save and system will pause. It will wait user to put an input
