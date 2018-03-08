@@ -29,6 +29,8 @@ class ScoreTime
         void connectToDatabase();
         //this will allow user to make the highscore
         int makeHighscoreTable();
+
+        int highscore();
         void addScores(int score);
 
     protected:

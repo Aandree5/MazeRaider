@@ -120,7 +120,7 @@ int ScoreTime::savehighscore(){
     //Once it successful it will say saved successfull.
     if(!querystate) {
         cout<<"Saved...\n\n" << endl;
-        cout<<"Rank   ID              Character name"<<endl;
+        cout<<"Rank   ID          Character name"<<endl;
 
     } else {
         //if not it will say failed to save and system will pause. It will wait user to put an input
@@ -170,6 +170,11 @@ int ScoreTime::makeHighscoreTable(){
         //if it showed the error it will exit from the game.
         exit(0);
     }
+}
+
+int ScoreTime::highscore(){
+
+
 }
 
 void ScoreTime::addScores(int score)
