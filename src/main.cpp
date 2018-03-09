@@ -7,6 +7,7 @@
 #include <windows.h>
 #include <mysql.h>
 #include <cstdlib>
+#include <conio.h>
 
 using namespace std;
 using namespace UIHelpers;
@@ -34,8 +35,18 @@ void printMenu() {
     cout << "    ------------------------------------------------" << endl;
     cout << "    |  1. Login                                    |" << endl;
     cout << "    |  2. Signup                                   |" << endl;
-    cout << "    |  3. Exit                                     |" << endl;
+    cout << "    |  3. Admin                                    |" << endl;
+    cout << "    |  4. Exit                                     |" << endl;
     cout << "    ------------------------------------------------" << endl;
+    cout << endl;
+}
+
+void printadmin() {
+    cout << "    ------------------------------------------------------" << endl;
+    cout << "    |  1. User update                                    |" << endl;
+    cout << "    |  2. User delete                                    |" << endl;
+    cout << "    |  3. Exit to Main menu                              |" << endl;
+    cout << "    ------------------------------------------------------" << endl;
     cout << endl;
 }
 //this is how we connect to the database
@@ -100,14 +111,146 @@ void registerUser() {
     }
 }
 
+void deleteusers(){
+    int userID;
+
+    cout<<"ID: "; cin>>userID;
+    //When user put information it will delete data in UserInfo table and it will store as a string
+    string delete_char = SQLPrepare("DELETE FROM PlayerChar WHERE playerID=%?", userID);
+
+    if(mysql_query(connection, delete_char.c_str()))
+        cout << mysql_error(connection) << endl;
+
+    string delete_user = SQLPrepare("DELETE FROM UserInfo WHERE userID=%?", userID);
+
+    if(mysql_query(connection, delete_user.c_str()))
+        cout << mysql_error(connection) << endl;
+
+}
+
+void showuser(){
+
+    int query;
+    MYSQL_ROW row;
+    MYSQL_RES *results;
+
+    //Now we are linking tables in the database.
+
+    string showdata = UIHelpers::SQLPrepare("SELECT * FROM UserInfo");
+
+    //this will allow get the data as a sting
+    query = mysql_query(connection, showdata.c_str());
+    if(!query){
+        //this will allow you to show up the results
+        results = mysql_store_result(connection);
+
+        //this will allow to show the number of their rank.
+        //rows represent the actual able rows and we will cout them to show up in the actual game.
+        while((row = mysql_fetch_row(results)))
+        {
+            //This is the layout of the highscore system.
+            cout<< "   ||   "<<row[0]<<  "   ||   "<<row[1]<< "   ||   "<<row[2]<<"   ||   "<<row[3]<<" "<<endl;
+            cout<<endl;
+        }
+
+
+}
+}
+void update(){
+    string name, password, username, userID;
+
+    cout<<"name: "; cin>>name;
+    cout<<"password: "; cin>>password;
+    cout<<"username: "; cin>>username;
+    cout<<"userID: "; cin>>userID;
+
+    string updateuser = SQLPrepare("UPDATE UserInfo SET name ='%?', username = '%?', password = '%?' WHERE userID = '%?'",name,username, password, userID);
+    int querystate = mysql_query(connection, updateuser.c_str());
+
+    if(!querystate) {
+        cout<<"update successful" << endl;
+        system("pause");
+        cin;
+    } else {
+        //if not it will say update failed
+        cout<<"Failed to update, error: " << mysql_error(connection) << endl;
+        system("pause");
+    }
+
+
+}
+void admin(){
+
+    printLogo();
+
+    cout<<"Welcome to the Admin\n"<<endl;
+
+    string name, password;
+
+    //it will show up as name and password
+    name = requestFromUser<string>("Name: ");
+    password = requestFromUser<string>("Password: ");
+
+    // this is when user put name and password go to the UserInfo table and check if Admin right or wrong.
+    //I add placeholders in
+    string query=SQLPrepare("select adminID from Admin where name = '%?' and password = '%?'", name, password);
+    //This will check the if user Admin right or wrong
+    int queryResult = mysql_query(connection, query.c_str());
+    MYSQL_RES *result = mysql_store_result(connection);
+    MYSQL_ROW row;
+    //when user sucessfully login it will go to the level manager
+    if ((row = mysql_fetch_row(result)) != NULL) {
+            clearScreen();
+            printLogo();
+            printadmin();
+
+            //This will show up the choose option when user put an option it will call the function
+            char choice = requestFromUser<char>("Choose an option: ", 1, 4);
+
+
+            if (choice == '1') {
+                clearScreen();
+                cout<<"     user id     name        username    password"<<endl;
+                cout<<"   _______________________________________________"<<endl;
+                showuser();
+
+                update();
+
+            } else if (choice == '2'){
+                clearScreen();
+                cout<<"     user id     name        username    password"<<endl;
+                cout<<"   _______________________________________________"<<endl;
+                showuser();
+                deleteusers();
+
+            } else if (choice == '3'){
+                clearScreen();
+                printMenu();
+
+            } else {
+                //If user put a invalid character it will say invalid input.
+                clearScreen();
+                cout << "Invalid input." << endl;
+                system("pause");
+            }
+
+
+        } else {
+            //if not it will show the error message
+            cout << "Incorrect username or password." << endl;
+            system("pause");
+        }
+}
+
 int main() {
+
     waveOutSetVolume(0, -1);
     //This is where we put full screen
     SetFullScreen();
     //We are using connect to the database
     connectToDatabase();
 
-    while (1) {
+    while (true) {
             //This is where we put music in for the game. This will play the main menu song
         PlaySound(TEXT("sounds/musics/MainMenu.wav"),NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
         //This will clear the screen
@@ -117,7 +260,7 @@ int main() {
         //This will print the menu
         printMenu();
         //This will show up the choose option when user put an option it will call the function
-        char choice = requestFromUser<char>("Choose an option: ", 1, 4);
+        char choice = requestFromUser<char>("Choose an option: ", 1, 5);
 
 
         if (choice == '1') {
@@ -126,13 +269,18 @@ int main() {
             clearScreen();
             registerUser();
         } else if (choice == '3'){
-            exit(0);
+            clearScreen();
+            admin();
+        } else if (choice == '4'){
+            exit(1);
         } else {
             //If user put a invalid character it will say invalid input.
             clearScreen();
             cout << "Invalid input." << endl;
             system("pause");
 
-        }
-    }
 }
+    }
+
+}
+
