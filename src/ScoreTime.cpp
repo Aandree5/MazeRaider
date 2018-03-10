@@ -151,11 +151,11 @@ int ScoreTime::makeHighscoreTable(){
     //this will allow get the data as a sting
     query = mysql_query(connection, getData.c_str());
     if(!query){
-        //this will allow you to show up the results
         results = mysql_store_result(connection);
         //this will allow to show the number of their rank.
         int i=1;
-        //rows represent the actual able rows and we will cout them to show up in the actual game.
+        //rows represent the actual table rows and we will cout them to show up in the actual game.
+        //this will allow you to show up the results
         while((row = mysql_fetch_row(results)))
         {
             //This is the layout of the highscore system.
