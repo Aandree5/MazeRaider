@@ -8,7 +8,18 @@
 #include "BattleScene.h"
 #include "CharacterSelection.h"
 #include <sstream>
+#ifdef _WIN32
 #include <mmsystem.h>
+#endif // _WIN32
+
+#ifdef __linux__
+#define PlaySound(x, y, z)
+#define TEXT
+#define mciSendString
+#define SND_LOOP
+#define SND_ASYNC
+#define SND_FILENAME
+#endif // __linux__
 
 LevelManager::LevelManager(int pID)
 {

@@ -2,12 +2,23 @@
 #include "LevelManager.h"
 #include <iostream>
 #include <tuple>
+#ifdef _WIN32
 #include <mmsystem.h>
-#include <string>
 #include <windows.h>
+#include <conio.h>
+#endif // _WIN32
+#include <string>
 #include <mysql.h>
 #include <cstdlib>
-#include <conio.h>
+
+#ifdef __linux__
+#define PlaySound(x, y, z)
+#define TEXT
+#define waveOutSetVolume
+#define SND_LOOP
+#define SND_ASYNC
+#define SND_FILENAME
+#endif // __linux__
 
 
 

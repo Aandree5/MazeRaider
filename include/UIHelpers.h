@@ -76,6 +76,9 @@
 #define clearScreen() cout << "\033[2J\033[1;1H"
 #define mazeWall "\u2588"
 #define mazePath "\u0020"
+#define mazePlayer "\u006f"
+#define mazeEnemy "\u00a4"
+#define mazeChest "\u0024"
 #define bsTopLeftCorner "\u250c"
 #define bsTopRightCorner "\u2510"
 #define bsBottomLeftCorner "\u2514"
@@ -100,6 +103,7 @@
 #define white cout << "\033[1;37m"
 #define purple cout << "\033[1;35m"
 #define darkred cout << "\033[0;31m"
+#define darkcyan cout << "\033[0;36m"
 #define darkblue cout << "\033[0;34m"
 #define darkgreen cout << "\033[0;32m"
 #define darkpurple cout << "\033[0;35m"
@@ -107,6 +111,15 @@
 #define healthGreen cout << "\033[1;32m"
 #define healthYellow cout << "\033[1;33m"
 #define healthRed cout << "\033[1;31m"
+#define debugBlackGreen cout << "\033[1;42m" << "\033[1;30m"
+#define debugBlackRed cout << "\033[1;41m" << "\033[1;30m"
+#define darkgrey cout << "\033[0;37m"
+#define armygreen cout << "\033[0;32m"
+#define blackonwhite cout << "\033[1;47m" << "\033[1;30m"
+#define blackonblack cout << "\033[1;40m" << "\033[1;30m"
+#define playerColor cout << "\033[1;46m" << "\033[1;30m"
+#define enemyColor cout << "\033[1;41m" << "\033[1;30m"
+#define chestColor cout << "\033[1;43m" << "\033[1;30m"
 #endif // __linux__
 
 using namespace std;

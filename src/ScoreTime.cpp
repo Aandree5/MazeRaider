@@ -8,7 +8,9 @@
 #include <iostream>
 #include <tuple>
 #include <string>
+#ifdef _WIN32
 #include <windows.h>
+#endif // _WIN32
 #include <mysql.h>
 #include <cstdlib>
 
@@ -37,6 +39,7 @@ ScoreTime::ScoreTime(LevelManager* lvlman)
 }
 
 string ScoreTime::getTime(){
+    #ifdef _WIN32
     //this allow you to get the system time
     SYSTEMTIME tm;
     GetLocalTime(&tm);
@@ -52,6 +55,27 @@ string ScoreTime::getTime(){
 
     //This will allow you to see the timer and also they are starting by zero and increasing by when player input something to the system.
     return to_string(passedHours) + ":" + to_string(passedMinutes)+ ":" + to_string(passedSeconds);
+    #endif // _WIN32
+
+
+    #ifdef __linux__
+    time_t T = time(NULL);
+    struct  tm tm = *localtime(&T);
+
+    int hourSecond = (tm.tm_hour - startTime.tm_hour) * 60 * 60;
+    int minSecond = (tm.tm_min - startTime.tm_min) * 60;
+
+    int startSec = (startTime.tm_hour * 3600) + (startTime.tm_min * 60) + startTime.tm_sec;
+    int tmSec = (tm.tm_hour * 3600) + (tm.tm_min * 60) + tm.tm_sec;
+
+    int difSec = tmSec - startSec;
+
+    int passedHours = difSec / 3600;
+    int passedMinutes = (difSec % 3600) / 60;
+    int passedSeconds = ((difSec % 3600) % 60);
+
+    return to_string(passedHours) + ":" + to_string(passedMinutes)+ ":" + to_string(passedSeconds);
+    #endif // __linux__
 
 }
 
