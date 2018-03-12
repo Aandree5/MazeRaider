@@ -73,6 +73,8 @@ class LevelManager : public std::enable_shared_from_this<LevelManager>
         void lowLevel();
         void mediumLevel();
         void highLevel();
+        void saveMaze();
+        void makeMazeTable();
 
     protected:
 
