@@ -93,10 +93,12 @@ void loginUser() {
 
     string username,password;
     cout << endl << "   ------------------------------------------------------------------" << endl;
-
     //it will show up as username and password
-    username = requestFromUser<string>("Username: ");
-    password = requestFromUser<string>("Password: ");
+    cout << "Username: "; cin >> username;
+    cout << "Password: ";
+    ChangeColour(0);
+    cin >> password;
+    ChangeColour(7);
 
     // this is when user put username and password go to the UserInfo table and check if information right or wrong.
     //I add placeholders in
@@ -136,7 +138,6 @@ void registerUser() {
     if(!querystate) {
         cout<<"Registration successful" << endl;
         system("pause");
-        cin;
 
     } else {
         //if not it will say register failed
@@ -326,7 +327,9 @@ int main() {
         //This will print the menu
         printMenu();
         //This will show up the choose option when user put an option it will call the function
-        char choice = requestFromUser<char>("Choose an option: ", 1, 5);
+        char choice;
+
+        cout << "Choose an option: "; cin >> choice;
 
 
         if (choice == '1') {
