@@ -198,6 +198,10 @@ void Enemy::statsFromDatabase()
     defenceColour = atoi(row[11]);
     healType = atoi(row[12]);
     healColour = atoi(row[13]);
+
+    /* close connection */
+    mysql_free_result(result);
+    mysql_close(connection);
 }
 
 string Enemy::getName()

@@ -120,6 +120,10 @@ void loginUser() {
         //if not it will show the error message
         cout << "Incorrect username or password." << endl;
     }
+
+    /* close connection */
+    mysql_free_result(result);
+    mysql_close(connection);
 }
 
 //register
@@ -202,6 +206,9 @@ void showuser(){
 
 
     }
+
+    /* close connection */
+    mysql_free_result(results);
 }
 
 //This will allow update the user details
@@ -341,6 +348,8 @@ int main() {
             clearScreen();
             admin();
         } else if (choice == '4'){
+            /* close connection */
+            mysql_close(connection);
             exit(1);
         } else {
             //If user put a invalid character it will say invalid input.

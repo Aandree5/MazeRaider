@@ -153,6 +153,9 @@ int ScoreTime::savehighscore(){
         exit(1);
         system("pause");
     }
+
+    /* close connection */
+    mysql_close(connection);
 }
 //Showing up the Highscore in the actual game
 int ScoreTime::makeHighscoreTable(){
@@ -194,6 +197,10 @@ int ScoreTime::makeHighscoreTable(){
         //if it showed the error it will exit from the game.
         exit(0);
     }
+
+    /* close connection */
+    mysql_free_result(results);
+    mysql_close(connection);
 }
 
 int ScoreTime::highscore(){

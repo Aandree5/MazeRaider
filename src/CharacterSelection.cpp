@@ -168,6 +168,11 @@ void CharacterSelection::ShowSelectionScreen()
                 break;
             }
         }
+
+
+        /* close connection */
+        mysql_free_result(result);
+        mysql_close(connection);
     }
 }
 
@@ -300,6 +305,9 @@ void CharacterSelection::selCharCreateNew(MYSQL *connection)
             PrintC(name + " created.");
 
         Sleep(1000);
+
+        /* close connection */
+        mysql_free_result(result);
     }
 }
 

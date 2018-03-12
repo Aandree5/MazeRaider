@@ -215,6 +215,12 @@ void Player::chestEvent(void)
 
 
     UpdateMessageInfo(lvlmanager->ui->mazeInfo, message, MessageType::PickUp);
+
+
+
+    /* close connection */
+    mysql_free_result(result);
+    mysql_close(connection);
 }
 
 void Player::checkChest()
