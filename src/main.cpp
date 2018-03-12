@@ -199,8 +199,8 @@ void update(){
 
     //This is where we put names and password and username and ID in
     cout<<"name: "; cin>>name;
-    cout<<"password: "; cin>>password;
     cout<<"username: "; cin>>username;
+    cout<<"password: "; cin>>password;
     cout<<"userID: "; cin>>userID;
 
     //This will allow us to update username, password and name where user ID equal to what ever we put.
