@@ -271,7 +271,7 @@ void LevelManager::loadLevel()
     maze = make_shared<Maze>(mazeSize.first, mazeSize.second);
     for(int i=0; i<nrEnemies; i++)
      {
-        enemies.emplace_back(make_shared<Enemy>(maze));
+        enemies.emplace_back(make_shared<Enemy>(shared_from_this()));
      }
 }
 

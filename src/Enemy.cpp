@@ -5,10 +5,14 @@
 #endif // _WIN32
 #include <mysql.h>
 #include <sstream>
+#include "UIHelpers.h"
+#include "ScoreTime.h"
 
-Enemy::Enemy(shared_ptr<Maze> m)
+using namespace UIHelpers;
+
+Enemy::Enemy(shared_ptr<LevelManager> l)
 {
-    maze = m;
+    lvlManager = l;
 
     statsFromDatabase();
     //system("pause");
@@ -18,14 +22,14 @@ Enemy::Enemy(shared_ptr<Maze> m)
 
     while(true)
     {
-        x = rand() % (m->getMazeSizeWH().first - 6) + 5;
-        y = rand() % (m->getMazeSizeWH().second - 2) + 1;
+        x = rand() % (l->maze->getMazeSizeWH().first - 6) + 5;
+        y = rand() % (l->maze->getMazeSizeWH().second - 2) + 1;
 
         // Only spawn in places where player can stop
-        if(m->getMazeArray()[x][y]==0 && !(m->getMazeArray()[x + 1][y] == 1 && m->getMazeArray()[x - 1][y] == 1 &&
-                                           m->getMazeArray()[x][y + 1] == 0 && m->getMazeArray()[x][y - 1] == 0) &&
-                                         !(m->getMazeArray()[x + 1][y] == 0 && m->getMazeArray()[x - 1][y] == 0 &&
-                                           m->getMazeArray()[x][y + 1] == 1 && m->getMazeArray()[x][y - 1] == 1))
+        if(l->maze->getMazeArray()[x][y]==0 && !(l->maze->getMazeArray()[x + 1][y] == 1 && l->maze->getMazeArray()[x - 1][y] == 1 &&
+                                           l->maze->getMazeArray()[x][y + 1] == 0 && l->maze->getMazeArray()[x][y - 1] == 0) &&
+                                         !(l->maze->getMazeArray()[x + 1][y] == 0 && l->maze->getMazeArray()[x - 1][y] == 0 &&
+                                           l->maze->getMazeArray()[x][y + 1] == 1 && l->maze->getMazeArray()[x][y - 1] == 1))
         {
             break;
         }
@@ -40,11 +44,14 @@ Enemy::~Enemy()
     //gain points from defeating an enemy
     int scoreAdded;
     scoreAdded = rand() % 100 + 1;
+
+    //add the added score to the main score
+    lvlManager.lock()->scoretime->addScores(scoreAdded);
 }
 
 void Enemy::randomMoveEnemy()
 {
-    if(shared_ptr<Maze> m = maze.lock())
+    if(shared_ptr<LevelManager> l = lvlManager.lock())
     {
           ranDecision = rand() % 2 + 1;
     if(ranDecision == 1) // random chance of moving
@@ -62,17 +69,17 @@ void Enemy::randomMoveEnemy()
         {
             for(int i = 1;i < ranVal; i++)
             {
-                if(m->getMazeArray()[xPos][yPos+i]==1) // checks wall forward
+                if(l->maze->getMazeArray()[xPos][yPos+i]==1) // checks wall forward
                 {
                     yPos+=i-1;
                     break;
                 }
-                else if((m->getMazeArray()[xPos-1][yPos+i] == 0 || m->getMazeArray()[xPos+1][yPos+i] == 0) && (ranDecision == 1 || ranDecision == 2)) //checks path from sides
+                else if((l->maze->getMazeArray()[xPos-1][yPos+i] == 0 || l->maze->getMazeArray()[xPos+1][yPos+i] == 0) && (ranDecision == 1 || ranDecision == 2)) //checks path from sides
                 {
                     yPos+=i;
                     break;
                 }
-                else if(m->getMazeArray()[xPos][yPos+i]==2) // checks player forward
+                else if(l->maze->getMazeArray()[xPos][yPos+i]==2) // checks player forward
                 {
                     yPos+=i-1;
                     break;
@@ -83,17 +90,17 @@ void Enemy::randomMoveEnemy()
         {
             for(int i = 1;i < ranVal; i++)
             {
-                if(m->getMazeArray()[xPos-i][yPos]==1) // checks wall forwards
+                if(l->maze->getMazeArray()[xPos-i][yPos]==1) // checks wall forwards
                 {
                     xPos-=i-1;
                     break;
                 }
-                else if((m->getMazeArray()[xPos-i][yPos+1] == 0 || m->getMazeArray()[xPos-i][yPos-1] == 0) && (ranDecision == 1 || ranDecision == 2)) //checks path from sides
+                else if((l->maze->getMazeArray()[xPos-i][yPos+1] == 0 || l->maze->getMazeArray()[xPos-i][yPos-1] == 0) && (ranDecision == 1 || ranDecision == 2)) //checks path from sides
                 {
                     xPos-=i;
                     break;
                 }
-                else if(m->getMazeArray()[xPos-i][yPos]==2) // checks player forward
+                else if(l->maze->getMazeArray()[xPos-i][yPos]==2) // checks player forward
                 {
                     yPos+=i-1;
                     break;
@@ -104,16 +111,16 @@ void Enemy::randomMoveEnemy()
         {
             for(int i = 1;i < ranVal; i++)
             {
-                if(m->getMazeArray()[xPos+i][yPos]==1) // checks wall forwards
+                if(l->maze->getMazeArray()[xPos+i][yPos]==1) // checks wall forwards
                 {
                     xPos+=i-1;
                     break;
-                }else if((m->getMazeArray()[xPos+i][yPos+1] == 0 || m->getMazeArray()[xPos+i][yPos-1] == 0) && (ranDecision == 1 || ranDecision == 2)) //checks path from sides
+                }else if((l->maze->getMazeArray()[xPos+i][yPos+1] == 0 || l->maze->getMazeArray()[xPos+i][yPos-1] == 0) && (ranDecision == 1 || ranDecision == 2)) //checks path from sides
                 {
                     xPos+=i-1;
                     break;
                 }
-                else if(m->getMazeArray()[xPos+i][yPos]==2) // checks player forward
+                else if(l->maze->getMazeArray()[xPos+i][yPos]==2) // checks player forward
                 {
                     yPos+=i-1;
                     break;
@@ -124,16 +131,16 @@ void Enemy::randomMoveEnemy()
         {
             for(int i = 1;i < ranVal; i++)
             {
-                if(m->getMazeArray()[xPos][yPos-i]==1) // checks wall forward
+                if(l->maze->getMazeArray()[xPos][yPos-i]==1) // checks wall forward
                 {
                     yPos-=i-1;
                     break;
-                }else if((m->getMazeArray()[xPos-1][yPos-i] == 0 || m->getMazeArray()[xPos+1][yPos-i] == 0) && (ranDecision == 1 || ranDecision == 2)) //checks path from sides
+                }else if((l->maze->getMazeArray()[xPos-1][yPos-i] == 0 || l->maze->getMazeArray()[xPos+1][yPos-i] == 0) && (ranDecision == 1 || ranDecision == 2)) //checks path from sides
                 {
                     yPos-=i-1;
                     break;
                 }
-                else if(m->getMazeArray()[xPos][yPos-i]==2) // checks player forward
+                else if(l->maze->getMazeArray()[xPos][yPos-i]==2) // checks player forward
                 {
                     yPos+=i-1;
                     break;
