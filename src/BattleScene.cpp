@@ -843,7 +843,7 @@ bool BattleScene::canPlayerRun()
             if (it != end(lvlman->enemies))
                 lvlman->enemies.erase(it);
 
-            lvlman->enemies.emplace_back(make_shared<Enemy>(lvlman->maze));
+            lvlman->enemies.emplace_back(make_shared<Enemy>(lvlman));
             lvlman->playEffect(LevelManager::Effect::Run);
             return true;
         }
