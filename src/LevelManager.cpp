@@ -181,35 +181,70 @@ int LevelManager::getPlayerID()
 }
 
 
-/*void LevelManager::saveS()
-{
-     //connecting to database
-    //MYSQL* connection;
 
+void LevelManager::saveMaze()
+{
+    MYSQL* connection;
     connection = mysql_init(0);
     mysql_real_connect(connection,"server1.jesseprescott.co.uk","jessepre","Mazeraider123?","MazeRaider_DB",0,NULL,0);
     if(!connection)
     {
         cout << "Failed to connect to the database." << endl;
     }
-    int getS = maze->getSeed();
-    string inSeed = "INSERT into Maze(mazeID)values('"getS"')";
-    int qstate = mysql_query(connection,inSeed.c_str());
 
-    if(!qstate) {
-        cout<<"Registration successful" << endl;
-        system("pause");
-        cin;
-    } else {
-        cout<<"Failed to register, error: " << mysql_error(connection) << endl;
-        system("pause");
+
+
+    string data = UIHelpers::SQLPrepare("insert into Maze( playCount, width, height) values('%?', '%?', '%?')", maze->getSeed(), maze->getMazeSizeWH().first, maze->getMazeSizeWH().second );
+
+    if (!mysql_query(connection, data.c_str()))
+        cout << mysql_error(connection) << endl;
+
+
+}
+
+void LevelManager::makeMazeTable()
+{
+    int query;
+    MYSQL* connection;
+
+    MYSQL_ROW row;
+    MYSQL_RES *results;
+
+    connection = mysql_init(0);
+
+    mysql_real_connect(connection,"server1.jesseprescott.co.uk","jessepre","Mazeraider123?","MazeRaider_DB",0,NULL,0);
+
+    string getData = UIHelpers::SQLPrepare("SELECT h.playCount, h.width, h.height  FROM Maze h "
+                                           "WHERE  playCount=%?, width=%?, height=%? ORDER BY RAND() LIMIT 1", maze->getSeed(), maze->getMazeSizeWH().first, maze->getMazeSizeWH().second);
+
+
+
+    //this will allow get the data as a sting
+    query = mysql_query(connection, getData.c_str());
+    if(!query){
+
+        results = mysql_store_result(connection);
+
+        int i=1;
+        while((row = mysql_fetch_row(results)))
+        {
+            cout<<i<<  ".   ||   "<<row[0]<<  "   ||   "<<row[1]<<" ||"<<endl;
+            cout<<endl;
+            i++;
+        }
     }
+    else{
+        cout<<"Sorry Rank table maintaining stage at this moment try again later. kjbbhj"<<endl;
+
+        exit(0);
+    }
+    /* close connection */
+    mysql_free_result(results);
+    mysql_close(connection);
+}
 
 
 
-
-
-*/
 
 
 
