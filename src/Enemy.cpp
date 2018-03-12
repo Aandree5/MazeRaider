@@ -46,7 +46,9 @@ Enemy::~Enemy()
     scoreAdded = rand() % 100 + 1;
 
     //add the added score to the main score
-    lvlManager.lock()->scoretime->addScores(scoreAdded);
+    if(lvlManager.lock()->exitToMenu == false){
+        lvlManager.lock()->scoretime->addScores(scoreAdded);
+    }
 }
 
 void Enemy::randomMoveEnemy()
