@@ -517,6 +517,12 @@ void UI::ShowNextLevel()
         char userOption;
         cout << endl;
         bool notvalid = true;
+
+        for(auto it = begin(mazeInfo); it != end(mazeInfo); it++)
+            *it = make_pair(" ", MessageType::General);
+
+        mazeInfo[mazeInfo.size() - 1] = make_pair("You just want to leave!", MessageType::General);
+
         while(notvalid)
         {
             userOption = requestFromUser<char>();
