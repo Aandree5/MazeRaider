@@ -218,10 +218,12 @@ namespace UIHelpers
         expectedInput userInput;
         bool showError = false;
 
+        cin.clear();
+        //cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cin.sync();
+
         while(true)
         {
-            cin.clear();
-
             PrintC(question);
             getline(cin, input);
 

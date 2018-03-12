@@ -28,9 +28,30 @@ void EnemyAI::getNextPosition(shared_ptr<Enemy> enemy)
 
             vector<pos> path = findPath({enemy->xPos, enemy->yPos});
 
-            //DEBUG
-            //debugPrintNodes(path);
-            //system("pause");
+            //----------- DEBUG
+            /*
+            #ifdef _WIN32
+                HANDLE hStdOut = GetStdHandle( STD_OUTPUT_HANDLE );
+                CONSOLE_SCREEN_BUFFER_INFO cbsi;
+                GetConsoleScreenBufferInfo(hStdOut, &cbsi);
+                COORD originalPos = cbsi.dwCursorPosition;
+            #endif // _WIN32
+
+            #ifdef __linux__
+                cout << "\033[s";
+            #endif // __linux__
+
+            debugPrintNodes(path);
+            system("pause");
+
+            #ifdef _WIN32
+                SetConsoleCursorPosition( hStdOut, originalPos );
+            #endif // _WIN32
+
+            #ifdef __linux__
+                cout << "\033[u";
+            #endif // __linux__
+            */
 
             // (1, 0) = Parent at right | (-1, 0) = Parent at Left | (0, 1) = Parent at Top | (0, -1) = Parent at Bottom
 
@@ -105,14 +126,61 @@ vector<EnemyAI::pos> EnemyAI::findPath(pos p)
                 sort(sameFValue.begin(), sameFValue.end(), node::compareH);
 
             currNode = sameFValue[0];
+
+
+        //----------- DEBUG
+        /*
+        #ifdef _WIN32
+            HANDLE hStdOut = GetStdHandle( STD_OUTPUT_HANDLE );
+            CONSOLE_SCREEN_BUFFER_INFO cbsi;
+            GetConsoleScreenBufferInfo(hStdOut, &cbsi);
+            COORD originalPos = cbsi.dwCursorPosition;
+        #endif // _WIN32
+
+        #ifdef __linux__
+            cout << "\033[s";
+        #endif // __linux__
+
+        debugPrintNodes(openList, closeList);
+        system("pause");
+
+        #ifdef _WIN32
+            SetConsoleCursorPosition( hStdOut, originalPos );
+        #endif // _WIN32
+
+        #ifdef __linux__
+            cout << "\033[u";
+        #endif // __linux__
+        */
         }
 
-        //DEBUG
-        //debugPrintNodes(openList, closeList);
-        //system("pause");
+        //----------- DEBUG
+        /*
+        #ifdef _WIN32
+            HANDLE hStdOut = GetStdHandle( STD_OUTPUT_HANDLE );
+            CONSOLE_SCREEN_BUFFER_INFO cbsi;
+            GetConsoleScreenBufferInfo(hStdOut, &cbsi);
+            COORD originalPos = cbsi.dwCursorPosition;
+        #endif // _WIN32
 
-        //debugPrintNodes(closeList);
-        //system("pause");
+        #ifdef __linux__
+            cout << "\033[s";
+        #endif // __linux__
+
+        debugPrintNodes(openList, closeList);
+        system("pause");
+
+        debugPrintNodes(closeList);
+        system("pause");
+
+        #ifdef _WIN32
+            SetConsoleCursorPosition( hStdOut, originalPos );
+        #endif // _WIN32
+
+        #ifdef __linux__
+            cout << "\033[u";
+        #endif // __linux__
+        */
 
         vector<pos> path;
         path.emplace_back(currNode.position);

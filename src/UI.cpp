@@ -35,10 +35,10 @@ void  UI::ShowUI()
         else
             battleState = btlScene->BuildScene();
 
-    // 1 = Player Lost (GameOver)
+// 1 = Player Lost (GameOver)
         if (battleState == 1)
             break;
-    // 2 = Enemy Killed
+// 2 = Enemy Killed
         else if (battleState == 2)
         {
             if(lvlManager.lock()->enemies.size() > 0)
@@ -282,12 +282,6 @@ void UI::PrintUOptions()
                 if (lvlman->isPaused)
                     return;
 
-                //quit the game
-                if (userOption == 'e'){
-                    lvlman->scoretime->savehighscore();
-                    lvlman->scoretime->makeHighscoreTable();
-                }
-
                 if (userOption == 'b') // TEMP - TESTING
                 {
                     StartBattleScene(lvlman->enemies[0]); // TEMP - TESTING
@@ -308,7 +302,7 @@ void UI::PrintUOptions()
 
                     string m = "Nice, the enemy has lost you!";
                     if(mazeInfo[mazeInfo.size() - 1].first != m)
-                        if(!enemyFollowing)
+                        if(lvlman->enemies.size() > 0 && !enemyFollowing)
                             UpdateMessageInfo(mazeInfo, m, MessageType::General);
 
                 }
@@ -453,7 +447,7 @@ void UI::ShowGameOver()
     lvlManager.lock()->playEffect(LevelManager::Effect::LevelLost);
     clearScreen();
     PrintC("Game Over!");
-
+    system("pause");
 }
 
 void UI::StartBattleScene(shared_ptr<Enemy> enemy)
