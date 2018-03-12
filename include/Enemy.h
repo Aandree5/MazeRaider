@@ -15,7 +15,7 @@ class LevelManager;
 class Enemy
 {
     public:
-        Enemy(shared_ptr<Maze> m);
+        Enemy(shared_ptr<LevelManager> l);
         ~Enemy();
 
         //functions
@@ -41,7 +41,7 @@ class Enemy
 
 
         //variables
-        weak_ptr<Maze> maze;
+        weak_ptr<LevelManager> lvlManager;
         int xPos, yPos;
 
         bool followingPlayer;

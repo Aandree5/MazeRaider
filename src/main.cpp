@@ -2,12 +2,23 @@
 #include "LevelManager.h"
 #include <iostream>
 #include <tuple>
+#ifdef _WIN32
 #include <mmsystem.h>
-#include <string>
 #include <windows.h>
+#include <conio.h>
+#endif // _WIN32
+#include <string>
 #include <mysql.h>
 #include <cstdlib>
-#include <conio.h>
+
+#ifdef __linux__
+#define PlaySound(x, y, z)
+#define TEXT
+#define waveOutSetVolume
+#define SND_LOOP
+#define SND_ASYNC
+#define SND_FILENAME
+#endif // __linux__
 
 
 
@@ -82,10 +93,12 @@ void loginUser() {
 
     string username,password;
     cout << endl << "   ------------------------------------------------------------------" << endl;
-
     //it will show up as username and password
-    username = requestFromUser<string>("Username: ");
-    password = requestFromUser<string>("Password: ");
+    cout << "Username: "; cin >> username;
+    cout << "Password: ";
+    ChangeColour(0);
+    cin >> password;
+    ChangeColour(7);
 
     // this is when user put username and password go to the UserInfo table and check if information right or wrong.
     //I add placeholders in
@@ -107,6 +120,10 @@ void loginUser() {
         //if not it will show the error message
         cout << "Incorrect username or password." << endl;
     }
+
+    /* close connection */
+    mysql_free_result(result);
+    mysql_close(connection);
 }
 
 //register
@@ -125,7 +142,6 @@ void registerUser() {
     if(!querystate) {
         cout<<"Registration successful" << endl;
         system("pause");
-        cin;
 
     } else {
         //if not it will say register failed
@@ -190,6 +206,9 @@ void showuser(){
 
 
     }
+
+    /* close connection */
+    mysql_free_result(results);
 }
 
 //This will allow update the user details
@@ -315,7 +334,9 @@ int main() {
         //This will print the menu
         printMenu();
         //This will show up the choose option when user put an option it will call the function
-        char choice = requestFromUser<char>("Choose an option: ", 1, 5);
+        char choice;
+
+        cout << "Choose an option: "; cin >> choice;
 
 
         if (choice == '1') {
@@ -327,6 +348,8 @@ int main() {
             clearScreen();
             admin();
         } else if (choice == '4'){
+            /* close connection */
+            mysql_close(connection);
             exit(1);
         } else {
             //If user put a invalid character it will say invalid input.

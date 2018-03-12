@@ -4,7 +4,9 @@
 #include <array>
 #include <map>
 #include <memory>
+#ifdef _WIN32
 #include <windows.h>
+#endif // _WIN32
 #include <mysql.h>
 
 using namespace std;

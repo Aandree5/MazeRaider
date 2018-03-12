@@ -8,7 +8,18 @@
 #include "BattleScene.h"
 #include "CharacterSelection.h"
 #include <sstream>
+#ifdef _WIN32
 #include <mmsystem.h>
+#endif // _WIN32
+
+#ifdef __linux__
+#define PlaySound(x, y, z)
+#define TEXT
+#define mciSendString
+#define SND_LOOP
+#define SND_ASYNC
+#define SND_FILENAME
+#endif // __linux__
 
 LevelManager::LevelManager(int pID)
 {
@@ -260,7 +271,7 @@ void LevelManager::loadLevel()
     maze = make_shared<Maze>(mazeSize.first, mazeSize.second);
     for(int i=0; i<nrEnemies; i++)
      {
-        enemies.emplace_back(make_shared<Enemy>(maze));
+        enemies.emplace_back(make_shared<Enemy>(shared_from_this()));
      }
 }
 
