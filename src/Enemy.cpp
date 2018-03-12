@@ -46,8 +46,11 @@ Enemy::~Enemy()
     scoreAdded = rand() % 100 + 1;
 
     //add the added score to the main score
-    if(lvlManager.lock()->exitToMenu == false){
-        lvlManager.lock()->scoretime->addScores(scoreAdded);
+    if(shared_ptr<LevelManager> lvlman = lvlManager.lock())
+    {
+        if(lvlman->exitToMenu == false){
+            lvlman->scoretime->addScores(scoreAdded);
+        }
     }
 }
 
