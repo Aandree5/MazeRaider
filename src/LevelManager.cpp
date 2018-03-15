@@ -194,7 +194,7 @@ void LevelManager::saveMaze()
 
 
 
-    string data = UIHelpers::SQLPrepare("insert into Maze( playCount, width, height) values('%?', '%?', '%?')", maze->getSeed(), maze->getMazeSizeWH().first, maze->getMazeSizeWH().second );
+    string data = UIHelpers::SQLPrepare("insert into Maze( mazeID, width, height) values('%?', '%?', '%?')", maze->getSeed(), maze->getMazeSizeWH().first, maze->getMazeSizeWH().second );
 
     if (!mysql_query(connection, data.c_str()))
         cout << mysql_error(connection) << endl;
@@ -214,8 +214,8 @@ void LevelManager::makeMazeTable()
 
     mysql_real_connect(connection,"server1.jesseprescott.co.uk","jessepre","Mazeraider123?","MazeRaider_DB",0,NULL,0);
 
-    string getData = UIHelpers::SQLPrepare("SELECT h.playCount, h.width, h.height  FROM Maze h "
-                                           "WHERE  playCount=%?, width=%?, height=%? ORDER BY RAND() LIMIT 1", maze->getSeed(), maze->getMazeSizeWH().first, maze->getMazeSizeWH().second);
+    string getData = UIHelpers::SQLPrepare("SELECT h.mazeID, h.width, h.height  FROM Maze h "
+                                           "WHERE  mazeID=%?, width=%?, height=%? ORDER BY RAND() LIMIT 1", maze->getSeed(), maze->getMazeSizeWH().first, maze->getMazeSizeWH().second);
 
 
 
