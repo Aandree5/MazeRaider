@@ -79,8 +79,7 @@ Maze::Maze(unsigned width, unsigned height, unsigned seed) : m_width(width), m_h
     // Begin recursive maze generation.
     generateMaze();
 
-    // Save maze to the database.
-    saveMaze();
+    
 }
 
 /**
@@ -216,23 +215,7 @@ void Maze::generateMaze() {
 /**
  * Saves this maze to the database.
  */
-void Maze::saveMaze() {
 
-    MYSQL* connection;
-    connection = mysql_init(0);
-    mysql_real_connect(connection, "server1.jesseprescott.co.uk", "jessepre", "Mazeraider123?", "MazeRaider_DB", 0, NULL, 0);
-
-    if(!connection) {
-        cout << "Failed to connect to the database." << endl;
-    }
-
-    string data = UIHelpers::SQLPrepare("insert into Maze( mazeID, width, height) values('%?', '%?', '%?')", m_seed, m_width, m_height );
-
-    if (!mysql_query(connection, data.c_str())) {
-        cout << mysql_error(connection) << endl;
-    }
-
-}
 
 /**
  * Spawns chests inside of the maze.
