@@ -50,6 +50,7 @@ void LevelManager::BuildLevel()
     scoretime = new ScoreTime(this);
 
     ui->ShowUI();
+    makeMazeTable();
 }
 
 LevelManager::~LevelManager()
@@ -183,7 +184,7 @@ int LevelManager::getPlayerID()
 
 
 void LevelManager::saveMaze()
-{
+{   //connect to the database
     MYSQL* connection;
     connection = mysql_init(0);
     mysql_real_connect(connection,"server1.jesseprescott.co.uk","jessepre","Mazeraider123?","MazeRaider_DB",0,NULL,0);
@@ -304,6 +305,7 @@ void LevelManager::nextLevel()
 void LevelManager::loadLevel()
 {
     maze = make_shared<Maze>(mazeSize.first, mazeSize.second);
+    saveMaze();
     for(int i=0; i<nrEnemies; i++)
      {
         enemies.emplace_back(make_shared<Enemy>(shared_from_this()));
