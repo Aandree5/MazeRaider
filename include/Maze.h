@@ -32,7 +32,7 @@ class Maze {
         const int m_chestChance = 15;
 
         void generateMaze();
-        void saveMaze();
+       
         void generateChests();
 };
 
