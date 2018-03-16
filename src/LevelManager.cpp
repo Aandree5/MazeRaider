@@ -199,7 +199,7 @@ void LevelManager::saveMaze()
     if (!mysql_query(connection, data.c_str()))
         cout << mysql_error(connection) << endl;
 
-
+mysql_close(connection);
 }
 
 void LevelManager::makeMazeTable()
