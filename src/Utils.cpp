@@ -21,7 +21,7 @@ int** Utils::create2DIntArray(unsigned width, unsigned height, int value) {
     return array2D;
 }
 
-void delete2DIntArray(unsigned width, int** &array2D) {
+void Utils::delete2DIntArray(unsigned width, int** &array2D) {
 
     for(int w = 0; w < width; w++) {
         delete [] array2D[w];

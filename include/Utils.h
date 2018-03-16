@@ -5,7 +5,7 @@ class Utils
 {
     public:
         static int** create2DIntArray(unsigned width, unsigned height, int value);
-        void delete2DIntArray(unsigned width, int** &array2D);
+        static void delete2DIntArray(unsigned width, int** &array2D);
 
     protected:
 
