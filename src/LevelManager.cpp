@@ -50,6 +50,7 @@ void LevelManager::BuildLevel()
     scoretime = new ScoreTime(this);
 
     ui->ShowUI();
+    makeMazeTable();
 }
 
 LevelManager::~LevelManager()
@@ -180,6 +181,72 @@ int LevelManager::getPlayerID()
     return playerID;
 }
 
+void LevelManager::saveMaze()
+{   //connect to the database
+    MYSQL* connection;
+   connection = mysql_init(0);
+   //this allows to connect to the database
+   mysql_real_connect(connection,"server1.jesseprescott.co.uk","jessepre","Mazeraider123?","MazeRaider_DB",0,NULL,0);
+    if(!connection)
+    {
+        cout << "Failed to connect to the database." << endl;
+    }
+
+
+
+    //I used insert in order to store information into database. I inserted mazeID, the width and the height.
+    //also I put place holders in so database will be clean
+
+    string data = UIHelpers::SQLPrepare("insert into Maze( mazeID, width, height) values('%?', '%?', '%?')", maze->getSeed(), maze->getMazeSizeWH().first, maze->getMazeSizeWH().second );
+
+    if (!mysql_query(connection, data.c_str()))
+        cout << mysql_error(connection) << endl;
+
+
+}
+
+void LevelManager::makeMazeTable()
+{
+    int query;
+    MYSQL* connection;
+     //connect to the database
+    MYSQL_ROW row;
+    MYSQL_RES *results;
+    //rows are the rows from database
+    connection = mysql_init(0);
+
+    mysql_real_connect(connection,"server1.jesseprescott.co.uk","jessepre","Mazeraider123?","MazeRaider_DB",0,NULL,0);
+
+    string getData = UIHelpers::SQLPrepare("SELECT h.mazeID, h.width, h.height  FROM Maze h "
+                                           "WHERE  mazeID=%?, width=%?, height=%? ORDER BY RAND() LIMIT 1", maze->getSeed(), maze->getMazeSizeWH().first, maze->getMazeSizeWH().second);
+
+
+    //this will allow get the data as a sting
+    query = mysql_query(connection, getData.c_str());
+    if(!query){
+
+        results = mysql_store_result(connection);
+             //linking tables in the database.
+        int i=1;
+        while((row = mysql_fetch_row(results)))
+        {
+            cout<<i<<  ".   ||   "<<row[0]<<  "   ||   "<<row[1]<<" ||"<<endl;
+            cout<<endl;
+            i++;
+        }
+    }
+    else{
+        cout<<"Sorry Rank table maintaining stage at this moment try again later. "<<endl;
+
+        exit(0);
+    }
+    /* close connection */
+    mysql_free_result(results);
+    mysql_close(connection);
+}
+
+
+
 //Next level is chosen by computer according to the score value
 
 void LevelManager::nextLevel()
@@ -234,6 +301,7 @@ void LevelManager::nextLevel()
 void LevelManager::loadLevel()
 {
     maze = make_shared<Maze>(mazeSize.first, mazeSize.second);
+    saveMaze();
     for(int i=0; i<nrEnemies; i++)
      {
         enemies.emplace_back(make_shared<Enemy>(shared_from_this()));
